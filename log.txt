@@ -1,0 +1,174 @@
+严重问题：
+axio的then后访问this的属性报错。改为箭头符号调用就行了：
+https://blog.csdn.net/u011350541/article/details/80458708
+
+1: hello world没有，是因为run after build, 也即build后并没有执行
+2：而执行，则必须要有main函数
+
+3.element-ui报错
+https://blog.csdn.net/weixin_41587194/article/details/80275281
+
+
+4. axios
+https://www.jianshu.com/p/97fea7c54969
+cnpm install axios --save
+
+5. Typo: In word 拼写检查
+https://www.cnblogs.com/nicknailo/p/9140014.html
+
+6. 什么是jsonp
+https://blog.csdn.net/hansexploration/article/details/80314948
+
+7. 读取json对象的方法，如：
+{"message":"Hello Iris!"}，本身不是数据，则：
+  console.log(response.data.message) 显示：Hello Iris!
+
+8. json数组处理方法：
+先创建一个User结构：
+type User struct {
+		Firstname string `json:"firstname"`
+		Lastname  string `json:"lastname"`
+		City      string `json:"city"`
+		Age       int    `json:"age"`
+	}
+
+创建一个初始化长度为0的切片
+	slice1 := make([]User, 0)
+再创建两个人：
+	rockage := User{
+		Firstname: "Hua",
+		Lastname:  "Yang",
+		City:      "ShenZhen",
+		Age:       41,
+	}
+
+	carol := User{
+		Firstname: "Gui",
+		Lastname:  "Yun",
+		City:      "ShenZhen",
+		Age:       33,
+	}
+将上面两个人append到切片中去
+	slice1 = append(slice1, rockage, carol)
+发送切片：
+ctx.JSON(slice1)
+
+前端这边：
+console.log(response.data[0].firstname); 
+显示：Hua
+
+9：git上传:
+…or create a new repository on the command line
+echo "# stoneren-bbs" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/rockage/stoneren-bbs.git
+git push -u origin master
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/rockage/stoneren-bbs.git
+git push -u origin master
+Git错误提示之：fatal: Not a git repository (or any of the parent directories): .git
+产生原因：一般是没有初始化git本地版本管理仓库，所以无法执行git命令 解决方法：操作之前执行以下命令行: git init 然后执行一下git status查看状态信息，good，问题解决。
+
+9. 如何引用本地包（mysql）
+https://blog.csdn.net/zshdd/article/details/103088088
+
+
+10. 在一个包里，方法名首字母是大写的就是public方法！
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+万智有灵.azw3:  https://545c.com/file/21100933-413951962
+万智有灵.epub:  https://545c.com/file/21100933-413951964
+万智有灵.mobi:  https://545c.com/file/21100933-413951963
+这本书昨天收到侵权通知，已经下架了，需要的收藏吧，不要传播。
+
+最后npm ru
+1. d:
+2. md iris
+3. cd iris
+4. 编辑一个文件iris.go :
+package main
+ 
+import (
+    "github.com/kataras/iris"
+ 
+    "github.com/kataras/iris/middleware/logger"
+    "github.com/kataras/iris/middleware/recover"
+)
+ 
+func main() {
+    app := iris.New()
+    app.Logger().SetLevel("debug")
+    app.Use(recover.New())
+    app.Use(logger.New())
+    app.Get("/", func (ctx iris.Context){
+        ctx.HTML("Hello")
+    })
+ 
+ 
+    app.Run(iris.Addr(":8080"), iris.WithoutServerError(iris.ErrServerClosed))
+}
+存盘退出。
+
+5. go mod init iris.go
+>go: creating new go.mod: module iris.go
+
+6. go build iris.go
+无墙状态：系统会自动根据依赖关系下载相应的包
+有墙状态：超时，弹出错误：connection failed because connected host has failed to respond.
+解决方法：
+1： set GOPROXY=https://goproxy.io （设置代理）
+再次执行
+go build iris.go
+
+7. 东西存放位置：C:\Users\rocka\go\pkg\mod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
