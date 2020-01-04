@@ -98,7 +98,7 @@
       }
     },
     mounted() {
-      this.getTotalThreads()
+      this.getTotalThreads();
     }
   }
 </script>
