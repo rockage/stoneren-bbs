@@ -1,6 +1,8 @@
 <template>
   <div class="threadsview">
-    <p>{{totalPosts}}</p>
+    <p>
+      <button v-on:click="ccc">返回</button>
+    </p>
     <el-main>
       <el-pagination
         background
@@ -23,10 +25,10 @@
           </template>
         </el-table-column>
         <el-table-column
-           label="内容"
+          label="内容"
           min-width="70%">
           <template slot-scope="scope">
-            <div style="margin-left: 10px;white-space: pre-line;">{{scope.row.message}}</div>
+            <div style="margin-left: 10px;white-space: pre-line;" v-html="up(scope.row.message)"></div>
           </template>
 
         </el-table-column>
@@ -49,16 +51,48 @@
     data() {
       return {
         tid: this.$route.params.tid,
-        tableData:[],
+        tableData: [],
         totalPosts: 0,
       }
     },
     methods: {
+      ccc: function () {
+        this.$router.go(-1)
+      },
+      up: function (str) {
+        str = str.replace(/\[i(=s)\]/ig, '[i]');
+        str = str.replace(/</ig, '&lt;');
+        str = str.replace(/>/ig, '&gt;');
+        //str = str.replace(/\n/ig, '<br />');
+        str = str.replace(/\[code\](.+?)\[\/code\]/ig, function ($1, $2) {
+          return phpcode($2);
+        });
+        str = str.replace(/\[hr\]/ig, '<hr />');
+        str = str.replace(/\[\/(size|color|font|backcolor)\]/ig, '</font>');
+        str = str.replace(/\[(sub|sup|u|i|strike|b|blockquote|li)\]/ig, '<$1>');
+        str = str.replace(/\[\/(sub|sup|u|i|strike|b|blockquote|li)\]/ig, '</$1>');
+        str = str.replace(/\[\/align\]/ig, '</p>');
+        str = str.replace(/\[(\/)?h([1-6])\]/ig, '<$1h$2>');
+        str = str.replace(/\[align=(left|center|right|justify)\]/ig, '<p align="$1">');
+        str = str.replace(/\[size=(\d+?)\]/ig, '<font size="$1">');
+        str = str.replace(/\[color=([^\[\<]+?)\]/ig, '<font color="$1">');
+        str = str.replace(/\[backcolor=([^\[\<]+?)\]/ig, '<font style="background-color:$1">');
+        str = str.replace(/\[font=([^\[\<]+?)\]/ig, '<font face="$1">');
+        str = str.replace(/\[list=(a|A|1)\](.+?)\[\/list\]/ig, '<ol type="$1">$2</ol>');
+        str = str.replace(/\[(\/)?list\]/ig, '<$1ul>');
+        str = str.replace(/\[s:(\d+)\]/ig, function ($1, $2) {
+          return smilepath($2);
+        });
+        str = str.replace(/\[img\]([^\[]*)\[\/img\]/ig, '<img src="$1" border="0" />');
+        str = str.replace(/\[url=([^\]]+)\]([^\[]+)\[\/url\]/ig, '<a href="$1">' + '$2' + '</a>');
+        str = str.replace(/\[url\]([^\[]+)\[\/url\]/ig, '<a href="$1">' + '$1' + '</a>');
+        return str;
+      },
       handleCurrentChange(val) {
         this.renderMain(val)
       },
       renderMain: function (page) {
-       // this.loading = true
+        // this.loading = true
         this.axios.get('http://localhost:8081/renderThreadsView', {
           params: {
             page: page,
@@ -67,7 +101,6 @@
         })
           .then((response) => {
             this.tableData = JSON.parse(response.data)
-            console.log(JSON.parse(response.data))
             //this.loading = false
           })
       },
