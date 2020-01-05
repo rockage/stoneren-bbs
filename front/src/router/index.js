@@ -7,10 +7,12 @@ import threadsview from '../components/threadsview'
 Vue.use(Router)
 
 export default new Router({
- // mode: 'history',
+  mode: 'history',
   routes: [
     // {path: '/', name: 'HelloWorld', component: HelloWorld},
     {path: '/', name: 'bbs', component: bbs},
     {path: '/threads/view/:tid',  component: threadsview}
   ]
 })
+
+

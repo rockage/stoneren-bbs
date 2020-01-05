@@ -1,12 +1,14 @@
 <template>
   <div class="bbs">
+    <button v-on:click="ccc">BACK</button>
     <el-main>
       <el-pagination
         background
         @current-change="handleCurrentChange"
         layout="prev, pager, next"
-        :total=totalPage
+        :total=this.totalPage
         :page-size="20"
+        :current-page=this.currentPage
         style="text-align: right;"
       >
       </el-pagination>
@@ -20,7 +22,7 @@
         </el-table-column>
         <el-table-column label="作者" min-width="15%">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{scope.row.author}}</span>+
+            <span style="margin-left: 10px">{{scope.row.author}}</span>
             <br>
             <span style="margin-left: 10px">{{ getLocalTime(scope.row.dateline) }}</span>
           </template>
@@ -60,18 +62,39 @@
     name: 'bbs',
     data() {
       return {
-        tid: 112,
+        tid: 0,
         tableData: null,
         totalPage: 0,
+        currentPage: 0,
         loading: false
       }
     },
     methods: {
       ccc: function () {
-
+        this.$router.go(-1)
       },
-      handleCurrentChange(val) {
-        this.renderMain(val)
+      setContextData: function (key, value) {     //给sessionStorage存值
+        if (typeof value == "string") {
+          sessionStorage.setItem(key, value);
+        } else {
+          sessionStorage.setItem(key, JSON.stringify(value));
+        }
+      },
+      getContextData: function (key) { // 从sessionStorage取值
+        const str = sessionStorage.getItem(key);
+        if (typeof str == "string") {
+          try {
+            return JSON.parse(str);
+          } catch (e) {
+            return str;
+          }
+        }
+        return;
+      },
+      handleCurrentChange(page) {
+        this.currentPage = page
+        this.setContextData("currentPage", this.currentPage)
+        this.renderMain(page)
       },
       renderMain: function (page) {
         this.loading = true
@@ -89,7 +112,6 @@
         this.axios.get('http://localhost:8081/getTotalThreads', {})
           .then((response) => {
             this.totalPage = JSON.parse(response.data)
-            this.renderMain(1)
           })
       },
       getLocalTime: function (nS) {
@@ -97,8 +119,12 @@
         return d;
       }
     },
+    created() {
+      this.currentPage = this.getContextData("currentPage") || 1 //每次created的时候，总是刷新“上一页”
+      this.renderMain(this.currentPage)
+    },
     mounted() {
       this.getTotalThreads();
-    }
+    },
   }
 </script>

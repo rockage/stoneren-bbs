@@ -1,8 +1,7 @@
 <template>
   <div class="threadsview">
-    <p>
-      <button v-on:click="ccc">返回</button>
-    </p>
+
+    <button v-on:click="ccc">ccc</button>
     <el-main>
       <el-pagination
         background
@@ -57,16 +56,16 @@
     },
     methods: {
       ccc: function () {
-        this.$router.go(-1)
+        this.$router.back();
       },
       up: function (str) {
         str = str.replace(/\[i(=s)\]/ig, '[i]');
         str = str.replace(/</ig, '&lt;');
         str = str.replace(/>/ig, '&gt;');
         //str = str.replace(/\n/ig, '<br />');
-        str = str.replace(/\[code\](.+?)\[\/code\]/ig, function ($1, $2) {
-          return phpcode($2);
-        });
+        //str = str.replace(/\[code\](.+?)\[\/code\]/ig, function ($1, $2) {
+        //  return phpcode($2);
+        //});
         str = str.replace(/\[hr\]/ig, '<hr />');
         str = str.replace(/\[\/(size|color|font|backcolor)\]/ig, '</font>');
         str = str.replace(/\[(sub|sup|u|i|strike|b|blockquote|li)\]/ig, '<$1>');

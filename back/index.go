@@ -45,7 +45,7 @@ func renderThreadsView(ctx iris.Context) {
 	var ok bool
 	var rst []map[string]string
 
-	rst, ok = mysql_con.Query("select pid,fid,tid,author,dateline,message from pre_forum_post where tid = " + tid + " ORDER BY dateline DESC limit " + startRec + "," + stopRec)
+	rst, ok = mysql_con.Query("select pid,fid,tid,author,dateline,message from pre_forum_post where tid = " + tid + " ORDER BY dateline limit " + startRec + "," + stopRec)
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
