@@ -26,8 +26,3 @@ new Vue({
 
   }
 })
-
-
-Vue.use(VueRouterBackButton, {
-  router
-})

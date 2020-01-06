@@ -25,7 +25,7 @@ func main() {
 	index.Get("/renderThreadsView", renderThreadsView)
 	index.Get("/getTotalThreads", getTotalThreads)
 	index.Get("/getTotalPosts", getTotalPosts)
-
+	index.Get("/getForums", getForums)
 
 
 

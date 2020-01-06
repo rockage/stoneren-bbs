@@ -18,7 +18,6 @@ func renderIndexMain(ctx iris.Context) {
 
 	var ok bool
 	var rst []map[string]string
-
 	rst, ok = mysql_con.Query("select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY dateline DESC limit " + startRec + "," + stopRec)
 	if ok {
 		b, err := json.Marshal(rst)
@@ -44,12 +43,10 @@ func renderThreadsView(ctx iris.Context) {
 
 	var ok bool
 	var rst []map[string]string
-
 	rst, ok = mysql_con.Query("select pid,fid,tid,author,dateline,message from pre_forum_post where tid = " + tid + " ORDER BY dateline limit " + startRec + "," + stopRec)
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
-			fmt.Println(string(b))
 			_, _ = ctx.JSON(string(b)) //不返回错误代码，强行执行
 		}
 	}
@@ -60,3 +57,53 @@ func getTotalPosts(ctx iris.Context) {
 	rst, _ = mysql_con.Query("select COUNT(1) as rows from pre_forum_post where tid = " + posts) //求出总行数
 	_, _ = ctx.JSON(rst[0]["rows"])
 }
+//forumView
+func getForums(ctx iris.Context) {
+	var rst []map[string]string
+	var ok bool
+	rst, ok = mysql_con.Query("select fid,name,status,displayorder from pre_forum_forum where status = 1 ORDER BY displayorder")
+	if ok {
+		b, err := json.Marshal(rst)
+		fmt.Println(err)
+		if err == nil {
+			fmt.Println("in router:")
+			fmt.Println(rst)
+			_, _ = ctx.JSON(string(b))
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
