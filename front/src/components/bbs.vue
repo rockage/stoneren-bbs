@@ -66,6 +66,7 @@
         tableData: null,
         totalPage: 0,
         currentPage: 0,
+        fid: this.$route.query.fid,
         loading: false
       }
     },
@@ -97,10 +98,12 @@
         this.renderMain(page)
       },
       renderMain: function (page) {
+        console.log("fid:"+this.fid)
         this.loading = true
         this.axios.get('http://localhost:8081/renderIndexMain', {
           params: {
-            page: page
+            page: page,
+            fid:this.fid
           }
         })
           .then((response) => {
@@ -109,7 +112,9 @@
           })
       },
       getTotalThreads: function () {
-        this.axios.get('http://localhost:8081/getTotalThreads', {})
+        this.axios.get('http://localhost:8081/getTotalThreads', {
+          fid:this.fid
+        })
           .then((response) => {
             this.totalPage = JSON.parse(response.data)
           })

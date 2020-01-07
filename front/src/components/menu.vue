@@ -1,8 +1,8 @@
 <template>
   <div class="myMenu">
-    <el-menu-item :index="index">
-      <i class="el-icon-star-on"></i>
-      <span slot="title">{{label}}</span>
+    <el-menu-item :index="index" @click="router_to">
+      <i :class="icon"></i>
+      <span slot="title" >{{label}}</span>
     </el-menu-item>
   </div>
 </template>
@@ -14,11 +14,15 @@
       index:String,
       fid: String,
       label: String,
+      icon:String
     },
     methods: {
-      onCloseClick() {
+      onCloseClick:function() {
         // 激活删除标签事件
         this.$emit("delete", this.text);
+      },
+      router_to:function(){
+        console.log(this.icon)
       }
     }
   };

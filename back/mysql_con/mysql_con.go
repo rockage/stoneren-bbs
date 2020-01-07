@@ -2,7 +2,7 @@ package mysql_con
 
 import (
 	"database/sql"
-	"fmt"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -21,18 +21,18 @@ func initDB() bool {
 }
 
 func Exec(SQL string) {
-	if initDB() == true {
+	/*if initDB() == true {
 		ret, _ := DB.Exec(SQL)
 		insID, _ := ret.LastInsertId()
-		fmt.Println(insID)
+
 	}
+	*/
 }
 
 func Query(SQL string) ([]map[string]string, bool) {
 	if initDB() != true { //连接数据库
 		return nil, false
 	}
-	fmt.Println(SQL)
 	rows, err := DB.Query(SQL) //执行SQL语句，比如select * from users
 	if err != nil {
 		panic(err)
@@ -61,23 +61,7 @@ func Query(SQL string) ([]map[string]string, bool) {
 	}
 	defer rows.Close()
 	if len(ret) != 0 {
-		fmt.Println(ret)
 		return ret, true
 	}
 	return nil, false
 }
-
-/* //标准的查询方法，指定字段名，返回sql.Rows结果集
-var id int
-var name string
-var address string
-rows, err := DB.Query("select id,name,address from users")
-if err != nil {
-	fmt.Println(err)
-}
-for rows.Next() {
-	rows.Scan(&id, &name, &address)
-	fmt.Println(id, name, address)
-}
-defer rows.Close()
-*/

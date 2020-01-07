@@ -13,7 +13,7 @@
       </el-pagination>
       <el-table
         :data="tableData"
-        style="width: 100%">
+        style="width: 100%;">
         <el-table-column
           label="发帖ID"
           min-width="30%">
@@ -29,7 +29,6 @@
           <template slot-scope="scope">
             <div style="margin-left: 10px;white-space: pre-line;" v-html="up(scope.row.message)"></div>
           </template>
-
         </el-table-column>
       </el-table>
       <el-pagination

@@ -9,9 +9,21 @@ export default new Router({
   mode: 'history',
   routes: [
     // {path: '/', name: 'HelloWorld', component: HelloWorld},
-    {path: '/', name: 'bbs', component: bbs},
-    {path: '/threads/view/:tid',  component: threadsview}
+    {
+      path: '/',
+      name: 'bbs',
+      query: {
+        fid: 0
+      },
+      component: bbs
+    },
+    {
+      path: '/threads/view/:tid',
+      component: threadsview
+    },
+    {
+      path: '/forums/view/:fid',
+      component: bbs
+    }
   ]
 })
-
-

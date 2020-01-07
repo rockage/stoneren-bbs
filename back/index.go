@@ -10,15 +10,29 @@ import (
 
 //FillMain
 func renderIndexMain(ctx iris.Context) {
+	var sql string
+
+	forumsId := ctx.FormValue("fid")
+	fmt.Println(forumsId)
+
 	page := ctx.FormValue("page")
 	p1, _ := strconv.Atoi(page)
 	t1 := p1*20 - 20
 	startRec := strconv.Itoa(t1)
 	stopRec := "20"
 
+	if forumsId == "0" {
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY dateline DESC limit " + startRec + "," + stopRec
+	} else {
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + forumsId + " ORDER BY dateline DESC limit " + startRec + "," + stopRec
+	}
+
+	fmt.Println(sql)
+
 	var ok bool
 	var rst []map[string]string
-	rst, ok = mysql_con.Query("select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY dateline DESC limit " + startRec + "," + stopRec)
+	fmt.Println(sql)
+	rst, ok = mysql_con.Query(sql)
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
@@ -57,6 +71,7 @@ func getTotalPosts(ctx iris.Context) {
 	rst, _ = mysql_con.Query("select COUNT(1) as rows from pre_forum_post where tid = " + posts) //求出总行数
 	_, _ = ctx.JSON(rst[0]["rows"])
 }
+
 //forumView
 func getForums(ctx iris.Context) {
 	var rst []map[string]string
@@ -64,46 +79,8 @@ func getForums(ctx iris.Context) {
 	rst, ok = mysql_con.Query("select fid,name,status,displayorder from pre_forum_forum where status = 1 ORDER BY displayorder")
 	if ok {
 		b, err := json.Marshal(rst)
-		fmt.Println(err)
 		if err == nil {
-			fmt.Println("in router:")
-			fmt.Println(rst)
 			_, _ = ctx.JSON(string(b))
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

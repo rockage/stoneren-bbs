@@ -6,11 +6,6 @@
       <el-header>中国石凳联盟</el-header>
       <el-container>
         <el-menu class="el-menu-vertical-demo" style="text-align: left;">
-          <el-menu-item index="1">
-            <i class="el-icon-s-home"></i>
-            <span slot="title"> 《首页》 - 最新帖子</span>
-
-          </el-menu-item>
             <div v-if="myMenus && myMenus.length > 0">
               <myMenu
                 is="myMenu"
@@ -18,12 +13,12 @@
                 v-bind:key="myMenu.index"
                 v-bind:fid="myMenu.fid"
                 v-bind:label="myMenu.label"
+                v-bind:icon="myMenu.icon"
                 v-on:remove="myMenu.splice(index, 1)"
               />
             </div>
             <div v-else>板块加载中...</div>
         </el-menu>
-
         <el-container>
           <router-view/>
           <el-footer>
@@ -45,15 +40,22 @@
     name: "App",
     data() {
       return {
-        myMenus: []
+        myMenus: [
+          {index:0,
+          fid:0,
+          label: '《首页》 - 最新帖子',
+          icon:'el-icon-s-home'
+          }
+        ]
       };
     },
     methods: {
-      addmyMenu: function (index, fid, label) {
+      addmyMenu: function (index, fid, label,icon) {
         this.myMenus.push({
           index: index,
           fid: fid,
-          label: label
+          label: label,
+          icon:icon
         })
       },
       getForums: function () {
@@ -61,7 +63,7 @@
           .then((response) => {
             let index = 2
             for (let i of  JSON.parse(response.data)) {
-              this.addmyMenu(index, i['fid'], i['name'])
+              this.addmyMenu(index, i['fid'], i['name'],'el-icon-star-off')
               index++
             }
           })
