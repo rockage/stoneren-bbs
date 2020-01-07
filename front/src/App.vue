@@ -5,22 +5,26 @@
     <el-container>
       <el-header>中国石凳联盟</el-header>
       <el-container>
-        <el-menu class="el-menu-vertical-demo" style="text-align: left;">
-            <div v-if="myMenus && myMenus.length > 0">
-              <myMenu
-                is="myMenu"
-                v-for="(myMenu,index) in myMenus"
-                v-bind:key="myMenu.index"
-                v-bind:fid="myMenu.fid"
-                v-bind:label="myMenu.label"
-                v-bind:icon="myMenu.icon"
-                v-on:remove="myMenu.splice(index, 1)"
-              />
-            </div>
-            <div v-else>板块加载中...</div>
+        <el-menu style="text-align: left;" >
+          <div v-if="myMenus && myMenus.length > 0">
+            <myMenu
+              is="myMenu"
+              v-for="(myMenu,index) in myMenus"
+              v-bind:key="myMenu.key"
+              v-bind:index="myMenu.index"
+              v-bind:label="myMenu.label"
+              v-bind:icon="myMenu.icon"
+              v-bind:fid="myMenu.fid"
+              v-on:remove="myMenu.splice(index, 1)"
+            />
+          </div>
+          <div v-else>板块加载中...</div>
         </el-menu>
         <el-container>
+
+
           <router-view/>
+
           <el-footer>
             <a
               href="https://github.com/rockage/stoneren-bbs"
@@ -41,30 +45,33 @@
     data() {
       return {
         myMenus: [
-          {index:0,
-          fid:0,
-          label: '《首页》 - 最新帖子',
-          icon:'el-icon-s-home'
+          {
+            key: 0,
+            fid: '0',
+            label: '《首页》 - 最新帖子',
+            icon: 'el-icon-s-home'
           }
         ]
       };
     },
     methods: {
-      addmyMenu: function (index, fid, label,icon) {
+      addmyMenu: function (key, index, label, icon, fid) {
         this.myMenus.push({
           index: index,
-          fid: fid,
           label: label,
-          icon:icon
+          icon: icon,
+          fid: fid,
         })
       },
       getForums: function () {
         this.axios.get('http://localhost:8081/getForums', {})
           .then((response) => {
-            let index = 2
+            let key = 1
+            let index = ''
             for (let i of  JSON.parse(response.data)) {
-              this.addmyMenu(index, i['fid'], i['name'],'el-icon-star-off')
-              index++
+              index = '/forums/view/' + i['fid']
+              this.addmyMenu(key, index, i['name'], 'el-icon-star-off', i['fid'])
+              key++
             }
           })
       },

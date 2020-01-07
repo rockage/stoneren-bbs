@@ -8,22 +8,26 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
-    // {path: '/', name: 'HelloWorld', component: HelloWorld},
     {
       path: '/',
       name: 'bbs',
-      query: {
-        fid: 0
+      component: bbs,
+      meta: {
+        keepAlive: false,
       },
-      component: bbs
     },
     {
-      path: '/threads/view/:tid',
+      path: '/threads/view',
+      name: 'threadsview',
       component: threadsview
     },
     {
       path: '/forums/view/:fid',
-      component: bbs
+      name:'forumsview',
+      component: bbs,
+      meta: {
+        keepAlive: false,
+      },
     }
   ]
 })

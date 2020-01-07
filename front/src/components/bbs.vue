@@ -17,7 +17,7 @@
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="主题" min-width="60%">
           <template slot-scope="scope">
-            <router-link :to="{path:'threads/view/'+scope.row.tid}"> {{scope.row.subject}}</router-link>
+            <router-link :to="{name:'threadsview',params:{ tid:scope.row.tid }}"> {{scope.row.subject}}</router-link>
           </template>
         </el-table-column>
         <el-table-column label="作者" min-width="15%">
@@ -52,8 +52,6 @@
       >
       </el-pagination>
     </el-main>
-
-
   </div>
 </template>
 
@@ -66,7 +64,7 @@
         tableData: null,
         totalPage: 0,
         currentPage: 0,
-        fid: this.$route.query.fid,
+        fid: 0,
         loading: false
       }
     },
@@ -98,12 +96,11 @@
         this.renderMain(page)
       },
       renderMain: function (page) {
-        console.log("fid:"+this.fid)
         this.loading = true
         this.axios.get('http://localhost:8081/renderIndexMain', {
           params: {
             page: page,
-            fid:this.fid
+            fid: this.fid
           }
         })
           .then((response) => {
@@ -113,7 +110,7 @@
       },
       getTotalThreads: function () {
         this.axios.get('http://localhost:8081/getTotalThreads', {
-          fid:this.fid
+          fid: this.fid
         })
           .then((response) => {
             this.totalPage = JSON.parse(response.data)
@@ -129,7 +126,17 @@
       this.renderMain(this.currentPage)
     },
     mounted() {
+      if (typeof (this.$route.params.fid) == "undefined") {
+        this.fid = 0
+      } else {
+        this.fid = this.$route.params.fid
+      }
+
       this.getTotalThreads();
+
     },
+    activated() {
+
+    }
   }
 </script>

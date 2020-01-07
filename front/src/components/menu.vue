@@ -2,27 +2,30 @@
   <div class="myMenu">
     <el-menu-item :index="index" @click="router_to">
       <i :class="icon"></i>
-      <span slot="title" >{{label}}</span>
+      <span slot="title">{{label}}</span>
     </el-menu-item>
   </div>
 </template>
 <script>
+
+
   export default {
     name: "myMenu",
     props: {
-      // 标签内容
-      index:String,
-      fid: String,
+      index: String,
       label: String,
-      icon:String
+      icon: String,
+      fid:String,
     },
     methods: {
-      onCloseClick:function() {
+      onCloseClick: function () {
         // 激活删除标签事件
         this.$emit("delete", this.text);
       },
-      router_to:function(){
-        console.log(this.icon)
+      router_to: function () {
+
+        this.$router.push({name: 'forumsview', params: {fid: this.fid}})
+        this.$router.go(0)
       }
     }
   };
