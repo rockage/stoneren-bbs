@@ -11,7 +11,6 @@
               is="myMenu"
               v-for="(myMenu,index) in myMenus"
               v-bind:key="myMenu.key"
-              v-bind:index="myMenu.index"
               v-bind:label="myMenu.label"
               v-bind:icon="myMenu.icon"
               v-bind:fid="myMenu.fid"
@@ -23,7 +22,7 @@
         <el-container>
 
 
-          <router-view/>
+          <router-view :key="$route.fullPath"></router-view>
 
           <el-footer>
             <a

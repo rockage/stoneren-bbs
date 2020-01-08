@@ -97,10 +97,11 @@
       },
       renderMain: function (page) {
         this.loading = true
+        console.log('methods fid:' + this.fid)
         this.axios.get('http://localhost:8081/renderIndexMain', {
           params: {
             page: page,
-            fid: this.fid
+            fid: this.fid,
           }
         })
           .then((response) => {
@@ -123,19 +124,22 @@
     },
     created() {
       this.currentPage = this.getContextData("currentPage") || 1 //每次created的时候，总是刷新“上一页”
-      this.renderMain(this.currentPage)
+
     },
     mounted() {
+
+      console.log('mounted this.$route.params.fid:'+this.$route.params.fid)
       if (typeof (this.$route.params.fid) == "undefined") {
         this.fid = 0
       } else {
         this.fid = this.$route.params.fid
       }
-
+      console.log('mounted this.fid:'+this.fid)
       this.getTotalThreads();
-
+      this.renderMain(this.currentPage)
     },
     activated() {
+      console.log('activated:'+this.$route.params.fid)
 
     }
   }

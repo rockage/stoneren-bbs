@@ -13,7 +13,7 @@ func renderIndexMain(ctx iris.Context) {
 	var sql string
 
 	forumsId := ctx.FormValue("fid")
-	fmt.Println(forumsId)
+	fmt.Println("page:"+ctx.FormValue("page"), "fid:"+ctx.FormValue("fid"))
 
 	page := ctx.FormValue("page")
 	p1, _ := strconv.Atoi(page)
@@ -31,7 +31,7 @@ func renderIndexMain(ctx iris.Context) {
 
 	var ok bool
 	var rst []map[string]string
-	fmt.Println(sql)
+
 	rst, ok = mysql_con.Query(sql)
 	if ok {
 		b, err := json.Marshal(rst)
