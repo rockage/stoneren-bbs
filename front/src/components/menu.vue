@@ -1,6 +1,6 @@
 <template>
   <div class="myMenu">
-    <el-menu-item :index="index" @click="router_to">
+    <el-menu-item :index="this.index" @click="router_to">
       <i :class="icon"></i>
       <span slot="title">{{label}}</span>
     </el-menu-item>
@@ -12,10 +12,10 @@
   export default {
     name: "myMenu",
     props: {
-      index: String,
+      index:String,
       label: String,
       icon: String,
-      fid:String,
+      fid: String,
     },
     methods: {
       onCloseClick: function () {

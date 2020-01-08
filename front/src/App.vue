@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <button @click="getForums">get标签</button>
-    <button @click="addmyMenu">add</button>
     <el-container>
-      <el-header>中国石凳联盟</el-header>
+      <el-header style="text-align: left;background-color: #DCDFE6"><img src="/static/logo.png" style="margin-top: 10px;margin-left: 0px"></el-header>
       <el-container>
-        <el-menu style="text-align: left;" >
+        <el-menu
+          class="el-menu-vertical-demo"
+          background-color="#303133"
+          text-color="#fff"
+          active-text-color="#ffd04b">
           <div v-if="myMenus && myMenus.length > 0">
             <myMenu
               is="myMenu"
@@ -13,6 +15,7 @@
               v-bind:key="myMenu.key"
               v-bind:label="myMenu.label"
               v-bind:icon="myMenu.icon"
+              v-bind:index="myMenu.fid"
               v-bind:fid="myMenu.fid"
               v-on:remove="myMenu.splice(index, 1)"
             />
@@ -20,10 +23,7 @@
           <div v-else>板块加载中...</div>
         </el-menu>
         <el-container>
-
-
           <router-view :key="$route.fullPath"></router-view>
-
           <el-footer>
             <a
               href="https://github.com/rockage/stoneren-bbs"
@@ -47,16 +47,18 @@
           {
             key: 0,
             fid: '0',
-            label: '《首页》 - 最新帖子',
+            index:'0',
+            label: '首页 - 最新帖子',
             icon: 'el-icon-s-home'
           }
         ]
       };
     },
     methods: {
-      addmyMenu: function (key, index, label, icon, fid) {
+      addmyMenu: function (key, label, icon, fid) {
         this.myMenus.push({
-          index: index,
+          key: key,
+          index:key,
           label: label,
           icon: icon,
           fid: fid,
@@ -66,10 +68,8 @@
         this.axios.get('http://localhost:8081/getForums', {})
           .then((response) => {
             let key = 1
-            let index = ''
             for (let i of  JSON.parse(response.data)) {
-              index = '/forums/view/' + i['fid']
-              this.addmyMenu(key, index, i['name'], 'el-icon-star-off', i['fid'])
+              this.addmyMenu(key, i['name'], 'el-icon-s-unfold', i['fid'])
               key++
             }
           })

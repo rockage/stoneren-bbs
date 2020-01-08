@@ -1,8 +1,8 @@
 <template>
   <div class="threadsview">
 
-    <button v-on:click="ccc">ccc</button>
     <el-main>
+      <el-button type="primary" v-on:click="back"><i class="el-icon-back"></i>返回</el-button>
       <el-pagination
         background
         @current-change="handleCurrentChange"
@@ -16,7 +16,9 @@
         style="width: 100%;">
         <el-table-column
           label="发帖ID"
-          min-width="30%">
+          min-width="30%"
+          className="my-cell1"
+        >
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{scope.row.author}}</span>
             <br>
@@ -54,7 +56,7 @@
       }
     },
     methods: {
-      ccc: function () {
+      back: function () {
         this.$router.back();
       },
       up: function (str) {
@@ -124,9 +126,14 @@
   }
 </script>
 
-<style scoped>
+<style>
   .el-table .cell {
     white-space: pre-line;
   }
+
+  .el-table .my-cell {
+    vertical-align: top
+  }
+
 
 </style>

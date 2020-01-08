@@ -17,17 +17,15 @@ export default new Router({
       },
     },
     {
-      path: '/threads/view',
+      path: '/threads/view/:tid',
       name: 'threadsview',
       component: threadsview
     },
     {
       path: '/forums/view/:fid',
-      name:'forumsview',
+      name: 'forumsview',
       component: bbs,
-      meta: {
-        keepAlive: false,
-      },
+      meta: {},
     }
   ]
 })

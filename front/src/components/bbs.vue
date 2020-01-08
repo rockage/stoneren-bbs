@@ -1,7 +1,7 @@
 <template>
   <div class="bbs">
-    <button v-on:click="ccc">BACK</button>
     <el-main>
+      <el-button type="primary" v-on:click="">发帖 <i class="el-icon-edit-outline"></i></el-button>
       <el-pagination
         background
         @current-change="handleCurrentChange"
@@ -60,7 +60,7 @@
     name: 'bbs',
     data() {
       return {
-        tid: 0,
+        tid: this.$route.params.fid,
         tableData: null,
         totalPage: 0,
         currentPage: 0,
@@ -97,7 +97,7 @@
       },
       renderMain: function (page) {
         this.loading = true
-        console.log('methods fid:' + this.fid)
+
         this.axios.get('http://localhost:8081/renderIndexMain', {
           params: {
             page: page,
@@ -128,18 +128,18 @@
     },
     mounted() {
 
-      console.log('mounted this.$route.params.fid:'+this.$route.params.fid)
+
       if (typeof (this.$route.params.fid) == "undefined") {
         this.fid = 0
       } else {
         this.fid = this.$route.params.fid
       }
-      console.log('mounted this.fid:'+this.fid)
+
       this.getTotalThreads();
       this.renderMain(this.currentPage)
     },
     activated() {
-      console.log('activated:'+this.$route.params.fid)
+
 
     }
   }
