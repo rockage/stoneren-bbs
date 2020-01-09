@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header style="text-align: left;background-color: #DCDFE6"><img src="/static/logo.png" style="margin-top: 10px;margin-left: 0px"></el-header>
+      <el-header style="text-align: left;background-color: #DCDFE6"><img src="/static/logo.png"
+                                                                         style="margin-top: 10px;margin-left: 0px">
+      </el-header>
       <el-container>
         <el-menu
           class="el-menu-vertical-demo"
@@ -12,11 +14,11 @@
             <myMenu
               is="myMenu"
               v-for="(myMenu,index) in myMenus"
-              v-bind:key="myMenu.key"
-              v-bind:label="myMenu.label"
-              v-bind:icon="myMenu.icon"
-              v-bind:index="myMenu.fid"
               v-bind:fid="myMenu.fid"
+              v-bind:label="myMenu.label"
+              v-bind:index="myMenu.index"
+              v-bind:icon="myMenu.icon"
+              v-bind:key="myMenu.index"
               v-on:remove="myMenu.splice(index, 1)"
             />
           </div>
@@ -45,32 +47,31 @@
       return {
         myMenus: [
           {
-            key: 0,
             fid: '0',
-            index:'0',
             label: '首页 - 最新帖子',
+            index: '0',
             icon: 'el-icon-s-home'
           }
         ]
       };
     },
     methods: {
-      addmyMenu: function (key, label, icon, fid) {
+      addmyMenu: function (fid, label, index, icon) {
         this.myMenus.push({
-          key: key,
-          index:key,
-          label: label,
-          icon: icon,
           fid: fid,
+          label: label,
+          index: index,
+          icon: icon,
+          key:index,
         })
       },
       getForums: function () {
         this.axios.get('http://localhost:8081/getForums', {})
           .then((response) => {
-            let key = 1
+            let index = 1
             for (let i of  JSON.parse(response.data)) {
-              this.addmyMenu(key, i['name'], 'el-icon-s-unfold', i['fid'])
-              key++
+              this.addmyMenu(i['fid'], i['name'], String(index), 'el-icon-s-unfold')
+              index++
             }
           })
       },

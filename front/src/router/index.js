@@ -12,9 +12,7 @@ export default new Router({
       path: '/',
       name: 'bbs',
       component: bbs,
-      meta: {
-        keepAlive: false,
-      },
+      meta: {renderMode: 0},
     },
     {
       path: '/threads/view/:tid',
@@ -25,7 +23,7 @@ export default new Router({
       path: '/forums/view/:fid',
       name: 'forumsview',
       component: bbs,
-      meta: {},
+      meta: {renderMode: 1},
     }
   ]
 })

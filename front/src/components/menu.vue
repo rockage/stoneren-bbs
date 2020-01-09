@@ -24,8 +24,7 @@
       },
       router_to: function () {
 
-        this.$router.push({name: 'forumsview', params: {fid: this.fid}})
-
+        this.$router.push({name: 'forumsview', params: {fid: this.fid}}).catch(err => {})
       }
     }
   };

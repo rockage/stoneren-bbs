@@ -1,17 +1,38 @@
 <template>
   <div class="bbs">
+    <div id="ntContent" style="display:none;">
+      <h1>hello world</h1>
+      <h2>hello world</h2>
+    </div>
     <el-main>
-      <el-button type="primary" v-on:click="ccc">发帖 <i class="el-icon-edit-outline"></i></el-button>
-      <el-pagination
-        background
-        @current-change="handleCurrentChange"
-        layout="prev, pager, next"
-        :total=this.totalPage
-        :page-size="20"
-        :current-page=this.currentPage
-        style="text-align: right;"
-      >
-      </el-pagination>
+      <el-button @click="ccc">test <i class="el-icon-edit-outline"></i></el-button>
+      <el-row :gutter="20">
+        <el-col :span="1">
+          <el-popover
+            placement="bottom-start"
+            title="标题"
+            width="200"
+            trigger="manual"
+            offset="0"
+            :visible-arrow="false"
+            v-model="visible">
+            <div id="nt"></div>
+            <el-button slot="reference" @click="visible = !visible">发新帖 <i class="el-icon-edit-outline"></i></el-button>
+          </el-popover>
+        </el-col>
+        <el-col :span="21" :push="1" style="text-align: right;">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            layout="prev, pager, next"
+            :total=this.totalPage
+            :page-size="20"
+            :current-page=this.currentPage
+            style="text-align: right;"
+          >
+          </el-pagination>
+        </el-col>
+      </el-row>
       <div style="left:50%;top:50%;width: 100px;height: 100px;position: fixed;z-index: 99"
            v-loading="loading"></div>
       <el-table :data="tableData" style="width: 100%">
@@ -63,15 +84,18 @@
         tid: this.$route.params.fid,
         tableData: null,
         totalPage: 0,
-        currentPage: 0,
+        currentPage: 0, //BUG：点击返回无法真正回到上一页，而总是返回第一页
+        currentForum: 0, //BUG: 水区翻页到100，返回一个不足100页的子论坛报错
         fid: 0,
-        loading: false
+        loading: false,
+        visible: false,
+
       }
     },
     methods: {
       ccc: function () {
-        this.$router.go(-1)
-        console.log()
+        document.getElementById("nt").innerHTML =  document.getElementById("ntContent").innerHTML
+
       },
       setContextData: function (key, value) {     //给sessionStorage存值
         if (typeof value == "string") {
@@ -125,24 +149,26 @@
       }
     },
     created() {
-      this.currentPage = this.getContextData("currentPage") || 1 //created的时候，从session中读取页码
-
+      if (String(this.$route.params.fid) === String(this.getContextData("currentForum"))) {
+        //因为created在mounted前发生，在这将页码设置好，back的时候仍然是回到当前页
+        this.currentPage = this.getContextData("currentPage")
+      } else {
+        this.currentPage = 1 //如果fid发生了变化，则当前page强制设为1
+      }
     },
     mounted() {
 
-
-      if (typeof (this.$route.params.fid) == "undefined") {
-        this.fid = 0
+      if (this.$route.meta.renderMode === 0) {
+        this.fid = '0' //最新帖子模式
       } else {
-        this.fid = this.$route.params.fid
+        this.fid = this.$route.params.fid //常规模式
       }
-
+      this.setContextData("currentForum", this.fid) //将当前fid存入session
       this.getTotalThreads();
       this.renderMain(this.currentPage)
     },
+
     activated() {
-
-
     }
   }
 </script>

@@ -2,6 +2,7 @@ package mysql_con
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -30,6 +31,8 @@ func Exec(SQL string) {
 }
 
 func Query(SQL string) ([]map[string]string, bool) {
+	fmt.Println(SQL)
+
 	if initDB() != true { //连接数据库
 		return nil, false
 	}

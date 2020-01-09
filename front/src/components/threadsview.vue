@@ -23,6 +23,7 @@
         :data="tableData"
         style="width: 100%;"
         :show-header="false"
+        :border="true"
       >
 
         <el-table-column
