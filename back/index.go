@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/kataras/iris/v12"
 	"mysql_con"
 	"strconv"
@@ -11,13 +10,11 @@ import (
 //FillMain
 func renderIndexMain(ctx iris.Context) {
 	var sql string
-
 	forumsId := ctx.FormValue("fid")
-	fmt.Println("page:"+ctx.FormValue("page"), "fid:"+ctx.FormValue("fid"))
-
 	page := ctx.FormValue("page")
 	p1, _ := strconv.Atoi(page)
 	t1 := p1*20 - 20
+
 	startRec := strconv.Itoa(t1)
 	stopRec := "20"
 
@@ -26,9 +23,6 @@ func renderIndexMain(ctx iris.Context) {
 	} else {
 		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + forumsId + " ORDER BY dateline DESC limit " + startRec + "," + stopRec
 	}
-
-	fmt.Println(sql)
-
 	var ok bool
 	var rst []map[string]string
 
@@ -41,9 +35,18 @@ func renderIndexMain(ctx iris.Context) {
 	}
 }
 func getTotalThreads(ctx iris.Context) {
+	var sql string
+	forumsId := ctx.FormValue("fid")
+	if forumsId == "0" {
+		sql = "explain select * from pre_forum_thread"
+	} else {
+		sql ="select  COUNT(1) as rows from pre_forum_thread where fid = " + forumsId
+	}
+
 	var rst []map[string]string
-	rst, _ = mysql_con.Query("explain select * from pre_forum_thread") //求出总行数
+	rst, _ = mysql_con.Query(sql) //求出总行数
 	_, _ = ctx.JSON(rst[0]["rows"])
+	
 }
 
 //ThreadsView

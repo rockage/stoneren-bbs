@@ -2,32 +2,49 @@
   <div class="threadsview">
 
     <el-main>
-      <el-button type="primary" v-on:click="back"><i class="el-icon-back"></i>返回</el-button>
-      <el-pagination
-        background
-        @current-change="handleCurrentChange"
-        layout="prev, pager, next"
-        :total=totalPosts
-        :page-size="20"
-        style="text-align: right;">
-      </el-pagination>
+      <el-row :gutter="20">
+        <el-col :span="1">
+          <el-button type="primary" v-on:click="back"><i class="el-icon-back"></i>返回</el-button>
+        </el-col>
+        <el-col :span="21" :push="1" style="text-align: right;">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            layout="prev, pager, next"
+            :total=totalPosts
+            :page-size="20"
+            >
+          </el-pagination>
+        </el-col>
+      </el-row>
+
+
       <el-table
         :data="tableData"
-        style="width: 100%;">
+        style="width: 100%;"
+        :show-header="false"
+      >
+
         <el-table-column
-          label="发帖ID"
-          min-width="30%"
-          className="my-cell1"
+          label=""
+          min-width="15%"
+          className="my-cell"
         >
           <template slot-scope="scope">
+            <div class="block" style="margin-top: 20px;">
+              <el-avatar shape="square" :size="50" src="/static/avatar.png"></el-avatar>
+            </div>
+
             <span style="margin-left: 10px">{{scope.row.author}}</span>
             <br>
             <span style="margin-left: 10px">{{ getLocalTime(scope.row.dateline) }}</span>
+            <div class="block" style="margin-bottom: 50px;"></div>
           </template>
         </el-table-column>
         <el-table-column
-          label="内容"
-          min-width="70%">
+          min-width="85%"
+          className="my-cell-2"
+        >
           <template slot-scope="scope">
             <div style="margin-left: 10px;white-space: pre-line;" v-html="up(scope.row.message)"></div>
           </template>
@@ -132,6 +149,13 @@
   }
 
   .el-table .my-cell {
+    height: 300px;
+    text-align: center;
+    vertical-align: top
+  }
+
+  .el-table .my-cell-2 {
+    text-align: left;
     vertical-align: top
   }
 

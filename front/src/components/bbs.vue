@@ -1,7 +1,7 @@
 <template>
   <div class="bbs">
     <el-main>
-      <el-button type="primary" v-on:click="">发帖 <i class="el-icon-edit-outline"></i></el-button>
+      <el-button type="primary" v-on:click="ccc">发帖 <i class="el-icon-edit-outline"></i></el-button>
       <el-pagination
         background
         @current-change="handleCurrentChange"
@@ -71,6 +71,7 @@
     methods: {
       ccc: function () {
         this.$router.go(-1)
+        console.log()
       },
       setContextData: function (key, value) {     //给sessionStorage存值
         if (typeof value == "string") {
@@ -88,7 +89,6 @@
             return str;
           }
         }
-        return;
       },
       handleCurrentChange(page) {
         this.currentPage = page
@@ -111,19 +111,21 @@
       },
       getTotalThreads: function () {
         this.axios.get('http://localhost:8081/getTotalThreads', {
-          fid: this.fid
+          params: {
+            fid: this.fid,
+          }
         })
           .then((response) => {
             this.totalPage = JSON.parse(response.data)
           })
       },
       getLocalTime: function (nS) {
-        let d = new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ')
-        return d;
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ')
+
       }
     },
     created() {
-      this.currentPage = this.getContextData("currentPage") || 1 //每次created的时候，总是刷新“上一页”
+      this.currentPage = this.getContextData("currentPage") || 1 //created的时候，从session中读取页码
 
     },
     mounted() {
