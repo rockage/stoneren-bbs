@@ -125,7 +125,5 @@
     line-height: 100px;
     width: 500px;
   }
-  .ql-editor{
-    height:600px;
-  }
+
 </style>

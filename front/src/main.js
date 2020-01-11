@@ -13,18 +13,24 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
 
+
+
+import post from './components/post.vue'
+
+
+
 Vue.prototype.axios = axios
 Vue.use(ElementUI);
 Vue.use(VueQuillEditor)
+Vue.component('post', post) //自定义模块:post
 
 Vue.config.productionTip = false
-
 
 new Vue({
   el: "#app",
   router,
   components: {
-    App
+    App,
   },
   template: '<App/>',
 

@@ -1,0 +1,6 @@
+git status
+echo "请输入本次push的commit: "
+read answer
+git add .
+git commit -m \"$answer\"
+git push -u origin master

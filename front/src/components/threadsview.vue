@@ -78,6 +78,9 @@
         this.$router.back();
       },
       up: function (str) {
+
+        return str
+
         str = str.replace(/\[i(=s)\]/ig, '[i]');
         str = str.replace(/</ig, '&lt;');
         str = str.replace(/>/ig, '&gt;');

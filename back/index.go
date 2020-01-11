@@ -2,9 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/kataras/iris/v12"
 	"mysql_con"
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 //FillMain
@@ -40,13 +43,13 @@ func getTotalThreads(ctx iris.Context) {
 	if forumsId == "0" {
 		sql = "explain select * from pre_forum_thread"
 	} else {
-		sql ="select  COUNT(1) as rows from pre_forum_thread where fid = " + forumsId
+		sql = "select  COUNT(1) as rows from pre_forum_thread where fid = " + forumsId
 	}
 
 	var rst []map[string]string
 	rst, _ = mysql_con.Query(sql) //求出总行数
 	_, _ = ctx.JSON(rst[0]["rows"])
-	
+
 }
 
 //ThreadsView
@@ -86,4 +89,25 @@ func getForums(ctx iris.Context) {
 			_, _ = ctx.JSON(string(b))
 		}
 	}
+}
+
+//New Post
+func setNewPost(ctx iris.Context) {
+	fid := ctx.FormValue("fid")
+	tid := ctx.FormValue("tid")
+	uid := ctx.FormValue("uid")
+	threadsTitle := ctx.FormValue("threadsTitle")
+	postContens := ctx.FormValue("postContens")
+	fmt.Println("fid = " + fid)
+	fmt.Println("tid = " + tid)
+	fmt.Println("uid = " + uid)
+	fmt.Println("threadsTitle = " + threadsTitle)
+	fmt.Println("postContens = " + postContens)
+	// 105003
+	postContens = strings.Replace(postContens, "'", "\\'", -1)
+	postContens = strings.Replace(postContens, "</a>", "", -1)
+	re, _ := regexp.Compile(`<a\s{1,}href(.+?)>`)
+	postContens = re.ReplaceAllString(postContens, "")
+	mysql_con.Exec("UPDATE pre_forum_post set message = '" + postContens + "' where pid = 105003")
+
 }
