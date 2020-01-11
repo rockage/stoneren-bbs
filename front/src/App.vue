@@ -53,7 +53,7 @@
             icon: 'el-icon-s-home'
           }
         ]
-      };
+      };z
     },
     methods: {
       addmyMenu: function (fid, label, index, icon) {
@@ -124,5 +124,8 @@
     text-align: center;
     line-height: 100px;
     width: 500px;
+  }
+  .ql-editor{
+    height:600px;
   }
 </style>
