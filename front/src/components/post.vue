@@ -12,7 +12,7 @@
       @change="onEditorChange($event)">
     </quill-editor>
     <el-button v-on:click="saveHtml">保存</el-button>
-    <input type="file" id="inputimg">
+    <input type="file" id="inputimg" style="display: none">
     <select id="myselect">
       <option value="1">webp格式</option>
       <option value="2">jpeg格式</option>
@@ -65,13 +65,13 @@
             toolbar: {
               container: container,
               handlers: {
-                // 事件对象将于默认的事件处理对象合并
-                'link': function(value) {
-                  if (value) {
-                    this.quill.insertText(0, 'Hello', 'bold', true);
-                  } else {
-                    this.Quill.format('link', false);
-                  }
+                // 拦截image的click事件
+                'image': function () {
+
+                    this.quill.insertText(0, 'Hello Quill', 'bold', true);
+                    let c = document.getElementById("inputimg");
+                    c.click()
+
                 }
               }
 
