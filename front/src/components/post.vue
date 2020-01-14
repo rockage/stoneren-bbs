@@ -12,7 +12,9 @@
       @change="onEditorChange($event)">
     </quill-editor>
     <el-button v-on:click="saveHtml">保存</el-button>
-    <input type="file" id="inputimg" style="display: none">
+
+    <input type="file" id="inputImg" @change="onInputImgChange($event)">
+
     <select id="myselect">
       <option value="1">webp格式</option>
       <option value="2">jpeg格式</option>
@@ -53,6 +55,7 @@
     ['link', 'image', 'video']
   ]
 
+  let fileBtn = document.getElementById('inputImg')
 
   export default {
     name: "post",
@@ -67,11 +70,9 @@
               handlers: {
                 // 拦截image的click事件
                 'image': function () {
-
-                    this.quill.insertText(0, 'Hello Quill', 'bold', true);
-                    let c = document.getElementById("inputimg");
-                    c.click()
-
+                  this.quill.insertText(0, 'Hello Quill', 'bold', true);
+                  let c = document.getElementById("inputImg");
+                  c.click()
                 }
               }
 
@@ -105,7 +106,75 @@
       },
       onEditorChange: function () { // 内容改变事件
       },
-      saveHtml: function (event) {
+      iii: function () { // 内容改变事件
+        console.log("i am in iii")
+
+      },
+      onInputImgChange: function (event) {
+        console.log("in")
+        let file = document.getElementById("inputImg").files[0]
+
+        if (window.FileReader) {
+
+          let fr = new FileReader()
+          fr.readAsDataURL(file) //开始加载文件
+          fr.onload = function (e) { //文件加载结束，this = e.target
+            //返回FileReader对象：事件，状态，属性，结果等
+
+            let originImg = new Image()
+            originImg.src = e.target.result //开始将结果（base64格式）加载到image
+
+            originImg.onload = function () { //原始图片加载结束，this = 原始图片
+              let w_old = this.width, h_old = this.height
+              const w_new = 1024
+              let h_new = (w_new * parseInt(h_old)) / parseInt(w_old)
+
+
+
+              let canvas = document.createElement("canvas")
+              canvas.width = w_new
+              canvas.height = h_new
+
+              if (w_old<=1024) {
+                canvas.width = w_old
+                canvas.height = h_old
+                canvas.getContext("2d").drawImage(this, 0, 0, w_old, h_old, 0, 0, w_old, h_old) //宽度小于1024不做处理
+              }else{
+                canvas.width = w_new
+                canvas.height = h_new
+                canvas.getContext("2d").drawImage(this, 0, 0, w_old, h_old, 0, 0, w_new, h_new)  //超宽图强制设为1024
+              }
+
+              let imgshow = document.getElementById("imgShow")
+              let src = canvas.toDataURL("image/jpeg")
+              imgshow.setAttribute('src', src)
+
+
+
+              // 获取光标所在位置
+                // let length = this.quill.getSelection()
+              // 插入图片，res为服务器返回的图片链接地址
+              //this. quill.insertEmbed(0, 'image', imgshow)
+              // 调整光标到最后
+              //this.quill.setSelection(length + 1)
+
+              this.$emit('myQuillEditor')
+
+
+
+
+
+
+            }
+
+
+          }
+        } else {
+          alert('暂不支持FileReader')
+        }
+      },
+
+      saveHtml: function () {
 
         let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
         param.append("fid", this.fid)
@@ -157,7 +226,7 @@
               fn(image);
             }
           }
-          imgFile.readAsDataURL(document.getElementById('inputimg').files[0]);
+          imgFile.readAsDataURL(document.getElementById('inputImg').files[0]);
         } catch (e) {
           console.log("请上传图片！" + e);
         }
