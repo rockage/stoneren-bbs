@@ -9,7 +9,9 @@
       ref="myQuillEditor"
       :options="editorOption"
       @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
-      @change="onEditorChange($event)">
+      @change="onEditorChange($event)"
+      v-on:insertImage="insertImage($event)"
+    >
     </quill-editor>
     <el-button v-on:click="saveHtml">保存</el-button>
 
@@ -34,6 +36,7 @@
 
   import {ImageDrop} from 'quill-image-drop-module'
   import ImageResize from 'quill-image-resize-module'
+  //import QuillEditor from "vue-quill-editor/src";
 
   Quill.register('modules/imageDrop', ImageDrop)
   Quill.register('modules/imageResize', ImageResize)
@@ -54,8 +57,10 @@
     ['clean'],
     ['link', 'image', 'video']
   ]
-
+//
   let fileBtn = document.getElementById('inputImg')
+  let myQuill //增加一个全局quill，代表当前quill实例
+  let thisVue  //增加一个全局this，表示当前vue实例
 
   export default {
     name: "post",
@@ -70,7 +75,7 @@
               handlers: {
                 // 拦截image的click事件
                 'image': function () {
-                  this.quill.insertText(0, 'Hello Quill', 'bold', true);
+                  myQuill = this.quill //全局quill源自此处
                   let c = document.getElementById("inputImg");
                   c.click()
                 }
@@ -106,12 +111,14 @@
       },
       onEditorChange: function () { // 内容改变事件
       },
-      iii: function () { // 内容改变事件
-        console.log("i am in iii")
+      insertImage: function () { // 内容改变事件
+
 
       },
       onInputImgChange: function (event) {
         console.log("in")
+
+
         let file = document.getElementById("inputImg").files[0]
 
         if (window.FileReader) {
@@ -130,43 +137,27 @@
               let h_new = (w_new * parseInt(h_old)) / parseInt(w_old)
 
 
-
               let canvas = document.createElement("canvas")
               canvas.width = w_new
               canvas.height = h_new
 
-              if (w_old<=1024) {
+              if (w_old <= 1024) {
                 canvas.width = w_old
                 canvas.height = h_old
                 canvas.getContext("2d").drawImage(this, 0, 0, w_old, h_old, 0, 0, w_old, h_old) //宽度小于1024不做处理
-              }else{
+              } else {
                 canvas.width = w_new
                 canvas.height = h_new
                 canvas.getContext("2d").drawImage(this, 0, 0, w_old, h_old, 0, 0, w_new, h_new)  //超宽图强制设为1024
               }
-
-              let imgshow = document.getElementById("imgShow")
               let src = canvas.toDataURL("image/jpeg")
-              imgshow.setAttribute('src', src)
-
-
-
-              // 获取光标所在位置
-                // let length = this.quill.getSelection()
-              // 插入图片，res为服务器返回的图片链接地址
-              //this. quill.insertEmbed(0, 'image', imgshow)
+              //此处不能直接使用this来访问vue实例，因为此时的this = originImg，因此此处采用全局quill来访问quill实例
+              let length = myQuill.selection.savedRange.index // 获取光标所在位置
+              myQuill.insertEmbed(length, 'image', src)
               // 调整光标到最后
-              //this.quill.setSelection(length + 1)
-
-              this.$emit('myQuillEditor')
-
-
-
-
-
+              myQuill.setSelection(length + 1)
 
             }
-
 
           }
         } else {
@@ -273,7 +264,7 @@
       }
     },
     mounted() {
-
+      thisVue = this
 
     },
   }
