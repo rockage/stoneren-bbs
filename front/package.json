@@ -14,7 +14,6 @@
     "element-ui": "^2.13.0",
     "js-base64": "^2.5.1",
     "quill": "^1.3.7",
-    "quill-image-drop-module": "^1.0.3",
     "quill-image-extend-module": "^1.1.2",
     "quill-image-resize-module": "^3.0.0",
     "quill-image-rotate-module": "latest",
