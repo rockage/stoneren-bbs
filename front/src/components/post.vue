@@ -99,12 +99,12 @@
       },
       onEditorChange: function () { // 内容改变事件
       },
-      onInputImgChange: function (event) {
+      onInputImgChange: function () {
         let file = document.getElementById("inputImg").files[0]
         if (window.FileReader) {
           let fr = new FileReader()
           fr.readAsDataURL(file) //开始加载文件
-          fr.onload = function (e) { //文件加载结束，this = e.target,返回FileReader对象：事件，状态，属性，结果等
+          fr.onload = function (e) { //文件加载结束，this = e.target
             let originImg = new Image()
             originImg.src = e.target.result //开始将结果（base64格式）加载到image
             originImg.onload = function () { //原始图片加载结束，this = 原始图片
@@ -124,9 +124,8 @@
                 canvas.getContext("2d").drawImage(this, 0, 0, w_old, h_old, 0, 0, w_new, h_new)  //超宽图强制设为1024
               }
               let src = canvas.toDataURL("image/jpeg")
-              //此处不能直接使用this（this = originImg）来访问vue实例，用全局quill来访问quill实例
-              let length = myQuill.selection.savedRange.index // 获取光标所在位置
-              myQuill.insertEmbed(length, 'image', src)       //插入图片
+              let length = myQuill.selection.savedRange.index //用全局quill来访问quill实例
+              myQuill.insertEmbed(length, 'image', src)
               myQuill.setSelection(length + 1)               // 调整光标到最后
             }
           }
@@ -134,23 +133,31 @@
           alert('暂不支持FileReader')
         }
       },
+
       rotateImage: function () {
-        let img = new Image()
-        img.src = Vue.rotateImg.src // Vue.rotateImg = 当前点击的图片
-        img.onload = function () {
-          let canvas = document.createElement("canvas")
-          canvas.width = img.width
-          canvas.height = img.height
-          let ctx = canvas.getContext("2d")
-          ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2);
-          ctx.save();
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.translate(canvas.width / 2, canvas.height / 2);
-          ctx.rotate(90 / 180 * Math.PI);
-          ctx.translate(-canvas.width / 2, -canvas.height / 2);
-          ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2);
+        let cvs = document.createElement("canvas");
+        let ctx = cvs.getContext("2d")
+        let image = new Image()
+        image.src = Vue.rotateImg.src
+        image.onload = function () {
+          let w = image.naturalWidth
+          let h = image.naturalHeight
+          let degrees = 90
+          ctx.save()
+          let x
+          let y
+          const c = w //w,h互换
+          w = h
+          h = c
+          cvs.width = w
+          cvs.height = h
+          x = 0
+          y = -w
+          ctx.rotate(degrees * (Math.PI / 180))
+          ctx.drawImage(image, x, y)
           ctx.restore()
-          Vue.rotateImg.src = canvas.toDataURL("image/jpeg") //立即刷新结果
+          Vue.rotateImg.src = cvs.toDataURL("image/jpeg")
+          myQuill.imageResize.hide()
         }
       },
       saveHtml: function () {
@@ -163,7 +170,7 @@
         const regex = /<img src="(.+?)">/g;
         let m = regex.exec(this.content)
 
-        return
+
         this.axios.post('http://localhost:8081/setNewPost', param)
           .then((response) => {
             this.totalPage = JSON.parse(response.data)
@@ -175,20 +182,26 @@
         sourceEditorButton.innerHTML = "<img src='/static/rotate.png'>"
         sourceEditorButton.title = "旋转图片"
       },
-    },
+    }
+    ,
     mounted() {
       this.initRotateButton() //初始化自定义按钮
       Vue = this
       myQuill = this.$refs.myQuillEditor.quill //全局quill实例
       myQuill.root.addEventListener('click', this.handleClick, false) //为全局quill创建一个根监听
-    },
+      let quillWidth = document.documentElement.clientWidth * 80 / 100
+      let quillHeight = document.documentElement.clientHeight * 70 / 100
+      myQuill.container.style.width = `${quillWidth}px`
+      myQuill.container.style.height = `${quillHeight}px`
+    }
+    ,
   }
 
 </script>
 
 <style>
   .ql-editor {
-    height: 600px;
-    width: 100%;
+
+
   }
 </style>
