@@ -16,6 +16,7 @@
     <el-button v-on:click="saveHtml">保存</el-button>
 
     <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;">
+    <img src="" id="myimg">
 
   </div>
 </template>
@@ -42,12 +43,14 @@
     ['link', 'image', 'rotate', 'video'],
   ]
   let myQuill //增加一个全局quill，代表当前quill实例
+  let Vue
 
   export default {
     name: "post",
     data() {
       return {
         threadsTitle: '',
+        rotateImg: null,
         editorOption: {
           placeholder: '输入内容...',
           modules: {
@@ -56,14 +59,11 @@
               handlers: {
                 // 拦截image的click事件
                 'image': function () {
-
                   let c = document.getElementById("inputImg")
                   c.click()
                 },
-                'rotate': function ($event) { // 旋转图片
-                  console.log("Rotate in !")
-
-                  console.log($event)
+                'rotate': function () {
+                  Vue.rotateImage()
                 },
               }
             },
@@ -90,10 +90,8 @@
     methods: {
       handleClick: function (evt) {
         if (evt.target && evt.target.tagName && evt.target.tagName.toUpperCase() === 'IMG') {
-          console.log(evt.target)
+          this.rotateImg = evt.target
         }
-      },
-      onEditorReady: function (editor) { // 准备编辑器
       },
       onEditorBlur: function () { // 失去焦点事件
       },
@@ -136,18 +134,32 @@
           alert('暂不支持FileReader')
         }
       },
-
-
+      rotateImage: function () {
+        let img = new Image()
+        img.src = Vue.rotateImg.src // Vue.rotateImg = 当前点击的图片
+        img.onload = function () {
+          let canvas = document.createElement("canvas")
+          canvas.width = img.width
+          canvas.height = img.height
+          let ctx = canvas.getContext("2d")
+          ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2);
+          ctx.save();
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.translate(canvas.width / 2, canvas.height / 2);
+          ctx.rotate(90 / 180 * Math.PI);
+          ctx.translate(-canvas.width / 2, -canvas.height / 2);
+          ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2);
+          ctx.restore()
+          Vue.rotateImg.src = canvas.toDataURL("image/jpeg") //立即刷新结果
+        }
+      },
       saveHtml: function () {
-
         let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
         param.append("fid", this.fid)
         param.append("tid", this.tid)
         param.append("uid", this.uid)
         param.append("threadsTitle", this.threadsTitle)
         param.append("postContens", this.content)
-
-
         const regex = /<img src="(.+?)">/g;
         let m = regex.exec(this.content)
 
@@ -166,6 +178,7 @@
     },
     mounted() {
       this.initRotateButton() //初始化自定义按钮
+      Vue = this
       myQuill = this.$refs.myQuillEditor.quill //全局quill实例
       myQuill.root.addEventListener('click', this.handleClick, false) //为全局quill创建一个根监听
     },
