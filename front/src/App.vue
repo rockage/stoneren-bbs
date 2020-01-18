@@ -1,59 +1,58 @@
 <template>
   <div id="app">
-    <el-container>
 
-      <el-row type="flex" class="row-bg">
-        <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
-      </el-row>
-
-      <el-header style="text-align: left;background-color: #FFFFFF">
-        <el-row type="flex" class="row-bg">
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-          <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 0px">
-            </div>
-          </el-col>
-          <el-col :span="6" :offset="12">
-            <div class="grid-content bg-purple">
+    <el-row>
+      <el-col :span="24">
+        <div class="div-one">
+          <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 10px">
+          <div class="div-two">
             <router-link to="home">登录</router-link>
-              <router-link to="home">注册</router-link>
-            </div>
-          </el-col>
-        </el-row>
-
-      </el-header>
-      <el-container>
-        <el-menu
-          class="el-menu-vertical-demo"
-          background-color="#303133"
-          text-color="#fff"
-          active-text-color="#ffd04b">
-          <div v-if="myMenus && myMenus.length > 0">
-            <myMenu
-              is="myMenu"
-              v-for="(myMenu,index) in myMenus"
-              v-bind:fid="myMenu.fid"
-              v-bind:label="myMenu.label"
-              v-bind:index="myMenu.index"
-              v-bind:icon="myMenu.icon"
-              v-bind:key="myMenu.index"
-              v-on:remove="myMenu.splice(index, 1)"
-            />
+            <router-link to="home">注册</router-link>
           </div>
-          <div v-else>板块加载中...</div>
-        </el-menu>
-        <el-container>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <div class="grid-content bg-purple">
+          <el-menu
+            class="el-menu-vertical-demo"
+            background-color="#303133"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+            <div v-if="myMenus && myMenus.length > 0">
+              <myMenu
+                is="myMenu"
+                v-for="(myMenu,index) in myMenus"
+                v-bind:fid="myMenu.fid"
+                v-bind:label="myMenu.label"
+                v-bind:index="myMenu.index"
+                v-bind:icon="myMenu.icon"
+                v-bind:key="myMenu.index"
+                v-on:remove="myMenu.splice(index, 1)"
+              />
+            </div>
+            <div v-else>板块加载中...</div>
+          </el-menu>
+
+        </div>
+      </el-col>
+      <el-col :span="21">
+        <div class="grid-content bg-purple-light">
           <router-view :key="$route.fullPath"></router-view>
-          <el-footer>
-            <a
-              href="https://github.com/rockage/stoneren-bbs"
-            >https://github.com/rockage/stoneren-bbs</a>
-          </el-footer>
-        </el-container>
-      </el-container>
-    </el-container>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="24">
+        <div class="footer" >
+          <a href="https://github.com/rockage/stoneren-bbs"
+          >https://github.com/rockage/stoneren-bbs</a>
+        </div>
+      </el-col>
+    </el-row>
+
+
   </div>
 </template>
 
@@ -74,7 +73,6 @@
           }
         ]
       };
-      z
     },
     methods: {
       addmyMenu: function (fid, label, index, icon) {
@@ -107,6 +105,44 @@
 </script>
 
 <style>
+
+  .footer{
+    /*flex 布局*/
+    display: flex;
+    /*实现垂直居中*/
+    align-items: center;
+    /*实现水平居中*/
+    justify-content: center;
+
+    text-align: justify;
+    width:100%;
+    height:50px;
+    background: #99a9bf;
+    margin:0 auto;
+    color:#fff;
+  }
+
+  .div-one {
+    width: 100%;
+    height: 70px;
+    position: relative;
+   // border: 1px solid #ff871e;
+    background: #99a9bf
+  }
+
+  .div-two {
+    position: absolute;
+    left: 85%;
+    right: 0;
+    top: 0;
+    bottom: 10px;
+    margin: auto;
+    width: 150px;
+    height: 20px;
+  //  border: 1px solid #ff871e;
+    background: #99a9bf
+  }
+
   #app {
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -141,10 +177,44 @@
 
   .el-aside {
     background-color: #000000;
-    color: #333;
+    color: #ffffff;
     text-align: center;
-    line-height: 100px;
-    width: 500px;
+    line-height: 50px;
+    width: 300px;
+  }
+
+  .el-row {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .el-col {
+    border-radius: 4px;
+  }
+
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+
+  .bg-purple {
+    background: #d3dce6;
+  }
+
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
   }
 
 </style>
