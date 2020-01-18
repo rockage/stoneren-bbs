@@ -141,7 +141,7 @@
         image.src = Vue.rotateImg.src
         image.onload = function () {
           let w = image.naturalWidth
-          let h = image.naturalHeight
+          let h = image.naturalHeight;
           let degrees = 90
           ctx.save()
           let x
@@ -167,7 +167,7 @@
         param.append("uid", this.uid)
         param.append("threadsTitle", this.threadsTitle)
         param.append("postContens", this.content)
-        const regex = /<img src="(.+?)">/g;
+        const regex = /<img src="(.+?)">/g
         let m = regex.exec(this.content)
 
 
@@ -177,7 +177,7 @@
           })
       },
       initRotateButton: function () {      //在quill中新增一个旋转图片的按钮
-        const sourceEditorButton = document.querySelector('.ql-rotate');
+        const sourceEditorButton = document.querySelector('.ql-rotate')
         sourceEditorButton.style.cssText = "border:0px"
         sourceEditorButton.innerHTML = "<img src='/static/rotate.png'>"
         sourceEditorButton.title = "旋转图片"

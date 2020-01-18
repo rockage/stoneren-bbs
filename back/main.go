@@ -7,6 +7,8 @@ import (
 	"github.com/kataras/iris/v12/middleware/recover"
 )
 
+
+
 func main() {
 
 	crs := cors.New(cors.Options{ //crs相当于一个中间件，允许所有主机通过
@@ -27,6 +29,6 @@ func main() {
 	index.Get("/getTotalPosts", getTotalPosts)
 	index.Get("/getForums", getForums)
 	index.Post("/setNewPost", setNewPost)
-
 	app.Run(iris.Addr(":8081"), iris.WithoutServerError(iris.ErrServerClosed))
+
 }
