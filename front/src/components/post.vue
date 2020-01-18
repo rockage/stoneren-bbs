@@ -167,9 +167,6 @@
         param.append("uid", this.uid)
         param.append("threadsTitle", this.threadsTitle)
         param.append("postContens", this.content)
-        const regex = /<img src="(.+?)">/g
-        let m = regex.exec(this.content)
-
 
         this.axios.post('http://localhost:8081/setNewPost', param)
           .then((response) => {

@@ -1,8 +1,28 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header style="text-align: left;background-color: #DCDFE6"><img src="/static/logo.png"
-                                                                         style="margin-top: 10px;margin-left: 0px">
+
+      <el-row type="flex" class="row-bg">
+        <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+        <el-col :span="6"><div class="grid-content bg-purple-light"></div></el-col>
+        <el-col :span="6"><div class="grid-content bg-purple"></div></el-col>
+      </el-row>
+
+      <el-header style="text-align: left;background-color: #FFFFFF">
+        <el-row type="flex" class="row-bg">
+          <el-col :span="6">
+            <div class="grid-content bg-purple">
+          <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 0px">
+            </div>
+          </el-col>
+          <el-col :span="6" :offset="12">
+            <div class="grid-content bg-purple">
+            <router-link to="home">登录</router-link>
+              <router-link to="home">注册</router-link>
+            </div>
+          </el-col>
+        </el-row>
+
       </el-header>
       <el-container>
         <el-menu
@@ -53,7 +73,8 @@
             icon: 'el-icon-s-home'
           }
         ]
-      };z
+      };
+      z
     },
     methods: {
       addmyMenu: function (fid, label, index, icon) {
@@ -62,7 +83,7 @@
           label: label,
           index: index,
           icon: icon,
-          key:index,
+          key: index,
         })
       },
       getForums: function () {
