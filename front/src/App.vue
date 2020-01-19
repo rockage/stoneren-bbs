@@ -6,8 +6,20 @@
         <div class="div-one">
           <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 10px">
           <div class="div-two">
-            <router-link to="home">登录</router-link>
-            <router-link to="home">注册</router-link>
+            <el-button type="text" @click="dialogVisible = true">登录</el-button>
+            <button  @click="xxx">注册</button>
+            <el-dialog
+              title="用户登录"
+              :modal="false"
+              :visible.sync="dialogVisible"
+              width="30%"
+              :before-close="handleClose">
+              <span>这是一段信息</span>
+              <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+              </span>
+            </el-dialog>
           </div>
         </div>
       </el-col>
@@ -45,7 +57,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <div class="footer" >
+        <div class="footer">
           <a href="https://github.com/rockage/stoneren-bbs"
           >https://github.com/rockage/stoneren-bbs</a>
         </div>
@@ -64,6 +76,7 @@
     name: "App",
     data() {
       return {
+        dialogVisible: false,
         myMenus: [
           {
             fid: '0',
@@ -75,6 +88,14 @@
       };
     },
     methods: {
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {
+          });
+      },
       addmyMenu: function (fid, label, index, icon) {
         this.myMenus.push({
           fid: fid,
@@ -106,7 +127,7 @@
 
 <style>
 
-  .footer{
+  .footer {
     /*flex 布局*/
     display: flex;
     /*实现垂直居中*/
@@ -115,19 +136,19 @@
     justify-content: center;
 
     text-align: justify;
-    width:100%;
-    height:50px;
+    width: 100%;
+    height: 50px;
     background: #99a9bf;
-    margin:0 auto;
-    color:#fff;
+    margin: 0 auto;
+    color: #fff;
   }
 
   .div-one {
     width: 100%;
     height: 70px;
     position: relative;
-   // border: 1px solid #ff871e;
-    background: #99a9bf
+  / / border: 1 px solid #ff871e;
+    background: #F2F6FC
   }
 
   .div-two {
@@ -139,8 +160,8 @@
     margin: auto;
     width: 150px;
     height: 20px;
-  //  border: 1px solid #ff871e;
-    background: #99a9bf
+  / / border: 1 px solid #ff871e;
+    background: #F2F6FC
   }
 
   #app {
@@ -186,9 +207,11 @@
   .el-row {
     margin-bottom: 20px;
 
-    &:last-child {
-      margin-bottom: 0;
-    }
+  &
+  :last-child {
+    margin-bottom: 0;
+  }
+
   }
 
   .el-col {

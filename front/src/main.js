@@ -36,5 +36,14 @@ new Vue({
 
   methods: {
 
+    xxx:function () {
+      console.log("main ok")
+
+    }
+
   }
 })
+
+Vue.prototype.xxx = function (){//changeData是函数名
+  alert('执行成功');
+}
