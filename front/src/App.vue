@@ -1,25 +1,12 @@
 <template>
   <div id="app">
-
     <el-row>
       <el-col :span="24">
         <div class="div-one">
           <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 10px">
           <div class="div-two">
             <el-button type="text" @click="dialogVisible = true">登录</el-button>
-            <button  @click="xxx">注册</button>
-            <el-dialog
-              title="用户登录"
-              :modal="false"
-              :visible.sync="dialogVisible"
-              width="30%"
-              :before-close="handleClose">
-              <span>这是一段信息</span>
-              <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-              </span>
-            </el-dialog>
+            <button @click="btnClick">注册</button>
           </div>
         </div>
       </el-col>
@@ -88,6 +75,14 @@
       };
     },
     methods: {
+      btnClick: function () {
+
+        this.$login(
+          {
+            msg: '用户登录'
+          }
+        )
+      },
       handleClose(done) {
         this.$confirm('确认关闭？')
           .then(_ => {
@@ -207,10 +202,10 @@
   .el-row {
     margin-bottom: 20px;
 
-  &
-  :last-child {
-    margin-bottom: 0;
-  }
+    &
+    :last-child {
+      margin-bottom: 0;
+    }
 
   }
 

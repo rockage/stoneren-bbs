@@ -13,16 +13,14 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
 
-
-
-import post from './components/post.vue'
-
+import Post from './components/post.vue'
+import Login from "./components/login.vue";
 
 
 Vue.prototype.axios = axios
 Vue.use(ElementUI);
 Vue.use(VueQuillEditor)
-Vue.component('post', post) //自定义模块:post
+Vue.component('post', Post) //自定义组件，<post> </post>
 
 Vue.config.productionTip = false
 
@@ -34,16 +32,17 @@ new Vue({
   },
   template: '<App/>',
 
-  methods: {
-
-    xxx:function () {
-      console.log("main ok")
-
-    }
-
-  }
+  methods: {}
 })
 
-Vue.prototype.xxx = function (){//changeData是函数名
-  alert('执行成功');
+Vue.prototype.$login = function (data) { //自定义全局弹窗组件，也可以把这一段放到一个独立的js文件中
+  const LoginBox = Vue.extend(Login)
+  let instance = new LoginBox({data})
+  let LoginEl = instance.$mount().$el
+  document.body.appendChild(LoginEl)
+
+  Vue.nextTick(() => {
+   instance.dialogVisible = true
+ })
+
 }
