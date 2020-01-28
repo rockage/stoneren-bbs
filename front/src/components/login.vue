@@ -14,7 +14,7 @@
 
     <el-input
       placeholder="密码"
-      prefix-icon="el-icon-s-order"
+      prefix-icon="el-icon-lock"
       v-model="inputPasswd" show-password style="margin-bottom: 15px">
     </el-input>
     <span>自动登录：</span>
@@ -25,8 +25,7 @@
     </el-switch>
 
     <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+              <el-button type="primary" @click="check">确 定</el-button>
               </span>
   </el-dialog>
 </template>
@@ -47,6 +46,14 @@
       init: function (options) {
         this.msg = options.msg
       },
+      check: async function () {
+
+        let r = await this.$checkLogin()
+        console.log(r)
+
+        this.dialogVisible = false
+
+      }
     }
 
   }

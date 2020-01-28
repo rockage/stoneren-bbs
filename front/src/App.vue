@@ -5,8 +5,24 @@
         <div class="div-one">
           <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 10px">
           <div class="div-two">
-            <el-button type="text" @click="dialogVisible = true">登录</el-button>
-            <button @click="btnClick">注册</button>
+            <span v-show="!loginState">
+            <el-button type="text" @click="btnClick">登录</el-button>
+            <el-button type="text" @click="btnClick">注册</el-button>
+            </span>
+
+            <span v-show="loginState">
+            <el-dropdown>
+              <i class="el-icon-setting" style="margin-right: 15px"></i>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>查看</el-dropdown-item>
+                <el-dropdown-item>新增</el-dropdown-item>
+                <el-dropdown-item>删除</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <span>王小虎</span>
+              </span>
+
+
           </div>
         </div>
       </el-col>
@@ -74,8 +90,15 @@
         ]
       };
     },
+    computed: {
+      loginState() {
+        return this.$store.state.loginState
+      }
+    },
+
     methods: {
       btnClick: function () {
+        console.log(this.$store.state.count)
 
         this.$login(
           {
@@ -113,6 +136,9 @@
     },
     components: {
       myMenu
+    },
+    beforeMount() {
+
     },
     mounted() {
       this.getForums();

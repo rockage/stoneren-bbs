@@ -4,7 +4,7 @@
 
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="1">
+        <el-col :span="1" v-show="loginState">
           <el-popover
             placement="bottom-start"
             title=""
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-
+  let a = 1
   export default {
     name: 'bbs',
     data() {
@@ -88,11 +88,18 @@
         fid: 0,
         loading: false,
         postVisible: false,
-
-
       }
     },
-    computed: {},
+    computed: {
+      loginState() {
+        return this.$store.state.loginState
+      }
+    },
+    watch: {
+      loginState: function () {
+        this.loginState = this.GLOBAL.loginState
+      }
+    },
     methods: {
       setContextData: function (key, value) {     //给sessionStorage存值
         if (typeof value == "string") {
@@ -145,7 +152,7 @@
 
       }
     },
-    created() {
+    created: function () {
       if (String(this.$route.params.fid) === String(this.getContextData("currentForum"))) {
         //因为created在mounted前发生，created阶段先get页码，接下来在mounted阶段直接渲染该页，
         //否则点击back的时候会默认回到第1页
@@ -153,9 +160,8 @@
       } else {
         this.currentPage = 1 //如果fid发生了变化，则当前page强制设为1
       }
-
     },
-    mounted() {
+    mounted: function () {
 
       if (this.$route.meta.renderMode === 0) {
         this.fid = '0' //最新帖子模式
@@ -165,9 +171,8 @@
       this.setContextData("currentForum", this.fid) //将当前fid存入session
       this.getTotalThreads();
       this.renderMain(this.currentPage)
-    },
 
-    activated() {
-    }
+
+    },
   }
 </script>
