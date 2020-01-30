@@ -133,4 +133,20 @@ func saveAttachment(data []byte) string {
 	err = ioutil.WriteFile(fileName, data, 0666)
 	fileName = strings.Replace(fileName, "../front", "", -1) //去掉../front，否则前端无法读取
 	return fileName
-}                                                                   
+}
+
+// login
+func login(ctx iris.Context) {
+	username := ctx.FormValue("username")
+	password := ctx.FormValue("password")
+	var rst []map[string]string
+	rst, _ = mysql_con.Query("select uid from pre_members where username = '" + username + "' and `password` = '" + password + "'")
+	if rst != nil {
+		b, err := json.Marshal(rst)
+		if err == nil {
+			_, _ = ctx.JSON(string(b))
+		}
+	} else {
+		ctx.Text("not found")
+	}
+}

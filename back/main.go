@@ -29,6 +29,9 @@ func main() {
 	index.Get("/getTotalPosts", getTotalPosts)
 	index.Get("/getForums", getForums)
 	index.Post("/setNewPost", setNewPost)
+	index.Get("/login", login)
 	app.Run(iris.Addr(":8081"), iris.WithoutServerError(iris.ErrServerClosed))
+
+
 
 }

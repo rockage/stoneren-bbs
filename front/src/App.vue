@@ -1,32 +1,6 @@
 <template>
   <div id="app">
-    <el-row>
-      <el-col :span="24">
-        <div class="div-one">
-          <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 10px">
-          <div class="div-two">
-            <span v-show="!loginState">
-            <el-button type="text" @click="btnClick">登录</el-button>
-            <el-button type="text" @click="btnClick">注册</el-button>
-            </span>
-
-            <span v-show="loginState">
-            <el-dropdown>
-              <i class="el-icon-setting" style="margin-right: 15px"></i>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>查看</el-dropdown-item>
-                <el-dropdown-item>新增</el-dropdown-item>
-                <el-dropdown-item>删除</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <span>王小虎</span>
-              </span>
-
-
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+    <bbsHeader></bbsHeader>
     <el-row>
       <el-col :span="3">
         <div class="grid-content bg-purple">
@@ -83,37 +57,14 @@
         myMenus: [
           {
             fid: '0',
-            label: '首页 - 最新帖子',
+            label: '最新帖子',
             index: '0',
             icon: 'el-icon-s-home'
           }
         ]
       };
     },
-    computed: {
-      loginState() {
-        return this.$store.state.loginState
-      }
-    },
-
     methods: {
-      btnClick: function () {
-        console.log(this.$store.state.count)
-
-        this.$login(
-          {
-            msg: '用户登录'
-          }
-        )
-      },
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });
-      },
       addmyMenu: function (fid, label, index, icon) {
         this.myMenus.push({
           fid: fid,

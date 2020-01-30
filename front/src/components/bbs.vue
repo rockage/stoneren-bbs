@@ -95,11 +95,6 @@
         return this.$store.state.loginState
       }
     },
-    watch: {
-      loginState: function () {
-        this.loginState = this.GLOBAL.loginState
-      }
-    },
     methods: {
       setContextData: function (key, value) {     //给sessionStorage存值
         if (typeof value == "string") {
@@ -171,6 +166,8 @@
       this.setContextData("currentForum", this.fid) //将当前fid存入session
       this.getTotalThreads();
       this.renderMain(this.currentPage)
+
+      console.log(this.$store.state.loginState)
 
 
     },

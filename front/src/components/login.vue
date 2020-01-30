@@ -5,7 +5,6 @@
     :visible.sync="dialogVisible"
     width="30%"
   >
-
     <el-input
       placeholder="用户名"
       prefix-icon="el-icon-s-custom"
@@ -31,6 +30,7 @@
 </template>
 
 <script>
+
   export default {
     name: "login",
     data() {
@@ -39,23 +39,42 @@
         msg: '',
         inputName: '',
         inputPasswd: '',
-        autoLogin: false,
+        autoLogin: true,
+        rootThis: '',
       };
     },
     methods: {
       init: function (options) {
         this.msg = options.msg
       },
-      check: async function () {
+      check: function () {
+        console.log(this.rootThis.$store.state.loginState)
 
-        let r = await this.$checkLogin()
-        console.log(r)
+        const a = this.autoLogin
+        const b = this.inputName
+        const c = this.md5(this.inputPasswd)
 
-        this.dialogVisible = false
+        if (b && c) {
+          this.setCookie('autologin', a)
+          this.setCookie('username', b)
+          this.setCookie('password', c)
+          let vm=this
+          let root = this.rootThis
+          console.log(this.getCookie('autologin'))
+          this.loginCheck(a, b, c, function (r) {
+            root.$store.commit('loginStateChanged', r)
+            vm.dialogVisible = false
+          })
+        } else {
+          this.$message.warning("用户名和密码不能为空。")
+        }
 
       }
-    }
+    },
+    mounted() {
+      this.rootThis = this.GLOBAL.globalThis
 
+    }
   }
 </script>
 

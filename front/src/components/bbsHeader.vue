@@ -1,0 +1,77 @@
+<template>
+  <el-row>
+    <el-col :span="24">
+      <div class="div-one">
+        <img src="/static/logo2.png" style="margin-top: 10px;margin-left: 10px">
+        <div class="div-two">
+            <span v-show="!loginState">
+            <el-button type="text" @click="btnClick">登录</el-button>
+            <el-button type="text" @click="btnClick">注册</el-button>
+            </span>
+
+          <span v-show="loginState">
+            <el-dropdown @command="handleCommand">
+              <i class="el-icon-setting" style="margin-right: 15px"></i>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="1">我的资料</el-dropdown-item>
+                <el-dropdown-item command="2">我的主题</el-dropdown-item>
+                <el-dropdown-item command="3">我的回帖</el-dropdown-item>
+                <el-dropdown-item command="4">修改密码</el-dropdown-item>
+                <el-dropdown-item command="5">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <span>王小虎</span>
+              </span>
+
+
+        </div>
+      </div>
+    </el-col>
+  </el-row>
+</template>
+
+<script>
+  export default {
+    name: "bbsHeader",
+    computed: {
+      loginState() {
+        return this.$store.state.loginState
+      }
+    },
+    methods: {
+      handleCommand: function (command) {
+        this.$message('click on item ' + command);
+
+        switch (command) {
+          case '1':
+            break
+          case '2':
+            break
+          case '3':
+            break
+          case '4':
+            break
+          case '5':
+            this.setCookie('username','')
+            this.setCookie('password','')
+            this.setCookie('autologin',false)
+            location.reload()
+        }
+
+      },
+      btnClick: function () {
+        this.$login(
+          {
+            msg: '用户登录'
+          }
+        )
+      },
+    },
+    mounted() {
+     }
+  }
+</script>
+
+<style scoped>
+
+</style>
