@@ -20,7 +20,7 @@
                 <el-dropdown-item command="5">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span>王小虎</span>
+            <span>{{uname}}/{{uid}}</span>
               </span>
 
 
@@ -36,7 +36,13 @@
     computed: {
       loginState() {
         return this.$store.state.loginState
-      }
+      },
+      uid() {
+        return this.$store.state.uid
+      },
+      uname() {
+        return this.$store.state.uname
+      },
     },
     methods: {
       handleCommand: function (command) {
@@ -52,19 +58,15 @@
           case '4':
             break
           case '5':
-            this.setCookie('username','')
-            this.setCookie('password','')
-            this.setCookie('autologin',false)
-            location.reload()
+            this.delCookie('username')
+            this.delCookie('password')
+            this.delCookie('autologin')
+            this.$store.commit('setLoginState', false)
         }
 
       },
       btnClick: function () {
-        this.$login(
-          {
-            msg: '用户登录'
-          }
-        )
+        this.$login()
       },
     },
     mounted() {

@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title=msg
+    title='Login'
     :modal="false"
     :visible.sync="dialogVisible"
     width="30%"
@@ -48,21 +48,21 @@
         this.msg = options.msg
       },
       check: function () {
-        console.log(this.rootThis.$store.state.loginState)
 
         const a = this.autoLogin
         const b = this.inputName
         const c = this.md5(this.inputPasswd)
 
-        if (b && c) {
+        if (b !== null && c !== null) {
           this.setCookie('autologin', a)
           this.setCookie('username', b)
           this.setCookie('password', c)
-          let vm=this
+          let vm = this
           let root = this.rootThis
-          console.log(this.getCookie('autologin'))
-          this.loginCheck(a, b, c, function (r) {
-            root.$store.commit('loginStateChanged', r)
+          this.loginCheck(false, b, c, function (r,uid) {
+            root.$store.commit('setLoginState', r)
+            root.$store.commit('setUid',uid)
+            root.$store.commit('setUname',b)
             vm.dialogVisible = false
           })
         } else {

@@ -1,16 +1,25 @@
 import Vuex from 'vuex'
+import Vue from 'vue'
 
-export const store = new Vuex.Store({
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
   state: {
-    count: 1,
     loginState: false,
+    uid: 0,
+    uname: '',
   },
   mutations: {
-    increment(state) {
-      state.count++
-    },
-    loginStateChanged(state, r) {
+    setLoginState(state, r) {
       state.loginState = r
-    }
+    },
+    setUid(state, r) {
+      state.uid = r
+    },
+    setUname(state, r) {
+      state.uname = r
+    },
   }
 })
+
+export default store

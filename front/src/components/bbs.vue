@@ -167,7 +167,6 @@
       this.getTotalThreads();
       this.renderMain(this.currentPage)
 
-      console.log(this.$store.state.loginState)
 
 
     },
