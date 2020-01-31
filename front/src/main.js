@@ -34,6 +34,7 @@ Vue.use(base)
 Vue.component('post', Post) //自定义组件: <post> </post>
 Vue.component('bbsHeader', bbsHeader) //自定义组件: <bbsHeader> </bbsHeader>
 Vue.prototype.$login = Popup.LoginBox
+Vue.prototype.$password = Popup.PasswordBox
 
 new Vue({
   el: "#app",

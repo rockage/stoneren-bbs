@@ -30,6 +30,7 @@ func main() {
 	index.Get("/getForums", getForums)
 	index.Post("/setNewPost", setNewPost)
 	index.Get("/login", login)
+	index.Get("/newpasswd", newpasswd)
 	app.Run(iris.Addr(":8081"), iris.WithoutServerError(iris.ErrServerClosed))
 
 

@@ -150,3 +150,27 @@ func login(ctx iris.Context) {
 		ctx.Text("not found")
 	}
 }
+
+// new password
+func newpasswd(ctx iris.Context) {
+
+	uid := ctx.FormValue("uid")
+	username := ctx.FormValue("username")
+	oldpasswd := ctx.FormValue("oldpasswd")
+	newpasswd := ctx.FormValue("newpasswd")
+
+	fmt.Println(uid)
+	fmt.Println(username)
+	fmt.Println(oldpasswd)
+	fmt.Println(newpasswd)
+
+	var rst []map[string]string
+	rst, _ = mysql_con.Query("select uid from pre_members where uid = " + uid + " and username = '" + username + "' and password = '" + oldpasswd + "'")
+	if rst != nil {
+		mysql_con.Exec("UPDATE pre_members set password = '" + newpasswd + "' where uid = " + uid)
+
+	} else {
+		ctx.Text("error")
+	}
+
+}

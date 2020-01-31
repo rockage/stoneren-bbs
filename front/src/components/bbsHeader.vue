@@ -46,9 +46,7 @@
     },
     methods: {
       handleCommand: function (command) {
-        this.$message('click on item ' + command);
-
-        switch (command) {
+         switch (command) {
           case '1':
             break
           case '2':
@@ -56,6 +54,7 @@
           case '3':
             break
           case '4':
+            this.$password()
             break
           case '5':
             this.delCookie('username')

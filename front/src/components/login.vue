@@ -1,9 +1,10 @@
 <template>
   <el-dialog
-    title='Login'
+    title='用户登录'
     :modal="false"
     :visible.sync="dialogVisible"
     width="30%"
+
   >
     <el-input
       placeholder="用户名"
@@ -53,17 +54,19 @@
         const b = this.inputName
         const c = this.md5(this.inputPasswd)
 
-        if (b !== null && c !== null) {
+        if (b !== '' && c !== '') {
           this.setCookie('autologin', a)
           this.setCookie('username', b)
           this.setCookie('password', c)
           let vm = this
           let root = this.rootThis
-          this.loginCheck(false, b, c, function (r,uid) {
-            root.$store.commit('setLoginState', r)
-            root.$store.commit('setUid',uid)
-            root.$store.commit('setUname',b)
-            vm.dialogVisible = false
+          this.loginCheck(false, b, c, function (r, uid) {
+            if (r) {
+              root.$store.commit('setLoginState', r)
+              root.$store.commit('setUid', uid)
+              root.$store.commit('setUname', b)
+              vm.dialogVisible = false
+            }
           })
         } else {
           this.$message.warning("用户名和密码不能为空。")

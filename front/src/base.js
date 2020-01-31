@@ -11,7 +11,7 @@ exports.install = function (Vue) {
       .then((response) => {
         if (response.status !== 200) {
 
-          if (!silence) { //自动登录不做信息提示
+          if (!silence) { //cookie静默登录不做信息提示
             this.$message.error('通讯失败，请检查网络。')
           }
 
