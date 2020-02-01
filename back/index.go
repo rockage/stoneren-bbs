@@ -159,16 +159,27 @@ func newpasswd(ctx iris.Context) {
 	oldpasswd := ctx.FormValue("oldpasswd")
 	newpasswd := ctx.FormValue("newpasswd")
 
-	fmt.Println(uid)
-	fmt.Println(username)
-	fmt.Println(oldpasswd)
-	fmt.Println(newpasswd)
-
 	var rst []map[string]string
 	rst, _ = mysql_con.Query("select uid from pre_members where uid = " + uid + " and username = '" + username + "' and password = '" + oldpasswd + "'")
 	if rst != nil {
 		mysql_con.Exec("UPDATE pre_members set password = '" + newpasswd + "' where uid = " + uid)
 
+	} else {
+		ctx.Text("error")
+	}
+
+}
+// get profile
+func getProfile(ctx iris.Context) {
+	uid := ctx.FormValue("uid")
+
+	var rst []map[string]string
+	rst, _ = mysql_con.Query("select * from pre_members where uid = " + uid )
+	if rst != nil {
+		b, err := json.Marshal(rst)
+		if err == nil {
+			_, _ = ctx.JSON(string(b))
+		}
 	} else {
 		ctx.Text("error")
 	}

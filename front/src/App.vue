@@ -47,7 +47,7 @@
 
 
 <script>
-  import myMenu from "./components/menu";
+  import myMenu from "./components/menu"
 
   export default {
     name: "App",

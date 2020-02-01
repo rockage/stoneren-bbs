@@ -26,6 +26,10 @@ import * as Popup from './popup' //自定义全局弹窗组件
 import base from './base'//全局函数
 import store from './store' //vuex全局变量
 
+
+import VueCropper from 'vue-cropper'
+Vue.use(VueCropper)
+
 let globalVariable = { //vue传统全局变量
   globalThis:'',
 }
@@ -35,6 +39,7 @@ Vue.component('post', Post) //自定义组件: <post> </post>
 Vue.component('bbsHeader', bbsHeader) //自定义组件: <bbsHeader> </bbsHeader>
 Vue.prototype.$login = Popup.LoginBox
 Vue.prototype.$password = Popup.PasswordBox
+Vue.prototype.$profile = Popup.ProfileBox
 
 new Vue({
   el: "#app",

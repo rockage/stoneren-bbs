@@ -17,7 +17,7 @@
       prefix-icon="el-icon-lock"
       v-model="inputPasswd" show-password style="margin-bottom: 15px">
     </el-input>
-    <span>自动登录：</span>
+    <span>记住我：</span>
     <el-switch
       v-model="autoLogin"
       active-color="#13ce66"

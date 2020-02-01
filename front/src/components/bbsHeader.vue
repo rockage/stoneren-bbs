@@ -15,12 +15,11 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="1">我的资料</el-dropdown-item>
                 <el-dropdown-item command="2">我的主题</el-dropdown-item>
-                <el-dropdown-item command="3">我的回帖</el-dropdown-item>
-                <el-dropdown-item command="4">修改密码</el-dropdown-item>
-                <el-dropdown-item command="5">退出登录</el-dropdown-item>
+                <el-dropdown-item command="3">修改密码</el-dropdown-item>
+                <el-dropdown-item command="4">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span>{{uname}}/{{uid}}</span>
+            <span style="color:#909399;font-size: small;">{{uname}} / {{uid}}</span>
               </span>
 
 
@@ -48,15 +47,14 @@
       handleCommand: function (command) {
          switch (command) {
           case '1':
+            this.$profile()
             break
           case '2':
             break
           case '3':
-            break
-          case '4':
             this.$password()
             break
-          case '5':
+          case '4':
             this.delCookie('username')
             this.delCookie('password')
             this.delCookie('autologin')

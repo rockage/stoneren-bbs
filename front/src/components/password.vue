@@ -25,7 +25,7 @@
 
 
     <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="btnClick">确 定</el-button>
+              <el-button type="primary" @click="btnClick">保存</el-button>
               </span>
   </el-dialog>
 </template>
