@@ -13,7 +13,7 @@
             layout="prev, pager, next"
             :total=totalPosts
             :page-size="20"
-            >
+          >
           </el-pagination>
         </el-col>
       </el-row>
@@ -28,18 +28,53 @@
 
         <el-table-column
           label=""
-          min-width="15%"
+          min-width="20%"
           className="my-cell"
         >
           <template slot-scope="scope">
-            <div class="block" style="margin-top: 20px;">
-              <el-avatar shape="square" :size="50" src="/static/avatar.png"></el-avatar>
-            </div>
+            <el-row style="margin-top: 20px" justify="center">
+              <el-col :span="24">
+                <img style="object-fit: fill;width: 60%;height: 60%;border-radius: 9px;"
+                     :src="(scope.row.avatar)?(scope.row.avatar):('/static/avatar.png')">
+              </el-col>
+            </el-row>
+            <el-row type="flex" justify="center">
+              <el-col :span="15" style="background-color: #EBEEF5">
+                <span class="author-text" style="font-size: medium;font-weight: bold">{{scope.row.author}}</span>
+              </el-col>
+            </el-row>
 
-            <span style="margin-left: 10px">{{scope.row.author}}</span>
-            <br>
-            <span style="margin-left: 10px">{{ getLocalTime(scope.row.dateline) }}</span>
-            <div class="block" style="margin-bottom: 50px;"></div>
+
+            <el-row gutter="0">
+              <el-col :span="12" class="author-text">回复帖子：</el-col>
+              <el-col :span="12" class="author-text" style="text-align: left">{{scope.row.posts}}</el-col>
+            </el-row>
+
+            <el-row gutter="0">
+              <el-col :span="12" class="author-text">发表主题：</el-col>
+              <el-col :span="12" class="author-text" style="text-align: left">{{scope.row.threads}}</el-col>
+            </el-row>
+
+            <el-row gutter="0">
+              <el-col :span="12" class="author-text">注册日期：</el-col>
+              <el-col :span="12" class="author-text" style="text-align: left">{{getLocalDate(scope.row.regdate)}}
+              </el-col>
+            </el-row>
+
+            <el-row gutter="0">
+              <el-col :span="12" class="author-text">最后登录：</el-col>
+              <el-col :span="12" class="author-text" style="text-align: left">{{getLocalDate(scope.row.lastvisited)}}
+              </el-col>
+            </el-row>
+
+            <el-row gutter="0" type="flex" justify="center">
+              <el-col :span="8" class="author-text"
+                      style="background-color: #EBEEF5;font-size: smaller;">用户等级：
+              </el-col>
+              <el-col :span="8" class="author-text"
+                      style="background-color: #EBEEF5;text-align: left;font-size: smaller;">{{title(scope.row.posts)}}</el-col>
+            </el-row>
+
           </template>
         </el-table-column>
         <el-table-column
@@ -47,7 +82,34 @@
           className="my-cell-2"
         >
           <template slot-scope="scope">
-            <div style="margin-left: 10px;white-space: pre-line;" v-html="up(scope.row.message)"></div>
+            <el-row>
+              <el-col :span="24">
+                <div class="grid-content">
+                  <span style="margin-left: 5px;text-align: left">发表于：{{ getLocalTime(scope.row.dateline) }}</span>
+                  <hr style="height:1px;border-width:0;color:#E4E7ED;background-color:#E4E7ED"/>
+                </div>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="24">
+
+                <div class="grid-content" :style="msgBox(scope.row.message)" v-html="up(scope.row.message)"></div>
+
+              </el-col>
+            </el-row>
+
+
+            <el-row>
+              <el-col :span="24">
+                <div class="grid-content">
+                  <hr style="height:1px;border-width:0;color:#E4E7ED;background-color:#E4E7ED"
+                      v-show="msgHr(scope.row.signature)"/>
+                  <span style="margin-left: 5px;text-align: left;font-style: oblique;font-weight:bold;">{{ scope.row.signature}}</span>
+                </div>
+              </el-col>
+            </el-row>
+
           </template>
         </el-table-column>
       </el-table>
@@ -71,9 +133,65 @@
         tid: this.$route.params.tid,
         tableData: [],
         totalPosts: 0,
+        messageBox: '',
+        level: [
+          {value: '0', label: '初学乍练'},
+          {value: '1', label: '粗通皮毛'},
+          {value: '2', label: '马马虎虎'},
+          {value: '3', label: '驾轻就熟'},
+          {value: '4', label: '略有小成'},
+          {value: '5', label: '出类拔萃'},
+          {value: '6', label: '炉火纯青'},
+          {value: '7', label: '神乎其技'},
+          {value: '8', label: '一代宗师'},
+          {value: '9', label: '登峰造极'},
+          {value: '10', label: '深不可测'},
+          {value: '11', label: '返璞归真'},
+          {value: '12', label: '荣誉会员'},
+        ],
       }
     },
     methods: {
+      title: function (x) {
+        switch (true) {
+          case (x < 10):
+            return this.level[0].label
+          case (x < 100):
+            return this.level[1].label
+          case (x < 500):
+            return this.level[2].label
+          case (x < 1000):
+            return this.level[3].label
+          case (x < 2000):
+            return this.level[4].label
+          case (x < 3000):
+            return this.level[5].label
+          case (x < 5000):
+            return this.level[6].label
+          case (x < 8000):
+            return this.level[7].label
+          case (x < 10000):
+            return this.level[8].label
+          case (x < 15000):
+            return this.level[9].label
+          case (x < 20000):
+            return this.level[10].label
+          case (x < 30000):
+            return this.level[11].label
+          case (x < 50000):
+            return this.level[12].label
+        }
+      },
+      msgHr: function (message) {
+        return !!message
+      },
+      msgBox: function (message) {
+        if (message.length > 500) {
+          return 'height: 100%;white-space: pre-line;'
+        } else {
+          return 'height: 500px;white-space: pre-line;'
+        }
+      },
       back: function () {
         this.$router.back();
       },
@@ -113,7 +231,6 @@
         this.renderMain(val)
       },
       renderMain: function (page) {
-        // this.loading = true
         this.axios.get('http://localhost:8081/renderThreadsView', {
           params: {
             page: page,
@@ -122,7 +239,6 @@
         })
           .then((response) => {
             this.tableData = JSON.parse(response.data)
-            //this.loading = false
           })
       },
       getTotalPosts: function () {
@@ -136,10 +252,6 @@
             this.renderMain(1)
           })
       },
-      getLocalTime: function (nS) {
-        let d = new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ')
-        return d;
-      }
     },
     mounted() {
       this.getTotalPosts()
@@ -163,5 +275,10 @@
     vertical-align: top
   }
 
+  .author-text {
+    text-align: right;
+    color: #909399;
+    font-size: x-small;
+  }
 
 </style>

@@ -68,7 +68,18 @@ func renderThreadsView(ctx iris.Context) {
 
 	var ok bool
 	var rst []map[string]string
-	rst, ok = mysql_con.Query("select pid,fid,tid,author,dateline,message from pre_forum_post where tid = " + tid + " ORDER BY dateline limit " + startRec + "," + stopRec)
+	var sql string
+
+	sql = "select pid,fid,tid,author,dateline,message,authorid," +
+		"(select threads from pre_members where pre_members.uid = pre_forum_post.authorid) as threads," +
+		"(select posts from pre_members where pre_members.uid = pre_forum_post.authorid) as posts," +
+		"(select avatar from pre_members where pre_members.uid = pre_forum_post.authorid) as avatar," +
+		"(select regdate from pre_members where pre_members.uid = pre_forum_post.authorid) as regdate," +
+		"(select lastvisited from pre_members where pre_members.uid = pre_forum_post.authorid) as lastvisited," +
+		"(select signature from pre_members where pre_members.uid = pre_forum_post.authorid) as signature " +
+		"from pre_forum_post where tid = " + tid + " ORDER BY dateline limit " + startRec + "," + stopRec
+	fmt.Println(sql)
+	rst, ok = mysql_con.Query(sql)
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
@@ -169,12 +180,13 @@ func newpasswd(ctx iris.Context) {
 	}
 
 }
+
 // get profile
 func getProfile(ctx iris.Context) {
 	uid := ctx.FormValue("uid")
 
 	var rst []map[string]string
-	rst, _ = mysql_con.Query("select * from pre_members where uid = " + uid )
+	rst, _ = mysql_con.Query("select email,gender,location,born,mobile,signature,avatar from pre_members where uid = " + uid)
 	if rst != nil {
 		b, err := json.Marshal(rst)
 		if err == nil {
@@ -184,4 +196,64 @@ func getProfile(ctx iris.Context) {
 		ctx.Text("error")
 	}
 
+}
+
+//setProfile
+func setProfile(ctx iris.Context) {
+
+	uid := ctx.FormValue("uid")
+	password := ctx.FormValue("password")
+	avatar := ctx.FormValue("avatar")
+	gender := ctx.FormValue("gender")
+	location := ctx.FormValue("location")
+	born := ctx.FormValue("born")
+	mobilePhone := ctx.FormValue("mobilePhone")
+	signature := ctx.FormValue("signature")
+
+	var rst []map[string]string
+	rst, _ = mysql_con.Query("select uid from pre_members where uid = " + uid + " and password = '" + password + "'")
+	if rst != nil {
+		mysql_con.Exec("UPDATE pre_members set avatar = '" + avatar + "', " +
+			"gender = " + gender + "," +
+			"location = " + location + "," +
+			"born = '" + born + "'," +
+			"mobile = '" + mobilePhone + "'," +
+			"signature = '" + signature + "' " +
+			"where uid = " + uid)
+		ctx.Text("success")
+	} else {
+		ctx.Text("error")
+	}
+}
+
+// resetPosts
+func resetPosts(ctx iris.Context) {
+
+	var rst []map[string]string
+	var rst2 []map[string]string
+	var rst3 []map[string]string
+	rst, _ = mysql_con.Query("SELECT uid,username from pre_members ORDER BY uid")
+
+	fmt.Println(rst[0])
+	if rst != nil {
+		for _, v := range rst {
+			uid := v["uid"]
+			fmt.Println("- - - 正在处理：" + uid + "- - -")
+			rst2, _ = mysql_con.Query("SELECT count(1) as tp from pre_forum_post WHERE authorid = " + uid)
+			v2 := rst2[0]
+			tp:=v2["tp"]
+			fmt.Println("发帖数：" + tp)
+			mysql_con.Exec("UPDATE pre_members set posts = " + tp + " where uid = " + uid)
+
+			rst3, _ = mysql_con.Query("SELECT count(1) as tf from pre_forum_thread WHERE authorid = " + uid)
+			v3 := rst3[0]
+			tf:=v3["tf"]
+			fmt.Println("主题数：" + tf)
+			mysql_con.Exec("UPDATE pre_members set threads = " + tf + " where uid = " + uid)
+
+		}
+	} else {
+	}
+
+	fmt.Println()
 }

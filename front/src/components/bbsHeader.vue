@@ -8,7 +8,7 @@
             <el-button type="text" @click="btnClick">登录</el-button>
             <el-button type="text" @click="btnClick">注册</el-button>
             </span>
-
+          <button @click="ccc">test</button>
           <span v-show="loginState">
             <el-dropdown @command="handleCommand">
               <i class="el-icon-setting" style="margin-right: 15px"></i>
@@ -44,6 +44,15 @@
       },
     },
     methods: {
+      ccc:function(){
+        this.axios.get('http://localhost:8081/resetPosts', {
+          params: {}
+        })
+          .then((response) => {
+            this.tableData = JSON.parse(response.data)
+            this.loading = false
+          })
+      },
       handleCommand: function (command) {
          switch (command) {
           case '1':

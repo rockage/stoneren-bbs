@@ -22,19 +22,13 @@ func initDB() bool {
 
 func Exec(SQL string) {
 	if initDB() == true {
-
-		fmt.Println(SQL)
-
 		ret, _ := DB.Exec(SQL)
 		//		insID, _ := ret.LastInsertId()
 		fmt.Println(ret)
-
-
 	}
 }
 
 func Query(SQL string) ([]map[string]string, bool) {
-	fmt.Println(SQL)
 
 	if initDB() != true { //连接数据库
 		return nil, false

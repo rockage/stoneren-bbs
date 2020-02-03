@@ -46,9 +46,9 @@ exports.install = function (Vue) {
     let strcookie = document.cookie
     let arrcookie = strcookie.split("; ")
     //遍历匹配
-    for ( let i = 0; i < arrcookie.length; i++) {
+    for (let i = 0; i < arrcookie.length; i++) {
       let arr = arrcookie[i].split("=")
-      if (arr[0] == c_name){
+      if (arr[0] == c_name) {
         return arr[1]
       }
     }
@@ -60,4 +60,19 @@ exports.install = function (Vue) {
     exdate.setTime(exdate.getTime() - 1);
     document.cookie = c_name + "=null;expires:-1;path=/"
   }
+
+  Vue.prototype.getLocalTime = function (nS) { //返回2020-02-03 03:45:00
+    let ds = String(new Date(parseInt(nS) * 1000).toISOString())
+    ds = ds.replace(/(.+?)T(.+?).\d\d\dZ/, '$1 $2')
+    return ds
+  }
+
+  Vue.prototype.getLocalDate = function (nS) { //返回2020-02-03
+    let ds = String(new Date(parseInt(nS) * 1000).toISOString())
+    ds = ds.replace(/(.+?)T.+?Z/, '$1')
+    if (ds < '2003-01-01') ds = '上古时期'
+    return ds
+  }
+
+
 }

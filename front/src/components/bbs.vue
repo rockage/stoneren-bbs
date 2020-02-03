@@ -142,10 +142,6 @@
             this.totalPage = JSON.parse(response.data)
           })
       },
-      getLocalTime: function (nS) {
-        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ')
-
-      }
     },
     created: function () {
       if (String(this.$route.params.fid) === String(this.getContextData("currentForum"))) {
