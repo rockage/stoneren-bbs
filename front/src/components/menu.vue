@@ -12,10 +12,10 @@
   export default {
     name: "myMenu",
     props: {
-      index:String,
-      label: String,
-      icon: String,
-      fid: String,
+      index: '',
+      label: '',
+      icon: '',
+      fid: '',
     },
     methods: {
       onCloseClick: function () {
@@ -24,7 +24,16 @@
       },
       router_to: function () {
 
-        this.$router.push({name: 'forumsview', params: {fid: this.fid}}).catch(err => {})
+        console.log(this.fid)
+
+        if (this.fid !== '0') {
+          this.$router.push({name: 'forumsview', params: {fid: this.fid}}).catch(err => {
+          })
+        } else {
+          this.$router.push({name: 'bbs'}).catch(err => {
+          })
+        }
+
       }
     }
   };

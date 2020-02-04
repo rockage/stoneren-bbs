@@ -2,7 +2,7 @@
   <div class="threadsview">
 
     <el-main>
-      <el-row :gutter="20">
+      <el-row>
         <el-col :span="1">
           <el-button type="primary" v-on:click="back"><i class="el-icon-back"></i>返回</el-button>
         </el-col>
@@ -40,39 +40,40 @@
             </el-row>
             <el-row type="flex" justify="center">
               <el-col :span="15" style="background-color: #EBEEF5">
-                <span class="author-text" style="font-size: medium;font-weight: bold">{{scope.row.author}}</span>
+                <span class="author-text" style="font-size: small;font-weight: bold">{{scope.row.author}}</span>
               </el-col>
             </el-row>
 
 
-            <el-row gutter="0">
+            <el-row>
               <el-col :span="12" class="author-text">回复帖子：</el-col>
               <el-col :span="12" class="author-text" style="text-align: left">{{scope.row.posts}}</el-col>
             </el-row>
 
-            <el-row gutter="0">
+            <el-row>
               <el-col :span="12" class="author-text">发表主题：</el-col>
               <el-col :span="12" class="author-text" style="text-align: left">{{scope.row.threads}}</el-col>
             </el-row>
 
-            <el-row gutter="0">
+            <el-row>
               <el-col :span="12" class="author-text">注册日期：</el-col>
               <el-col :span="12" class="author-text" style="text-align: left">{{getLocalDate(scope.row.regdate)}}
               </el-col>
             </el-row>
 
-            <el-row gutter="0">
+            <el-row>
               <el-col :span="12" class="author-text">最后登录：</el-col>
               <el-col :span="12" class="author-text" style="text-align: left">{{getLocalDate(scope.row.lastvisited)}}
               </el-col>
             </el-row>
 
-            <el-row gutter="0" type="flex" justify="center">
+            <el-row type="flex" justify="center">
               <el-col :span="8" class="author-text"
                       style="background-color: #EBEEF5;font-size: smaller;">用户等级：
               </el-col>
               <el-col :span="8" class="author-text"
-                      style="background-color: #EBEEF5;text-align: left;font-size: smaller;">{{title(scope.row.posts)}}</el-col>
+                      style="background-color: #EBEEF5;text-align: left;font-size: smaller;">{{title(scope.row.posts)}}
+              </el-col>
             </el-row>
 
           </template>
@@ -239,6 +240,7 @@
         })
           .then((response) => {
             this.tableData = JSON.parse(response.data)
+            console.log(JSON.parse(response.data))
           })
       },
       getTotalPosts: function () {

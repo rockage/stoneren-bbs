@@ -62,7 +62,7 @@
           return
         }
 
-        this.axios.get('http://localhost:8081/newpasswd', {
+        this.axios.get('http://localhost:8081/setNewPasswd', {
           params: {
             uid: root.$store.state.uid,
             username: root.$store.state.uname,

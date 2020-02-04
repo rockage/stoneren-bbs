@@ -40,6 +40,7 @@ Vue.component('bbsHeader', bbsHeader) //自定义组件: <bbsHeader> </bbsHeader
 Vue.prototype.$login = Popup.LoginBox
 Vue.prototype.$password = Popup.PasswordBox
 Vue.prototype.$profile = Popup.ProfileBox
+Vue.prototype.$userprofile = Popup.UserProfileBox
 
 new Vue({
   el: "#app",

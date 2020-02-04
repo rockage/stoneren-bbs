@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Login from "./components/login.vue"
 import Password from "./components/password.vue"
 import Profile from "./components/profile.vue"
-//import rockCropper from "./components/rockCropper.vue"
+import UserProfile from "./components/userprofile.vue"
 
 function LoginBox() {
   const LoginBox = Vue.extend(Login)
@@ -34,6 +34,15 @@ function ProfileBox() {
   })
 }
 
+function UserProfileBox(data) {
+  const UserProfileBox = Vue.extend(UserProfile)
+  let instance = new UserProfileBox({data})
+  let UserProfileEl = instance.$mount().$el
+  document.body.appendChild(UserProfileEl)
+  Vue.nextTick(() => {
+    instance.dialogVisible = true
+  })
+}
 
 
-export {LoginBox, PasswordBox,ProfileBox}
+export {LoginBox, PasswordBox, ProfileBox, UserProfileBox}

@@ -15,15 +15,21 @@ export default new Router({
       meta: {renderMode: 0},
     },
     {
-      path: '/threads/view/:tid',
-      name: 'threadsview',
-      component: threadsview
-    },
-    {
       path: '/forums/view/:fid',
       name: 'forumsview',
       component: bbs,
       meta: {renderMode: 1},
-    }
+    },
+    {
+      path: '/threads/userThreads/:uid',
+      name: 'userThreads',
+      component: bbs,
+      meta: {renderMode: 2},
+    },
+    {
+      path: '/threads/view/:tid',
+      name: 'threadsview',
+      component: threadsview
+    },
   ]
 })

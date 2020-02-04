@@ -22,18 +22,19 @@ func renderIndexMain(ctx iris.Context) {
 	page := ctx.FormValue("page")
 	p1, _ := strconv.Atoi(page)
 	t1 := p1*20 - 20
-
 	startRec := strconv.Itoa(t1)
 	stopRec := "20"
 
-	if forumsId == "0" {
+	switch ctx.FormValue("rmode") {
+	case "new":
 		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY dateline DESC limit " + startRec + "," + stopRec
-	} else {
+	case "self":
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where authorid = " + forumsId + " ORDER BY dateline DESC limit " + startRec + "," + stopRec
+	case "normal":
 		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + forumsId + " ORDER BY dateline DESC limit " + startRec + "," + stopRec
 	}
 	var ok bool
 	var rst []map[string]string
-
 	rst, ok = mysql_con.Query(sql)
 	if ok {
 		b, err := json.Marshal(rst)
@@ -45,16 +46,19 @@ func renderIndexMain(ctx iris.Context) {
 func getTotalThreads(ctx iris.Context) {
 	var sql string
 	forumsId := ctx.FormValue("fid")
-	if forumsId == "0" {
+
+	switch ctx.FormValue("rmode") {
+	case "new":
 		sql = "explain select * from pre_forum_thread"
-	} else {
+	case "self":
+		sql = "select  COUNT(1) as rows from pre_forum_thread where authorid = " + forumsId
+	case "normal":
 		sql = "select  COUNT(1) as rows from pre_forum_thread where fid = " + forumsId
 	}
 
 	var rst []map[string]string
 	rst, _ = mysql_con.Query(sql) //求出总行数
 	_, _ = ctx.JSON(rst[0]["rows"])
-
 }
 
 //ThreadsView
@@ -65,11 +69,9 @@ func renderThreadsView(ctx iris.Context) {
 	t1 := p1*20 - 20
 	startRec := strconv.Itoa(t1)
 	stopRec := "20"
-
 	var ok bool
 	var rst []map[string]string
 	var sql string
-
 	sql = "select pid,fid,tid,author,dateline,message,authorid," +
 		"(select threads from pre_members where pre_members.uid = pre_forum_post.authorid) as threads," +
 		"(select posts from pre_members where pre_members.uid = pre_forum_post.authorid) as posts," +
@@ -78,7 +80,7 @@ func renderThreadsView(ctx iris.Context) {
 		"(select lastvisited from pre_members where pre_members.uid = pre_forum_post.authorid) as lastvisited," +
 		"(select signature from pre_members where pre_members.uid = pre_forum_post.authorid) as signature " +
 		"from pre_forum_post where tid = " + tid + " ORDER BY dateline limit " + startRec + "," + stopRec
-	fmt.Println(sql)
+
 	rst, ok = mysql_con.Query(sql)
 	if ok {
 		b, err := json.Marshal(rst)
@@ -163,28 +165,23 @@ func login(ctx iris.Context) {
 }
 
 // new password
-func newpasswd(ctx iris.Context) {
-
+func setNewPasswd(ctx iris.Context) {
 	uid := ctx.FormValue("uid")
 	username := ctx.FormValue("username")
 	oldpasswd := ctx.FormValue("oldpasswd")
 	newpasswd := ctx.FormValue("newpasswd")
-
 	var rst []map[string]string
 	rst, _ = mysql_con.Query("select uid from pre_members where uid = " + uid + " and username = '" + username + "' and password = '" + oldpasswd + "'")
 	if rst != nil {
 		mysql_con.Exec("UPDATE pre_members set password = '" + newpasswd + "' where uid = " + uid)
-
 	} else {
 		ctx.Text("error")
 	}
-
 }
 
 // get profile
 func getProfile(ctx iris.Context) {
 	uid := ctx.FormValue("uid")
-
 	var rst []map[string]string
 	rst, _ = mysql_con.Query("select email,gender,location,born,mobile,signature,avatar from pre_members where uid = " + uid)
 	if rst != nil {
@@ -200,7 +197,6 @@ func getProfile(ctx iris.Context) {
 
 //setProfile
 func setProfile(ctx iris.Context) {
-
 	uid := ctx.FormValue("uid")
 	password := ctx.FormValue("password")
 	avatar := ctx.FormValue("avatar")
@@ -209,11 +205,23 @@ func setProfile(ctx iris.Context) {
 	born := ctx.FormValue("born")
 	mobilePhone := ctx.FormValue("mobilePhone")
 	signature := ctx.FormValue("signature")
+	var fn string
+
+	re, _ := regexp.Compile(`^(data:.+?;base64,)`)
+	match := re.FindAllStringSubmatch(avatar, -1)
+
+	if match == nil {
+		fn = avatar  //如果data不是base64，直接存储图片路径
+	} else {
+		avatar = re.ReplaceAllString(avatar, "")
+		data, _ := base64.StdEncoding.DecodeString(avatar)
+		fn = saveAvatar(data, uid)
+	}
 
 	var rst []map[string]string
 	rst, _ = mysql_con.Query("select uid from pre_members where uid = " + uid + " and password = '" + password + "'")
 	if rst != nil {
-		mysql_con.Exec("UPDATE pre_members set avatar = '" + avatar + "', " +
+		mysql_con.Exec("UPDATE pre_members set avatar = '" + fn + "', " +
 			"gender = " + gender + "," +
 			"location = " + location + "," +
 			"born = '" + born + "'," +
@@ -225,10 +233,38 @@ func setProfile(ctx iris.Context) {
 		ctx.Text("error")
 	}
 }
+func saveAvatar(data []byte, uid string) string {
+	dir := "../front/static/avatar/"
+	_, err := os.Stat(dir)
+	if err != nil {
+		err = os.Mkdir(dir, 0777)
+	}
+
+	fileName := dir + uid + ".jpg"
+	err = ioutil.WriteFile(fileName, data, 0666)
+	fileName = strings.Replace(fileName, "../front", "", -1) //去掉../front，否则前端无法读取
+	return fileName
+}
+
+//getUserProfile
+func getUserProfile(ctx iris.Context) {
+	uname := ctx.FormValue("uname")
+	var rst []map[string]string
+	fmt.Println("select posts,lastvisited,regdate,email,gender,location,born,mobile,signature,avatar from pre_members where username = " + uname)
+	rst, _ = mysql_con.Query("select uid,posts,threads,lastvisited,regdate,email,gender,location,born,mobile,signature,avatar from pre_members where username = '" + uname + "'")
+	if rst != nil {
+		b, err := json.Marshal(rst)
+		if err == nil {
+			_, _ = ctx.JSON(string(b))
+		}
+	} else {
+		ctx.Text("error")
+	}
+
+}
 
 // resetPosts
 func resetPosts(ctx iris.Context) {
-
 	var rst []map[string]string
 	var rst2 []map[string]string
 	var rst3 []map[string]string
@@ -241,19 +277,18 @@ func resetPosts(ctx iris.Context) {
 			fmt.Println("- - - 正在处理：" + uid + "- - -")
 			rst2, _ = mysql_con.Query("SELECT count(1) as tp from pre_forum_post WHERE authorid = " + uid)
 			v2 := rst2[0]
-			tp:=v2["tp"]
+			tp := v2["tp"]
 			fmt.Println("发帖数：" + tp)
 			mysql_con.Exec("UPDATE pre_members set posts = " + tp + " where uid = " + uid)
-
 			rst3, _ = mysql_con.Query("SELECT count(1) as tf from pre_forum_thread WHERE authorid = " + uid)
 			v3 := rst3[0]
-			tf:=v3["tf"]
+			tf := v3["tf"]
 			fmt.Println("主题数：" + tf)
 			mysql_con.Exec("UPDATE pre_members set threads = " + tf + " where uid = " + uid)
-
 		}
 	} else {
 	}
 
 	fmt.Println()
 }
+

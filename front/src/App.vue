@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <bbsHeader></bbsHeader>
-    <el-row>
+    <el-row style="margin-top: 0px">
       <el-col :span="3">
-        <div class="grid-content bg-purple">
+        <div>
           <el-menu
             class="el-menu-vertical-demo"
             background-color="#303133"
@@ -115,26 +115,12 @@
     color: #fff;
   }
 
-  .div-one {
-    width: 100%;
-    height: 70px;
-    position: relative;
-  / / border: 1 px solid #ff871e;
-    background: #F2F6FC
+
+  body{
+    margin-top: 0px;
+    padding: 0px;
   }
 
-  .div-two {
-    position: absolute;
-    left: 85%;
-    right: 0;
-    top: 0;
-    bottom: 10px;
-    margin: auto;
-    width: 150px;
-    height: 20px;
-  / / border: 1 px solid #ff871e;
-    background: #F2F6FC
-  }
 
   #app {
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
@@ -160,56 +146,5 @@
     color: #409eff;
   }
 
-  .el-header,
-  .el-footer {
-    background-color: #b3c0d1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
-
-  .el-aside {
-    background-color: #000000;
-    color: #ffffff;
-    text-align: center;
-    line-height: 50px;
-    width: 300px;
-  }
-
-  .el-row {
-    margin-bottom: 20px;
-
-    &
-    :last-child {
-      margin-bottom: 0;
-    }
-
-  }
-
-  .el-col {
-    border-radius: 4px;
-  }
-
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-
-  .bg-purple {
-    background: #d3dce6;
-  }
-
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
 
 </style>

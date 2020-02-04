@@ -61,18 +61,26 @@ exports.install = function (Vue) {
     document.cookie = c_name + "=null;expires:-1;path=/"
   }
 
-  Vue.prototype.getLocalTime = function (nS) { //返回2020-02-03 03:45:00
+  Vue.prototype.getLocalTime = function (nS) { //返回yyyy-mm-dd HH:MM:SS
+    if(isNull(nS)) nS = 1041350400
     let ds = String(new Date(parseInt(nS) * 1000).toISOString())
     ds = ds.replace(/(.+?)T(.+?).\d\d\dZ/, '$1 $2')
     return ds
   }
 
-  Vue.prototype.getLocalDate = function (nS) { //返回2020-02-03
+  Vue.prototype.getLocalDate = function (nS) { //返回yyyy-mm-dd
+    if(isNull(nS)) nS = 1041350400 //2003-01-01 00:00:00
     let ds = String(new Date(parseInt(nS) * 1000).toISOString())
     ds = ds.replace(/(.+?)T.+?Z/, '$1')
-    if (ds < '2003-01-01') ds = '上古时期'
+    //if (ds < '2003-01-01') ds = '上古时期'
     return ds
   }
+}
 
-
+function isNull(e) {
+  if (typeof (e) === "undefined") return true
+  if (!e && typeof (e) != 'undefined' && e != 0) return true
+  if (e !== e) return true
+  if (String(e).length === 0) return true
+  return false
 }

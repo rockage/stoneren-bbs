@@ -41,14 +41,14 @@
         </el-table-column>
         <el-table-column label="作者" min-width="15%">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{scope.row.author}}</span>
+            <span style="margin-left: 10px"><a href="javascript:void(0)" @click="userProfile(scope.row.author)">{{scope.row.author}}</a></span>
             <br>
             <span style="margin-left: 10px">{{ getLocalTime(scope.row.dateline) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="最后发表" min-width="15%">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{scope.row.lastposter}}</span>
+            <span style="margin-left: 10px"><a href="javascript:void(0)" @click="userProfile(scope.row.lastposter)">{{scope.row.lastposter}}</a></span>
             <br>
             <span style="margin-left: 10px">{{ getLocalTime(scope.row.lastpost) }}</span>
           </template>
@@ -85,9 +85,10 @@
         totalPage: 0,
         currentPage: 0, //BUG：点击返回无法真正回到上一页，而总是返回第一页
         currentForum: 0, //BUG: 若水区翻页到100，返回一个不足100页的子论坛报错
-        fid: 0,
+        fid: '',
         loading: false,
         postVisible: false,
+        rMode: '',
       }
     },
     computed: {
@@ -96,6 +97,13 @@
       }
     },
     methods: {
+      userProfile: function (uname) {
+        this.$userprofile(
+          {
+            uname: uname
+          }
+        )
+      },
       setContextData: function (key, value) {     //给sessionStorage存值
         if (typeof value == "string") {
           sessionStorage.setItem(key, value);
@@ -121,10 +129,12 @@
       renderMain: function (page) {
         this.loading = true
 
+
         this.axios.get('http://localhost:8081/renderIndexMain', {
           params: {
             page: page,
             fid: this.fid,
+            rmode: this.rMode,
           }
         })
           .then((response) => {
@@ -136,6 +146,7 @@
         this.axios.get('http://localhost:8081/getTotalThreads', {
           params: {
             fid: this.fid,
+            rmode: this.rMode,
           }
         })
           .then((response) => {
@@ -154,15 +165,28 @@
     },
     mounted: function () {
 
-      if (this.$route.meta.renderMode === 0) {
-        this.fid = '0' //最新帖子模式
-      } else {
-        this.fid = this.$route.params.fid //常规模式
+      switch (this.$route.meta.renderMode) {
+        case 0:
+          this.fid = 0 //最新帖子模式
+          this.rMode = "new"
+          break
+        case 1:
+          this.fid = this.$route.params.fid //常规模式
+          this.rMode = "normal"
+          break
+        case 2:
+          this.fid = this.$route.params.uid//只显示我的主题
+          this.rMode = "self"
+          break
+
       }
+
+
+      console.log(this.$route.params)
+
       this.setContextData("currentForum", this.fid) //将当前fid存入session
       this.getTotalThreads();
       this.renderMain(this.currentPage)
-
 
 
     },
