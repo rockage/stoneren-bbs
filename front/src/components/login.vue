@@ -50,28 +50,51 @@
       },
       check: function () {
 
-        const a = this.autoLogin
-        const b = this.inputName
-        const c = this.md5(this.inputPasswd)
+        const auto = this.autoLogin
+        const uname = this.inputName
+        const passwd = this.md5(this.inputPasswd)
 
-        if (b !== '' && c !== '') {
-          this.setCookie('autologin', a)
-          this.setCookie('username', b)
-          this.setCookie('password', c)
+        if (uname !== '' && passwd !== '') {
+
           let vm = this
           let root = this.rootThis
-          this.loginCheck(false, b, c, function (r, uid) {
-            if (r) {
-              root.$store.commit('setLoginState', r)
-              root.$store.commit('setUid', uid)
-              root.$store.commit('setUname', b)
-              vm.dialogVisible = false
+
+          this.axios.get('http://localhost:8081/login', {
+            withCredentials: true,
+            params: {
+              username: uname,
+              password: passwd,
             }
           })
+            .then((response) => {
+              if (response.status !== 200) {
+                this.$message.error('通讯失败，请检查网络。')
+                return
+              }
+
+              if (response.data === 'not found') {
+                this.$message.warning("用户名或密码错误。")
+                return
+              }
+
+              const ret = JSON.parse(response.data)
+              if (ret[0].uid) {
+                vm.setCookie('autologin', auto)
+                vm.setCookie('username', uname)
+                vm.setCookie('password', passwd)
+                root.$store.commit('setLoginState', true)
+                root.$store.commit('setUid', ret[0].uid)
+                root.$store.commit('setUname', uname)
+                vm.$message.success("恭喜你，登录成功了。")
+                console.log(vm.getCookie("autologin"))
+                console.log(vm.getCookie("username"))
+                console.log(vm.getCookie("password"))
+                vm.dialogVisible = false
+              }
+            })
         } else {
           this.$message.warning("用户名和密码不能为空。")
         }
-
       }
     },
     mounted() {

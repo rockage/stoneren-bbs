@@ -8,7 +8,14 @@
         <button @click="ccc" style="display: none">统计发帖数</button>
 
       </td>
-      <td>       <span style="font-size: xx-large">中国石凳联盟论坛</span></td>
+      <td><span style="font-size: xx-large">中国石凳联盟论坛</span>
+        <button @click="li">login</button>
+        <button @click="lo">logout</button>
+        <button @click="lc">secret</button>
+        <button @click="savecookie">savecookie</button>
+        <button @click="readcookie">readcookie</button>
+
+      </td>
 
       <td style="text-align: right;margin-right: 20px">
 
@@ -33,6 +40,11 @@
       </td>
       <td width="20px"></td>
     </tr>
+    <tr>
+      <td>
+
+      </td>
+    </tr>
     </tbody>
   </table>
 
@@ -54,6 +66,48 @@
       },
     },
     methods: {
+      readcookie: function () {
+        console.log(this.getCookie('autologin'))
+        console.log(this.getCookie('username'))
+        console.log(this.getCookie('password'))
+
+      },
+      savecookie: function () {
+        this.setCookie('autologin', this.getCookie('autologin'))
+        this.setCookie('username', this.getCookie('username'))
+        this.setCookie('password', this.getCookie('password'))
+      },
+
+      li: function () {
+        this.axios.get('http://localhost:8081/login', {
+          withCredentials: true,
+          params: {
+            username: 'rockage',
+            password: 'e10adc3949ba59abbe56e057f20f883e',
+          }
+        })
+          .then((response) => {
+
+
+
+          })
+
+      },
+      lo: function () {
+        this.axios.get('http://localhost:8081/logout', {withCredentials: true}).then((response) => {
+          console.log(response.data)
+        })
+      },
+      lc: function () {
+        this.axios.get('http://localhost:8081/secret', {
+          withCredentials: true,
+        }).then((response) => {
+          console.log(response.data)
+        })
+
+      },
+
+
       ccc: function () {
         this.axios.get('http://localhost:8081/resetPosts', {
           params: {}
@@ -81,12 +135,17 @@
             this.$password()
             break
           case '4':
-            this.delCookie('username')
-            this.delCookie('password')
-            this.delCookie('autologin')
-            this.$store.commit('setLoginState', false)
+            this.axios.get('http://localhost:8081/logout', {
+              withCredentials: true
+            })
+              .then((response) => {
+                this.delCookie('username')
+                this.delCookie('password')
+                this.delCookie('autologin')
+                this.$store.commit('setLoginState', false)
+                this.$message.success(response.data)
+              })
         }
-
       },
       btnClick: function () {
         this.$login()

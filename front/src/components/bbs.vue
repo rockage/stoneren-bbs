@@ -1,35 +1,42 @@
 <template>
   <div class="bbs">
-
-
     <el-main>
-      <el-row :gutter="20">
+      <el-row>
         <el-col :span="1" v-show="loginState">
-          <el-popover
-            placement="bottom-start"
-            title=""
-            width="100%"
-            trigger="manual"
-            offset="0"
-            :visible-arrow="false"
-            v-model="postVisible">
-            <post label="发帖"></post>
-            <el-button slot="reference" @click="postVisible = !postVisible">发帖 <i class="el-icon-edit-outline"></i>
-            </el-button>
-          </el-popover>
+          <div>
+            <el-button type="primary" icon="el-icon-back" circle v-on:click="$router.back()"></el-button>
+          </div>
         </el-col>
-        <el-col :span="21" :push="1" style="text-align: right;">
-          <el-pagination
-            background
-            @current-change="handleCurrentChange"
-            layout="prev, pager, next"
-            :total=this.totalPage
-            :page-size="20"
-            :current-page=this.currentPage
-            style="text-align: right;"
-          >
-          </el-pagination>
-        </el-col>
+        <div style="background-color: #2c3e50">
+          <el-col :span="1" v-show="loginState">
+            <el-popover
+              placement="bottom-start"
+              title=""
+              trigger="manual"
+              offset="0"
+              :visible-arrow="false"
+              v-model="postVisible">
+              <post label=""></post>
+              <el-button type="primary" icon="el-icon-edit" circle slot="reference" @click="postVisible = !postVisible">
+              </el-button>
+            </el-popover>
+          </el-col>
+        </div>
+        <div style="background-color: #2c3e50">
+          <el-col :span="20" :push="1" style="text-align: right;">
+            <el-pagination
+              small
+              background
+              @current-change="renderMain"
+              layout="prev, pager, next"
+              :total=this.totalPage
+              :page-size="20"
+              :current-page=this.currentPage
+              style="text-align: right;"
+            >
+            </el-pagination>
+          </el-col>
+        </div>
       </el-row>
       <div style="left:50%;top:50%;width: 100px;height: 100px;position: fixed;z-index: 99"
            v-loading="loading"></div>
@@ -62,14 +69,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        @current-change="handleCurrentChange"
-        layout="prev, pager, next"
-        :total="1000"
-        style="text-align: right;"
-      >
-      </el-pagination>
+
     </el-main>
   </div>
 </template>
@@ -83,8 +83,7 @@
         tid: this.$route.params.fid,
         tableData: null,
         totalPage: 0,
-        currentPage: 0, //BUG：点击返回无法真正回到上一页，而总是返回第一页
-        currentForum: 0, //BUG: 若水区翻页到100，返回一个不足100页的子论坛报错
+        currentForum: 0,
         fid: '',
         loading: false,
         postVisible: false,
@@ -94,47 +93,57 @@
     computed: {
       loginState() {
         return this.$store.state.loginState
+      },
+      currentPage: { //将currentPage放入computed的目的：当访问它的时候自动从session中取值，设置它的时候自动存入session
+        get() {
+          const str = sessionStorage.getItem("currentPage");
+          if (typeof str == "string") {
+            try {
+              return JSON.parse(str)
+            } catch (e) {
+              return str
+            }
+          }
+        },
+        set(v) {
+          if (typeof v == "string") {
+            sessionStorage.setItem("currentPage", v)
+          } else {
+            sessionStorage.setItem("currentPage", JSON.stringify(v))
+          }
+        }
       }
     },
     methods: {
       userProfile: function (uname) {
-        this.$userprofile(
-          {
-            uname: uname
-          }
-        )
+        this.$userprofile({uname: uname})
+
       },
-      setContextData: function (key, value) {     //给sessionStorage存值
+      setContextData: function (key, value) {     //sessionStorage存值
         if (typeof value == "string") {
           sessionStorage.setItem(key, value);
         } else {
           sessionStorage.setItem(key, JSON.stringify(value));
         }
       },
-      getContextData: function (key) { // 从sessionStorage取值
+      getContextData: function (key) { // sessionStorage取值
         const str = sessionStorage.getItem(key);
         if (typeof str == "string") {
           try {
-            return JSON.parse(str);
+            return JSON.parse(str) || 1 // ||1的意思：如果是0则为1
           } catch (e) {
-            return str;
+            return str || 1
           }
         }
       },
-      handleCurrentChange(page) {
-        this.currentPage = page
-        this.setContextData("currentPage", this.currentPage) //一旦currentPage发生改变，都存入session
-        this.renderMain(page)
-      },
       renderMain: function (page) {
+        this.currentPage = page
         this.loading = true
-
-
         this.axios.get('http://localhost:8081/renderIndexMain', {
           params: {
             page: page,
             fid: this.fid,
-            rmode: this.rMode,
+            rmode: this.$route.meta.renderMode,
           }
         })
           .then((response) => {
@@ -146,7 +155,7 @@
         this.axios.get('http://localhost:8081/getTotalThreads', {
           params: {
             fid: this.fid,
-            rmode: this.rMode,
+            rmode: this.$route.meta.renderMode,
           }
         })
           .then((response) => {
@@ -155,39 +164,29 @@
       },
     },
     created: function () {
-      if (String(this.$route.params.fid) === String(this.getContextData("currentForum"))) {
-        //因为created在mounted前发生，created阶段先get页码，接下来在mounted阶段直接渲染该页，
-        //否则点击back的时候会默认回到第1页
-        this.currentPage = this.getContextData("currentPage") || 1 //如currentPage=0，默认为1
-      } else {
-        this.currentPage = 1 //如果fid发生了变化，则当前page强制设为1
+      //页码重置规则：1) rMode模式转换；2) 论坛间fid切换；
+      if (this.$route.meta.renderMode !== this.getContextData("currentMode")) this.currentPage = 1
+
+
+      switch (this.$route.meta.renderMode) {
+        case "new":
+          this.fid = 0 //最新帖子模式，不指定论坛
+          break
+        case "normal":
+          this.fid = this.$route.params.fid //常规模式
+          if (String(this.$route.params.fid) !== String(this.getContextData("currentForum"))) this.currentPage = 1
+          break
+        case "self":
+          this.fid = this.$route.params.uid//只显示我的主题
+          break
       }
     },
     mounted: function () {
-
-      switch (this.$route.meta.renderMode) {
-        case 0:
-          this.fid = 0 //最新帖子模式
-          this.rMode = "new"
-          break
-        case 1:
-          this.fid = this.$route.params.fid //常规模式
-          this.rMode = "normal"
-          break
-        case 2:
-          this.fid = this.$route.params.uid//只显示我的主题
-          this.rMode = "self"
-          break
-
-      }
-
-
-      console.log(this.$route.params)
-
       this.setContextData("currentForum", this.fid) //将当前fid存入session
+      this.setContextData("currentMode", this.$route.meta.renderMode) //将当前rMode存入session
       this.getTotalThreads();
-      this.renderMain(this.currentPage)
 
+      this.renderMain(this.currentPage)
 
     },
   }

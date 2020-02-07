@@ -23,20 +23,14 @@
 
 
 <script>
-
-
   //import {ImageDrop} from 'quill-image-drop-module'
   import ImageResize from 'quill-image-resize-module'
-
   //Quill.register('modules/imageDrop', ImageDrop)
   Quill.register('modules/imageResize', ImageResize)
-
   const container = [
     ['bold', 'italic', 'underline', 'strike'],
     ['blockquote', 'code-block'],
-    [{'indent': '-1'}, {'indent': '+1'}],
     [{'size': ['small', false, 'large', 'huge']}],
-    [{'font': []}],
     [{'color': []}, {'background': []}],
     [{'align': []}],
     ['clean'],
@@ -44,11 +38,12 @@
   ]
   let myQuill //增加一个全局quill，代表当前quill实例
   let Vue
-
   export default {
     name: "post",
     data() {
       return {
+        tid:'',
+        rootThis:'',
         threadsTitle: '',
         rotateImg: null,
         editorOption: {
@@ -81,7 +76,6 @@
               },
               modules: ['Resize', 'DisplaySize', 'Toolbar']
             },
-
           },
         },
         content: ''
@@ -133,7 +127,6 @@
           alert('暂不支持FileReader')
         }
       },
-
       rotateImage: function () {
         let cvs = document.createElement("canvas");
         let ctx = cvs.getContext("2d")
@@ -162,12 +155,10 @@
       },
       saveHtml: function () {
         let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
-        param.append("fid", this.fid)
         param.append("tid", this.tid)
-        param.append("uid", this.uid)
+        param.append("uid", this.rootThis.$store.state.uid)
         param.append("threadsTitle", this.threadsTitle)
         param.append("postContens", this.content)
-
         this.axios.post('http://localhost:8081/setNewPost', param)
           .then((response) => {
             this.totalPage = JSON.parse(response.data)
@@ -186,19 +177,27 @@
       Vue = this
       myQuill = this.$refs.myQuillEditor.quill //全局quill实例
       myQuill.root.addEventListener('click', this.handleClick, false) //为全局quill创建一个根监听
-      let quillWidth = document.documentElement.clientWidth * 80 / 100
-      let quillHeight = document.documentElement.clientHeight * 70 / 100
+      let quillWidth = document.documentElement.clientWidth * 60 / 100
+      let quillHeight = document.documentElement.clientHeight * 50 / 100
       myQuill.container.style.width = `${quillWidth}px`
       myQuill.container.style.height = `${quillHeight}px`
+
+      this.rootThis = this.GLOBAL.globalThis
+
     }
     ,
   }
-
 </script>
 
 <style>
-  .ql-editor {
-
+  .edit_container {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: left;
+    color: #2c3e50;
+  }
+  .ql-editor{
 
   }
 </style>

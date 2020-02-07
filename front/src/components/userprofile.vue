@@ -7,16 +7,20 @@
     width="500px"
     :close-on-click-modal="false">
     <div style="text-align: center;">
-      <el-image :src="avatar" style="width: 150px;height: 150px;margin-bottom: 10px;border-radius: 9px;"></el-image>
+      <el-image :src="avatar" style="width: 150px;height: 150px;margin-bottom: 10px;border-radius: 9px;">
+      </el-image>
+      <div style="left:50%;top:50%;width: 100px;height: 100px;z-index: 99;position:fixed;" v-loading="loading"></div>
     </div>
     <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 80%;">
       <div style="white-space: pre;line-height: 50px;font-family: 'Microsoft YaHei',sans-serif"><span
-        style="color:#909399;">{{message}}</span></div>
+        style="color:#909399;">{{message}}</span>
+     </div>
     </el-card>
     <div style="text-align: right">
       <el-button @click="viewThreads()">浏览{{genderName}}的主题 <i class="el-icon-notebook-1"></i></el-button>
       <el-button @click="dialogVisible=false">关闭 <i class="el-icon-circle-close"></i></el-button>
     </div>
+
 
   </el-dialog>
 </template>
@@ -46,6 +50,7 @@
         level: '',
         options: [],
         options2: [],
+        loading: false,
       }
     },
     methods: {
@@ -55,9 +60,9 @@
             name: 'userThreads',
             params: {uid: this.uid}
           }).catch(err => {
-          console.log(err)
+          this.$message.error(err)
         })
-        this.dialogVisible=false
+        this.dialogVisible = false
       },
       getProfile: function () {
         let vm = this
@@ -74,6 +79,7 @@
               }
             }).then((response) => {
               if (response.data !== 'error') {
+                this.dialogVisible=true
                 const ret = JSON.parse(response.data)
                 vm.uid = ret[0].uid
                 vm.gender = ret[0].gender
@@ -136,18 +142,21 @@
                   } else {
                     msg += g + '在' + vm.regdate + '加入本坛，迄今已过去了' + joined + '年。\r\n'
                   }
-                  if (isNull(vm.lastvisited)) {
-                    msg += g + '在' + vm.lastvisited + '返回过一次本坛。'
+                  if (!isNull(vm.lastvisited)) {
+                    msg += g + '最后一次返回本坛的时间是' + vm.lastvisited + '。\r\n'
                   }
-                  msg += '共发表过' + vm.posts + '篇帖子，' + vm.threads + "个主题。\r\n"
+                  msg += g + '总共发表过' + vm.posts + '篇帖子，' + vm.threads + "个主题。\r\n"
                   msg += g + '的武功等级似乎达到了' + vm.level + '的境界。\r\n'
                   if (!isNull(vm.mobilePhone)) msg += '飞鸽传书：' + vm.mobilePhone + '\r\n'
                   if (!isNull(vm.signature)) msg += '人生格言：' + vm.signature
-
                   this.message = msg
+                  this.loading = false
                 })
               } else {
-                this.$message.error("资料读取失败")
+                this.loading = false
+                this.dialogVisible=false
+                this.$login()
+
               }
             })
           })
@@ -189,6 +198,7 @@
       },
     },
     mounted() {
+      this.loading = true
       this.getProfile()
       this.rootThis = this.GLOBAL.globalThis
 

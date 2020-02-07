@@ -1,40 +1,13 @@
 exports.install = function (Vue) {
-  Vue.prototype.loginCheck = function (silence, username, password, callback) {//全局函数1
 
-    this.axios.get('http://localhost:8081/login', {
-      params: {
-        username: username,
-        password: password,
-        autoLogin: this.autoLogin,
-      }
+  Vue.prototype.loginCheck = function (callback) {//全局函数1
+    this.axios.get('http://localhost:8081/secret', {
+      //携带cookie提交，mycookiesessionnameid是一个httponly cookie
+      withCredentials: true
+    }).then((response) => {
+      callback(response.data)
     })
-      .then((response) => {
-        if (response.status !== 200) {
-
-          if (!silence) { //cookie静默登录不做信息提示
-            this.$message.error('通讯失败，请检查网络。')
-          }
-
-          callback(false)
-        }
-        if (response.data === 'not found') {
-          if (!silence) {
-            this.$message.warning("请输入正确的用户名和密码。")
-          }
-          callback(false)
-
-        }
-        const ret = JSON.parse(response.data)
-        if (ret[0].uid) {
-          if (!silence) {
-            this.$message.success("恭喜你，登录成功了。")
-          }
-          callback(true, ret[0].uid)
-        }
-      })
-
   }
-
   Vue.prototype.setCookie = function (c_name, value) {//全局函数2
     let expiredays = 30
     let exdate = new Date();
@@ -60,16 +33,15 @@ exports.install = function (Vue) {
     exdate.setTime(exdate.getTime() - 1);
     document.cookie = c_name + "=null;expires:-1;path=/"
   }
-
   Vue.prototype.getLocalTime = function (nS) { //返回yyyy-mm-dd HH:MM:SS
-    if(isNull(nS)) nS = 1041350400
+    if (isNull(nS)) nS = 1041350400
     let ds = String(new Date(parseInt(nS) * 1000).toISOString())
     ds = ds.replace(/(.+?)T(.+?).\d\d\dZ/, '$1 $2')
     return ds
   }
 
   Vue.prototype.getLocalDate = function (nS) { //返回yyyy-mm-dd
-    if(isNull(nS)) nS = 1041350400 //2003-01-01 00:00:00
+    if (isNull(nS)) nS = 1041350400 //2003-01-01 00:00:00
     let ds = String(new Date(parseInt(nS) * 1000).toISOString())
     ds = ds.replace(/(.+?)T.+?Z/, '$1')
     //if (ds < '2003-01-01') ds = '上古时期'

@@ -23,9 +23,6 @@
         this.$emit("delete", this.text);
       },
       router_to: function () {
-
-        console.log(this.fid)
-
         if (this.fid !== '0') {
           this.$router.push({name: 'forumsview', params: {fid: this.fid}}).catch(err => {
           })
@@ -33,7 +30,6 @@
           this.$router.push({name: 'bbs'}).catch(err => {
           })
         }
-
       }
     }
   };

@@ -40,7 +40,7 @@ function UserProfileBox(data) {
   let UserProfileEl = instance.$mount().$el
   document.body.appendChild(UserProfileEl)
   Vue.nextTick(() => {
-    instance.dialogVisible = true
+    instance.dialogVisible = false
   })
 }
 

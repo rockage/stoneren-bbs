@@ -4,10 +4,11 @@
     <el-main>
       <el-row>
         <el-col :span="1">
-          <el-button type="primary" v-on:click="back"><i class="el-icon-back"></i>返回</el-button>
+          <el-button type="primary" icon="el-icon-back" circle v-on:click="$router.back()"></el-button>
         </el-col>
-        <el-col :span="21" :push="1" style="text-align: right;">
+        <el-col :span="22" :push="1" style="text-align: right;">
           <el-pagination
+            small
             background
             @current-change="handleCurrentChange"
             layout="prev, pager, next"
@@ -25,7 +26,6 @@
         :show-header="false"
         :border="true"
       >
-
         <el-table-column
           label=""
           min-width="20%"
@@ -40,39 +40,35 @@
             </el-row>
             <el-row type="flex" justify="center">
               <el-col :span="15" style="background-color: #EBEEF5">
-                <span class="author-text" style="font-size: small;font-weight: bold">{{scope.row.author}}</span>
+                <span class="author-text" style="font-size: small;font-weight: bold">
+                  <a href="javascript:void(0)" @click="userProfile(scope.row.author)"> {{scope.row.author}}</a>
+                </span>
               </el-col>
             </el-row>
-
-
             <el-row>
               <el-col :span="12" class="author-text">回复帖子：</el-col>
-              <el-col :span="12" class="author-text" style="text-align: left">{{scope.row.posts}}</el-col>
+              <el-col :span="12" class="author-text" style="text-align: left">{{scope.row.postsA}}</el-col>
             </el-row>
-
             <el-row>
               <el-col :span="12" class="author-text">发表主题：</el-col>
               <el-col :span="12" class="author-text" style="text-align: left">{{scope.row.threads}}</el-col>
             </el-row>
-
             <el-row>
               <el-col :span="12" class="author-text">注册日期：</el-col>
               <el-col :span="12" class="author-text" style="text-align: left">{{getLocalDate(scope.row.regdate)}}
               </el-col>
             </el-row>
-
             <el-row>
               <el-col :span="12" class="author-text">最后登录：</el-col>
               <el-col :span="12" class="author-text" style="text-align: left">{{getLocalDate(scope.row.lastvisited)}}
               </el-col>
             </el-row>
-
             <el-row type="flex" justify="center">
               <el-col :span="8" class="author-text"
-                      style="background-color: #EBEEF5;font-size: smaller;">用户等级：
+                      style="background-color: #EBEEF5;font-size: smaller;">武功等级：
               </el-col>
               <el-col :span="8" class="author-text"
-                      style="background-color: #EBEEF5;text-align: left;font-size: smaller;">{{title(scope.row.posts)}}
+                      style="background-color: #EBEEF5;text-align: left;font-size: smaller;">{{scope.row.level}}
               </el-col>
             </el-row>
 
@@ -91,7 +87,6 @@
                 </div>
               </el-col>
             </el-row>
-
             <el-row>
               <el-col :span="24">
 
@@ -99,8 +94,6 @@
 
               </el-col>
             </el-row>
-
-
             <el-row>
               <el-col :span="24">
                 <div class="grid-content">
@@ -135,58 +128,16 @@
         tableData: [],
         totalPosts: 0,
         messageBox: '',
-        level: [
-          {value: '0', label: '初学乍练'},
-          {value: '1', label: '粗通皮毛'},
-          {value: '2', label: '马马虎虎'},
-          {value: '3', label: '驾轻就熟'},
-          {value: '4', label: '略有小成'},
-          {value: '5', label: '出类拔萃'},
-          {value: '6', label: '炉火纯青'},
-          {value: '7', label: '神乎其技'},
-          {value: '8', label: '一代宗师'},
-          {value: '9', label: '登峰造极'},
-          {value: '10', label: '深不可测'},
-          {value: '11', label: '返璞归真'},
-          {value: '12', label: '荣誉会员'},
-        ],
       }
     },
     methods: {
-      title: function (x) {
-        switch (true) {
-          case (x < 10):
-            return this.level[0].label
-          case (x < 100):
-            return this.level[1].label
-          case (x < 500):
-            return this.level[2].label
-          case (x < 1000):
-            return this.level[3].label
-          case (x < 2000):
-            return this.level[4].label
-          case (x < 3000):
-            return this.level[5].label
-          case (x < 5000):
-            return this.level[6].label
-          case (x < 8000):
-            return this.level[7].label
-          case (x < 10000):
-            return this.level[8].label
-          case (x < 15000):
-            return this.level[9].label
-          case (x < 20000):
-            return this.level[10].label
-          case (x < 30000):
-            return this.level[11].label
-          case (x < 50000):
-            return this.level[12].label
-        }
+      userProfile: function (uname) {
+        this.$userprofile({uname: uname})
       },
       msgHr: function (message) {
         return !!message
       },
-      msgBox: function (message) {
+      msgBox: function (message) { //为了在帖子内容很少的时候撑大回帖内容区
         if (message.length > 500) {
           return 'height: 100%;white-space: pre-line;'
         } else {
@@ -194,6 +145,7 @@
         }
       },
       back: function () {
+
         this.$router.back();
       },
       up: function (str) {
@@ -240,7 +192,6 @@
         })
           .then((response) => {
             this.tableData = JSON.parse(response.data)
-            console.log(JSON.parse(response.data))
           })
       },
       getTotalPosts: function () {
@@ -254,6 +205,9 @@
             this.renderMain(1)
           })
       },
+      getThreads: function () {
+
+      }
     },
     mounted() {
       this.getTotalPosts()

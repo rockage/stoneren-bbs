@@ -12,19 +12,19 @@ export default new Router({
       path: '/',
       name: 'bbs',
       component: bbs,
-      meta: {renderMode: 0},
+      meta: {renderMode: 'new'},
     },
     {
       path: '/forums/view/:fid',
       name: 'forumsview',
       component: bbs,
-      meta: {renderMode: 1},
+      meta: {renderMode: 'normal'},
     },
     {
       path: '/threads/userThreads/:uid',
       name: 'userThreads',
       component: bbs,
-      meta: {renderMode: 2},
+      meta: {renderMode: 'self'},
     },
     {
       path: '/threads/view/:tid',

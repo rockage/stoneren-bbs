@@ -1,4 +1,4 @@
-module iris.go
+module stoneren-bbs
 
 go 1.13
 
@@ -30,6 +30,7 @@ require (
 	golang.org/x/crypto v0.0.0-20191227163750-53104e6ec876 // indirect
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 	mysql_con v0.0.0
+
 )
 
 replace mysql_con v0.0.0 => ./mysql_con

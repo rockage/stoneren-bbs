@@ -11,12 +11,20 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import VueCookies from 'vue-cookies'
+
+
+Vue.use(VueCookies)
 Vue.use(ElementUI);
 Vue.use(VueQuillEditor)
 Vue.prototype.md5 = md5
 Vue.prototype.axios = axios
+axios.defaults.withCredentials=true
+
 Vue.config.productionTip = false
 Vue.config.devtools = false
+
+//axios.defaults.withCredentials = true
 
 // 自定义区：
 import router from './router'
@@ -28,10 +36,11 @@ import store from './store' //vuex全局变量
 
 
 import VueCropper from 'vue-cropper'
+
 Vue.use(VueCropper)
 
 let globalVariable = { //vue传统全局变量
-  globalThis:'',
+  globalThis: '',
 }
 Vue.prototype.GLOBAL = globalVariable
 Vue.use(base)
@@ -54,21 +63,46 @@ new Vue({
 
   methods: {
     autoLogin: function () {
-      const a = this.getCookie('autologin')
-      const b = this.getCookie('username')
-      const c = this.getCookie('password')
+      //   const auto = this.getCookie('autologin')
+      //  const uname = this.getCookie('username')
+      //  const pass = this.getCookie('password')
 
-      if (a !== 'true' || b === null || c === null) {
+      const auto = this.getCookie('autologin')
+      const uname = this.getCookie('username')
+      const pass = this.getCookie('password')
+      console.log('auto = ' + auto)
+      console.log('uname = ' + uname)
+      console.log('pass = ' + pass)
+
+      if (auto !== 'true' || uname === null || pass === null) {
         store.commit('setLoginState', false)
         return
       }
 
-      this.loginCheck(true, b, c, function (r,uid) {
-        store.commit('setLoginState', r)
-        if (r){
-          store.commit('setUid', uid)
-          store.commit('setUname', b)
-
+      this.loginCheck(function (data) { //先判断session能否登录
+        if (data !== "") {
+          store.commit('setLoginState', true)
+          store.commit('setUid', data.uid)
+          store.commit('setUname', data.username)
+          console.log('in session login:' + data.uid)
+          console.log('in session login:' + data.username)
+        } else {
+          axios.get('http://localhost:8081/login', { //再使用cookie登录
+            params: {
+              withCredentials: true,
+              username: uname,
+              password: pass,
+            }
+          })
+            .then((response) => {
+              if (response.data !== 'not found') {
+                const ret = JSON.parse(response.data)
+                store.commit('setLoginState', true)
+                store.commit('setUid', ret[0].uid)
+                store.commit('setUname', uname)
+                console.log('in coockie login')
+              }
+            })
         }
       })
     }
