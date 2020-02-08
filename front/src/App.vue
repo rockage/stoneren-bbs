@@ -11,6 +11,7 @@
             active-text-color="#ffd04b">
             <div v-if="myMenus && myMenus.length > 0">
               <myMenu
+                :test="test"
                 is="myMenu"
                 v-for="(myMenu,index) in myMenus"
                 v-bind:fid="myMenu.fid"
@@ -48,11 +49,14 @@
 
 <script>
   import myMenu from "./components/menu"
+  import store from './store'
 
   export default {
     name: "App",
+    store: store,
     data() {
       return {
+        test: 'Rockage',
         dialogVisible: false,
         myMenus: [
           {
@@ -65,6 +69,47 @@
       };
     },
     methods: {
+      autoLogin: function () {
+        let auto = false, uname = '', pass = ''
+        if (this.getCookie('local') !== null) {
+          const arr = this.getCookie('local').split(";")
+          auto = arr[0]
+          uname = arr[1]
+          pass = arr[2]
+        }
+        if (auto === true || uname !== '' || pass !== '') {
+          this.loginCheck(function (data) { //先判断session能否登录
+            if (data !== "") {
+              store.commit('setLoginState', true)
+              store.commit('setUid', data.uid)
+              store.commit('setUname', data.username)
+              store.commit('setPasswd', pass)
+              console.log('session login')
+            } else {
+              this.axios.get('http://localhost:8081/login', { //再使用cookie登录
+                params: {
+                  withCredentials: true,
+                  username: uname,
+                  password: pass,
+                }
+              })
+                .then((response) => {
+                  if (response.data !== 'not found') {
+                    const ret = JSON.parse(response.data)
+                    store.commit('setLoginState', true)
+                    store.commit('setUid', ret[0].uid)
+                    store.commit('setUname', uname)
+                    store.commit('setPasswd', pass)
+                    console.log('cookie login')
+                  }
+                })
+            }
+          })
+        } else {
+          store.commit('setLoginState', false)
+        }
+      },
+
       addmyMenu: function (fid, label, index, icon) {
         this.myMenus.push({
           fid: fid,
@@ -92,9 +137,10 @@
 
     },
     mounted() {
-      this.getForums();
+      this.autoLogin()
+      this.getForums()
     },
-  };
+  }
 </script>
 
 <style>
@@ -116,7 +162,7 @@
   }
 
 
-  body{
+  body {
     margin-top: 0px;
     padding: 0px;
   }

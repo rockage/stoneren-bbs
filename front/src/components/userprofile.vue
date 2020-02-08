@@ -14,7 +14,7 @@
     <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 80%;">
       <div style="white-space: pre;line-height: 50px;font-family: 'Microsoft YaHei',sans-serif"><span
         style="color:#909399;">{{message}}</span>
-     </div>
+      </div>
     </el-card>
     <div style="text-align: right">
       <el-button @click="viewThreads()">浏览{{genderName}}的主题 <i class="el-icon-notebook-1"></i></el-button>
@@ -79,7 +79,7 @@
               }
             }).then((response) => {
               if (response.data !== 'error') {
-                this.dialogVisible=true
+                this.dialogVisible = true
                 const ret = JSON.parse(response.data)
                 vm.uid = ret[0].uid
                 vm.gender = ret[0].gender
@@ -154,7 +154,7 @@
                 })
               } else {
                 this.loading = false
-                this.dialogVisible=false
+                this.dialogVisible = false
                 this.$login()
 
               }
@@ -201,7 +201,6 @@
       this.loading = true
       this.getProfile()
       this.rootThis = this.GLOBAL.globalThis
-
     }
   }
 

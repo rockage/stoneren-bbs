@@ -22,6 +22,7 @@
             </el-popover>
           </el-col>
         </div>
+        <button @click="openpost">post</button>
         <div style="background-color: #2c3e50">
           <el-col :span="20" :push="1" style="text-align: right;">
             <el-pagination
@@ -71,15 +72,19 @@
       </el-table>
 
     </el-main>
+    <post :isShow="postShow" @postClose="postShow= $event"></post>
   </div>
+
 </template>
 
 <script>
-  let a = 1
+  import Post from './post.vue'
+
   export default {
     name: 'bbs',
     data() {
       return {
+        postShow:false,
         tid: this.$route.params.fid,
         tableData: null,
         totalPage: 0,
@@ -89,6 +94,9 @@
         postVisible: false,
         rMode: '',
       }
+    },
+    components: {
+      'post': Post,
     },
     computed: {
       loginState() {
@@ -115,6 +123,9 @@
       }
     },
     methods: {
+      openpost:function(){
+        this.postShow = true
+      },
       userProfile: function (uname) {
         this.$userprofile({uname: uname})
 

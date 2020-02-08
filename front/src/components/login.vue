@@ -79,16 +79,13 @@
 
               const ret = JSON.parse(response.data)
               if (ret[0].uid) {
-                vm.setCookie('autologin', auto)
-                vm.setCookie('username', uname)
-                vm.setCookie('password', passwd)
+
+                vm.setCookie('local', auto + ";" + uname + ";" + passwd)
                 root.$store.commit('setLoginState', true)
                 root.$store.commit('setUid', ret[0].uid)
                 root.$store.commit('setUname', uname)
+                root.$store.commit('setPasswd', passwd)
                 vm.$message.success("恭喜你，登录成功了。")
-                console.log(vm.getCookie("autologin"))
-                console.log(vm.getCookie("username"))
-                console.log(vm.getCookie("password"))
                 vm.dialogVisible = false
               }
             })

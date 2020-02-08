@@ -1,4 +1,12 @@
 <template>
+  <el-dialog
+    :modal="false"
+    v-show="currentIsShow"
+    :visible.sync="currentIsShow"
+    width="500px"
+    :close-on-click-modal="false"
+    @close="handleClose()"
+  >
   <div class="edit_container">
     <el-input
       placeholder="帖子标题"
@@ -17,8 +25,8 @@
 
     <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;">
     <img src="" id="myimg">
-
   </div>
+  </el-dialog>
 </template>
 
 
@@ -40,10 +48,12 @@
   let Vue
   export default {
     name: "post",
+    props: ['isShow',],
     data() {
       return {
-        tid:'',
-        rootThis:'',
+        currentIsShow: this.isShow,
+        tid: '',
+        rootThis: '',
         threadsTitle: '',
         rotateImg: null,
         editorOption: {
@@ -81,7 +91,15 @@
         content: ''
       }
     },
+    watch: {
+      isShow(val) {
+        this.currentIsShow = val
+      }
+    },
     methods: {
+      handleClose: function () {
+        this.$emit('profileClose', this.currentIsShow);
+      },
       handleClick: function (evt) {
         if (evt.target && evt.target.tagName && evt.target.tagName.toUpperCase() === 'IMG') {
           this.rotateImg = evt.target
@@ -155,13 +173,21 @@
       },
       saveHtml: function () {
         let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
+        const vm = this
         param.append("tid", this.tid)
+        console.log('in post saveHtml tid:' + this.tid)
         param.append("uid", this.rootThis.$store.state.uid)
+        console.log('in post saveHtml tid:' + this.rootThis.$store.state.uid)
         param.append("threadsTitle", this.threadsTitle)
         param.append("postContens", this.content)
         this.axios.post('http://localhost:8081/setNewPost', param)
           .then((response) => {
-            this.totalPage = JSON.parse(response.data)
+            if (response.data === 'login-error') {
+              vm.$login()
+              return
+            } else {
+              vm.$message.success("发帖成功。")
+            }
           })
       },
       initRotateButton: function () {      //在quill中新增一个旋转图片的按钮
@@ -197,7 +223,8 @@
     text-align: left;
     color: #2c3e50;
   }
-  .ql-editor{
+
+  .ql-editor {
 
   }
 </style>

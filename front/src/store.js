@@ -8,6 +8,7 @@ const store = new Vuex.Store({
     loginState: false,
     uid: 0,
     uname: '',
+    passwd:'',
   },
   mutations: {
     setLoginState(state, r) {
@@ -18,6 +19,9 @@ const store = new Vuex.Store({
     },
     setUname(state, r) {
       state.uname = r
+    },
+    setPasswd(state, r) {
+      state.passwd = r
     },
   }
 })

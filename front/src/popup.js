@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Login from "./components/login.vue"
 import Password from "./components/password.vue"
-import Profile from "./components/profile.vue"
 import UserProfile from "./components/userprofile.vue"
 
 function LoginBox() {
@@ -24,16 +23,6 @@ function PasswordBox() {
   })
 }
 
-function ProfileBox() {
-  const ProfileBox = Vue.extend(Profile)
-  let instance = new ProfileBox()
-  let ProfileEl = instance.$mount().$el
-  document.body.appendChild(ProfileEl)
-  Vue.nextTick(() => {
-    instance.dialogVisible = true
-  })
-}
-
 function UserProfileBox(data) {
   const UserProfileBox = Vue.extend(UserProfile)
   let instance = new UserProfileBox({data})
@@ -45,4 +34,4 @@ function UserProfileBox(data) {
 }
 
 
-export {LoginBox, PasswordBox, ProfileBox, UserProfileBox}
+export {LoginBox, PasswordBox, UserProfileBox}

@@ -1,30 +1,30 @@
 <template>
+  <div>
+    <table border="0" style="width: 100%;background-color: #EBEEF5">
+      <tbody>
+      <tr>
+        <td width="150">
+          <img src="/static/logo3.png" style="margin-top: 10px;margin-left: 10px">
+          <button @click="ccc" style="display: none">统计发帖数</button>
 
-  <table border="0" style="width: 100%;background-color: #EBEEF5">
-    <tbody>
-    <tr>
-      <td width="150">
-        <img src="/static/logo3.png" style="margin-top: 10px;margin-left: 10px">
-        <button @click="ccc" style="display: none">统计发帖数</button>
+        </td>
+        <td><span style="font-size: xx-large">中国石凳联盟论坛</span>
+          <button @click="login">login</button>
+          <button @click="logout">logout</button>
+          <button @click="secret">secret</button>
+          <button @click="savecookie">savecookie</button>
+          <button @click="readcookie">readcookie</button>
+          <button @click="readpasswd">readpasswd</button>
+        </td>
 
-      </td>
-      <td><span style="font-size: xx-large">中国石凳联盟论坛</span>
-        <button @click="li">login</button>
-        <button @click="lo">logout</button>
-        <button @click="lc">secret</button>
-        <button @click="savecookie">savecookie</button>
-        <button @click="readcookie">readcookie</button>
-
-      </td>
-
-      <td style="text-align: right;margin-right: 20px">
+        <td style="text-align: right;margin-right: 20px">
 
       <span v-show="!loginState">
             <el-button type="text" @click="btnClick">登录</el-button>
             <el-button type="text" @click="btnClick">注册</el-button>
             </span>
 
-        <span v-show="loginState">
+          <span v-show="loginState">
             <el-dropdown @command="handleCommand">
               <span class="el-dropdown-link">
                 {{uname}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -37,23 +37,35 @@
               </el-dropdown-menu>
             </el-dropdown>
       </span>
-      </td>
-      <td width="20px"></td>
-    </tr>
-    <tr>
-      <td>
+        </td>
+        <td width="20px"></td>
+      </tr>
+      <tr>
+        <td>
 
-      </td>
-    </tr>
-    </tbody>
-  </table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-
+    <profile :isShow="profileShow" @profileClose="profileShow=$event"></profile>
+  </div>
 </template>
 
 <script>
+  import Profile from "./profile.vue"
+
   export default {
     name: "bbsHeader",
+    data() {
+      return {
+        profileShow: false,
+        rootThis: '',
+      };
+    },
+    components: {
+      Profile
+    },
     computed: {
       loginState() {
         return this.$store.state.loginState
@@ -66,19 +78,23 @@
       },
     },
     methods: {
-      readcookie: function () {
-        console.log(this.getCookie('autologin'))
-        console.log(this.getCookie('username'))
-        console.log(this.getCookie('password'))
+      closeProfile: function () {
+        this.profileShow = false
 
+      },
+      readpasswd: function () {
+
+        console.log(root.$store.state.password)
+
+      },
+      readcookie: function () {
+        console.log(this.getCookie('local'))
       },
       savecookie: function () {
-        this.setCookie('autologin', this.getCookie('autologin'))
-        this.setCookie('username', this.getCookie('username'))
-        this.setCookie('password', this.getCookie('password'))
+        this.setCookie('local', this.getCookie('true;rockage;e10adc3949ba59abbe56e057f20f883e'))
       },
 
-      li: function () {
+      login: function () {
         this.axios.get('http://localhost:8081/login', {
           withCredentials: true,
           params: {
@@ -87,24 +103,21 @@
           }
         })
           .then((response) => {
-
-
-
+            console.log(response.data)
           })
 
       },
-      lo: function () {
+      logout: function () {
         this.axios.get('http://localhost:8081/logout', {withCredentials: true}).then((response) => {
           console.log(response.data)
         })
       },
-      lc: function () {
+      secret: function () {
         this.axios.get('http://localhost:8081/secret', {
           withCredentials: true,
         }).then((response) => {
           console.log(response.data)
         })
-
       },
 
 
@@ -120,7 +133,7 @@
       handleCommand: function (command) {
         switch (command) {
           case '1':
-            this.$profile()
+            this.profileShow = true
             break
           case '2':
             this.$router.push(
@@ -128,7 +141,7 @@
                 name: 'userThreads',
                 params: {uid: this.$store.state.uid}
               }).catch(err => {
-              console.log(err)
+
             })
             break
           case '3':
@@ -139,9 +152,7 @@
               withCredentials: true
             })
               .then((response) => {
-                this.delCookie('username')
-                this.delCookie('password')
-                this.delCookie('autologin')
+                this.delCookie('local')
                 this.$store.commit('setLoginState', false)
                 this.$message.success(response.data)
               })
@@ -152,6 +163,7 @@
       },
     },
     mounted() {
+
     }
   }
 </script>

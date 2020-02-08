@@ -15,23 +15,17 @@ var (
 	sess                   = sessions.New(sessions.Config{Cookie: cookieNameForSessionID})
 )
 
+func CheckLogin(ctx iris.Context) bool {
+	session := sess.Start(ctx)
+	auth, _ := session.GetBoolean("authenticated")
+	if !auth {
+		return false
+	}
+	return true
+}
+
 func secret(ctx iris.Context) {
 	// 检查用户是否已通过身份验证
-	/*
-		if auth, _ := sess.Start(ctx).GetBoolean("authenticated"); !auth {
-			//ctx.StatusCode(iris.StatusForbidden)
-			ctx.WriteString("false")
-			return
-		}
-		// 打印秘密消息
-
-		if uid == "" {
-			ctx.WriteString("")
-		} else {
-			ctx.WriteString(uid)
-		}
-
-	*/
 	session := sess.Start(ctx)
 	auth, _ := session.GetBoolean("authenticated")
 

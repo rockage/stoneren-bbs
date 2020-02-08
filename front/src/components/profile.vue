@@ -1,99 +1,107 @@
 <template>
-  <el-dialog
-    title='我的资料'
-    :modal="false"
-    :visible.sync="dialogVisible"
-    width="500px"
-    :close-on-click-modal="false"
-  >
-    <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 40px;">
-      <div><span style="color:#909399;">用户名：{{uname}} / uid：{{uid}}</span></div>
-    </el-card>
-    <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 40px;">
-      <div><span style="color:#909399;">E-mail：{{email}} </span></div>
-    </el-card>
-    <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 200px;">
-      <table border="0">
-        <tr>
-          <td align="center" style="max-width: 160px;min-width: 160px">
-            <div style="width:150px;height:150px;margin-top: 10px">
-              <vue-cropper autoCrop :img="avatarSrc" ref="cropper" centerBox/>
-            </div>
-            <span style="color:#909399;font-size: x-small"> (鼠标滚轮缩放图片)</span>
-          </td>
-          <td align="center" style="max-width: 100px;min-width: 100px">
-            <el-button round size="small" @click="clickFile()" style="margin:10px 0">上传<i
-              class="el-icon-picture-outline el-icon--right"></i></el-button>
-            <br/><br/>
-            <el-button round size="small" @click="getCropData()" style="margin:10px 0">使用<i
-              class="el-icon-check el-icon--right"></i></el-button>
-          </td>
-          <td style="max-width: 160px;min-width: 160px">
-            <el-image id="imgResult" :src="avatar" style="width: 150px;height: 150px;margin-top: 0px;border-radius: 9px;">
-              <div slot="error" class="image-slot"
-                   style="margin-left:10px;color:#909399;font-size: x-small;text-align: center;line-height:150px;">
-                (头像预览)
+  <div>
+    <el-dialog
+      title='我的资料'
+      :modal="false"
+      v-show="currentIsShow"
+      :visible.sync="currentIsShow"
+      width="500px"
+      :close-on-click-modal="false"
+      @close="handleClose()"
+    >
+      <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 40px;">
+        <div><span style="color:#909399;">用户名：{{uname}} / uid：{{uid}}</span></div>
+      </el-card>
+      <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 40px;">
+        <div><span style="color:#909399;">E-mail：{{email}} </span></div>
+      </el-card>
+      <el-card :body-style="{ padding: '10px' }" style="margin-bottom: 10px;height: 200px;">
+        <table border="0">
+          <tr>
+            <td align="center" style="max-width: 160px;min-width: 160px">
+              <div style="width:150px;height:150px;margin-top: 10px">
+                <vue-cropper autoCrop :img="avatarSrc" ref="cropper" centerBox/>
               </div>
-            </el-image>
-          </td>
-        </tr>
-      </table>
-    </el-card>
-    <div>
-      <el-select v-model="gender"
-                 placeholder="性别"
-                 style="width: 100%;margin-bottom: 10px">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-    </div>
-    <div class="block">
-      <el-select v-model="location" placeholder="省份" prefix-icon="el-icon-s-custom"
-                 style="width: 100%;margin-bottom: 10px">
-        <el-option
-          v-for="item in options2"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-    </div>
-    <div class="block">
-      <el-date-picker
-        v-model="born"
-        type="date"
-        placeholder="出生日期" style="width: 100%;margin-bottom: 10px">
-      </el-date-picker>
-    </div>
-    <div class="block">
-      <el-input
-        placeholder="手机"
-        prefix-icon="el-icon-mobile"
-        v-model="mobilePhone" style="width: 100%;margin-bottom: 10px">
-      </el-input>
-    </div>
-    <div class="block">
-      <el-input
-        placeholder="个性签名"
-        prefix-icon="el-icon-edit-outline"
-        v-model="signature" style="width: 100%;margin-bottom: 10px">
-      </el-input>
-    </div>
-    <span slot="footer" class="dialog-footer">
+              <span style="color:#909399;font-size: x-small"> (鼠标滚轮缩放图片)</span>
+            </td>
+            <td align="center" style="max-width: 100px;min-width: 100px">
+              <el-button round size="small" @click="clickFile()" style="margin:10px 0">上传<i
+                class="el-icon-picture-outline el-icon--right"></i></el-button>
+              <br/><br/>
+              <el-button round size="small" @click="getCropData()" style="margin:10px 0">使用<i
+                class="el-icon-check el-icon--right"></i></el-button>
+            </td>
+            <td style="max-width: 160px;min-width: 160px">
+              <el-image id="imgResult" :src="avatar"
+                        style="width: 150px;height: 150px;margin-top: 0px;border-radius: 9px;">
+                <div slot="error" class="image-slot"
+                     style="margin-left:10px;color:#909399;font-size: x-small;text-align: center;line-height:150px;">
+                  (头像预览)
+                </div>
+              </el-image>
+            </td>
+          </tr>
+        </table>
+      </el-card>
+      <div>
+        <el-select v-model="gender"
+                   placeholder="性别"
+                   style="width: 100%;margin-bottom: 10px">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="block">
+        <el-select v-model="location" placeholder="省份" prefix-icon="el-icon-s-custom"
+                   style="width: 100%;margin-bottom: 10px">
+          <el-option
+            v-for="item in options2"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="block">
+        <el-date-picker
+          v-model="born"
+          type="date"
+          placeholder="出生日期" style="width: 100%;margin-bottom: 10px">
+        </el-date-picker>
+      </div>
+      <div class="block">
+        <el-input
+          placeholder="手机"
+          prefix-icon="el-icon-mobile"
+          v-model="mobilePhone" style="width: 100%;margin-bottom: 10px">
+        </el-input>
+      </div>
+      <div class="block">
+        <el-input
+          placeholder="个性签名"
+          prefix-icon="el-icon-edit-outline"
+          v-model="signature" style="width: 100%;margin-bottom: 10px">
+        </el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="setProfile">保存</el-button>
               </span>
-  </el-dialog>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
+
   export default {
     name: "profile",
+    props: ['isShow',],
     data() {
       return {
+        currentIsShow: this.isShow,
         options: [],
         options2: [],
         gender: '',
@@ -102,16 +110,32 @@
         mobilePhone: '',
         signature: '',
         email: '',
-        dialogVisible: false,
-        rootThis: '',
-        uid: '',
-        uname: '',
         avatar: '',
         avatarSrc: '',
         imgFile: '',
       }
     },
+    watch: {
+      isShow(val) {
+        this.currentIsShow = val
+      }
+    },
+    computed: {
+      passwd() {
+        return this.$store.state.passwd
+      },
+      uid() {
+        return this.$store.state.uid
+      },
+      uname() {
+        return this.$store.state.uname
+      },
+    },
     methods: {
+      handleClose: function () {
+        console.log('$emit close!')
+        this.$emit('profileClose', this.currentIsShow);
+      },
       getCropData: function () {
         this.$refs.cropper.getCropData(data => {
           this.avatar = data
@@ -138,7 +162,6 @@
         }
       },
       getProfile: function () {
-        let root = this.rootThis
         let vm = this
         this.axios.get('http://localhost:8081/data/getGender', {}).then((response) => {
           this.options = JSON.parse(response.data)
@@ -148,7 +171,7 @@
             //Next:
             this.axios.get('http://localhost:8081/getProfile', {
               params: {
-                uid: root.$store.state.uid,
+                uid: vm.uid,
               }
             }).then((response) => {
               if (response.data !== 'error') {
@@ -162,6 +185,9 @@
                 vm.mobilePhone = ret[0].mobile
                 vm.signature = ret[0].signature
               } else {
+                console.log('in profile mounted uid=' + this.uid)
+                console.log('in profile mounted uname=' + this.uname)
+                console.log('in profile mounted passwd=' + this.passwd)
                 this.$message.error("资料读取失败")
               }
             })
@@ -185,8 +211,8 @@
         timestamp = String(timestamp / 1000)
         if (timestamp === 'NaN') timestamp = null
         let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
-        param.append("uid", this.rootThis.$store.state.uid)
-        param.append("password", this.getCookie('password'))
+        param.append("uid", this.uid)
+        param.append("password", this.passwd)
         param.append("avatar", this.avatar)
         param.append("gender", this.gender)
         param.append("location", this.location)
@@ -201,8 +227,6 @@
     },
     mounted() {
       this.rootThis = this.GLOBAL.globalThis
-      this.uid = this.rootThis.$store.state.uid
-      this.uname = this.rootThis.$store.state.uname
       this.getProfile()
     }
   }

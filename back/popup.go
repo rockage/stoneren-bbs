@@ -13,16 +13,7 @@ import (
 
 
 
-func CheckLogin(ctx iris.Context) bool {
-	session := sess.Start(ctx)
-	auth, _ := session.GetBoolean("authenticated")
-	if !auth {
-		//ctx.StatusCode(iris.StatusForbidden)
-		ctx.WriteString("")
-		return false
-	}
-	return true
-}
+
 
 // new password
 func SetNewPasswd(ctx iris.Context) {
@@ -54,9 +45,12 @@ func GetProfile(ctx iris.Context) {
 	}
 
 }
-
 //setProfile
 func SetProfile(ctx iris.Context) {
+	if CheckLogin(ctx) == false {
+		ctx.Text("error")
+		return
+	}
 
 	uid := ctx.FormValue("uid")
 	password := ctx.FormValue("password")
@@ -66,8 +60,8 @@ func SetProfile(ctx iris.Context) {
 	born := ctx.FormValue("born")
 	mobilePhone := ctx.FormValue("mobilePhone")
 	signature := ctx.FormValue("signature")
-	var fn string
 
+	var fn string
 	re, _ := regexp.Compile(`^(data:.+?;base64,)`)
 	match := re.FindAllStringSubmatch(avatar, -1)
 
@@ -78,7 +72,6 @@ func SetProfile(ctx iris.Context) {
 		data, _ := base64.StdEncoding.DecodeString(avatar)
 		fn = saveAvatar(data, uid)
 	}
-
 	var rst []map[string]string
 	rst, _ = mysql_con.Query("select uid from pre_members where uid = " + uid + " and password = '" + password + "'")
 	if rst != nil {
@@ -89,7 +82,7 @@ func SetProfile(ctx iris.Context) {
 			"mobile = '" + mobilePhone + "'," +
 			"signature = '" + signature + "' " +
 			"where uid = " + uid)
-		ctx.Text("success")
+		ctx.Text("个人资料修改成功。")
 	} else {
 		ctx.Text("error")
 	}
@@ -100,7 +93,6 @@ func saveAvatar(data []byte, uid string) string {
 	if err != nil {
 		err = os.Mkdir(dir, 0777)
 	}
-
 	fileName := dir + uid + ".jpg"
 	err = ioutil.WriteFile(fileName, data, 0666)
 	fileName = strings.Replace(fileName, "../front", "", -1) //去掉../front，否则前端无法读取

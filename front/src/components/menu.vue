@@ -4,6 +4,7 @@
       <i :class="icon"></i>
       <span slot="title">{{label}}</span>
     </el-menu-item>
+    {{test}}
   </div>
 </template>
 <script>
@@ -16,6 +17,7 @@
       label: '',
       icon: '',
       fid: '',
+      test:'',
     },
     methods: {
       onCloseClick: function () {

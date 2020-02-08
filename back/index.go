@@ -15,8 +15,6 @@ import (
 	"time"
 )
 
-
-
 //FillMain
 func renderIndexMain(ctx iris.Context) {
 	var sql string
@@ -112,6 +110,10 @@ func getForums(ctx iris.Context) {
 }
 //New Post
 func setNewPost(ctx iris.Context) {
+	if CheckLogin(ctx) == false {
+		ctx.Text("login-error")
+		return
+	}
 	tid := ctx.FormValue("tid")
 	uid := ctx.FormValue("uid")
 	threadsTitle := ctx.FormValue("threadsTitle")
