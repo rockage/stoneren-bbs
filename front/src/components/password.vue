@@ -39,7 +39,6 @@
         oldPasswd: '',
         newPasswd1: '',
         newPasswd2: '',
-        rootThis: '',
       };
     },
     methods: {
@@ -64,16 +63,16 @@
 
         this.axios.get('http://localhost:8081/setNewPasswd', {
           params: {
-            uid: root.$store.state.uid,
-            username: root.$store.state.uname,
+            uid: this.GLOBAL.root.$store.state.uid,
+            username: this.GLOBAL.root.$store.state.uname,
             oldpasswd: vm.md5(this.oldPasswd),
-            newpasswd:vm.md5(this.newPasswd1),
+            newpasswd: vm.md5(this.newPasswd1),
           }
         })
           .then((response) => {
-            if (response.data !== 'error'){
+            if (response.data !== 'error') {
               this.$message.success("密码登录成功，请重新登录。")
-              root.$store.commit('setLoginState', false)
+              this.GLOBAL.root.$store.commit('setLoginState', false)
               vm.$login()
               vm.dialogVisible = false
             } else {
@@ -84,8 +83,6 @@
       }
     },
     mounted() {
-      this.rootThis = this.GLOBAL.globalThis
-
     }
   }
 </script>

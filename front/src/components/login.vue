@@ -41,7 +41,6 @@
         inputName: '',
         inputPasswd: '',
         autoLogin: true,
-        rootThis: '',
       };
     },
     methods: {
@@ -57,8 +56,6 @@
         if (uname !== '' && passwd !== '') {
 
           let vm = this
-          let root = this.rootThis
-
           this.axios.get('http://localhost:8081/login', {
             withCredentials: true,
             params: {
@@ -81,10 +78,10 @@
               if (ret[0].uid) {
 
                 vm.setCookie('local', auto + ";" + uname + ";" + passwd)
-                root.$store.commit('setLoginState', true)
-                root.$store.commit('setUid', ret[0].uid)
-                root.$store.commit('setUname', uname)
-                root.$store.commit('setPasswd', passwd)
+                this.GLOBAL.root.$store.commit('setLoginState', true)
+                this.GLOBAL.root.$store.commit('setUid', ret[0].uid)
+                this.GLOBAL.root.$store.commit('setUname', uname)
+                this.GLOBAL.root.$store.commit('setPasswd', passwd)
                 vm.$message.success("恭喜你，登录成功了。")
                 vm.dialogVisible = false
               }
@@ -95,7 +92,6 @@
       }
     },
     mounted() {
-      this.rootThis = this.GLOBAL.globalThis
 
     }
   }

@@ -9,12 +9,12 @@
 
         </td>
         <td><span style="font-size: xx-large">中国石凳联盟论坛</span>
-          <button @click="login">login</button>
-          <button @click="logout">logout</button>
-          <button @click="secret">secret</button>
-          <button @click="savecookie">savecookie</button>
-          <button @click="readcookie">readcookie</button>
-          <button @click="readpasswd">readpasswd</button>
+          <button @click="login" style="display: none">login</button>
+          <button @click="logout" style="display: none">logout</button>
+          <button @click="secret" style="display: none">secret</button>
+          <button @click="savecookie" style="display: none">savecookie</button>
+          <button @click="readcookie" style="display: none">readcookie</button>
+          <button @click="readpasswd" style="display: none">readpasswd</button>
         </td>
 
         <td style="text-align: right;margin-right: 20px">
@@ -47,8 +47,6 @@
       </tr>
       </tbody>
     </table>
-
-    <profile :isShow="profileShow" @profileClose="profileShow=$event"></profile>
   </div>
 </template>
 
@@ -59,7 +57,6 @@
     name: "bbsHeader",
     data() {
       return {
-        profileShow: false,
         rootThis: '',
       };
     },
@@ -78,13 +75,9 @@
       },
     },
     methods: {
-      closeProfile: function () {
-        this.profileShow = false
-
-      },
       readpasswd: function () {
 
-        console.log(root.$store.state.password)
+        console.log(this.$store.state.password)
 
       },
       readcookie: function () {
@@ -133,15 +126,14 @@
       handleCommand: function (command) {
         switch (command) {
           case '1':
-            this.profileShow = true
+            this.$profile()
             break
           case '2':
             this.$router.push(
               {
                 name: 'userThreads',
-                params: {uid: this.$store.state.uid}
-              }).catch(err => {
-
+                params: {uid: this.GLOBAL.root.$store.state.uid}
+              }).catch(err => {this.$message.error(err)
             })
             break
           case '3':
@@ -163,6 +155,7 @@
       },
     },
     mounted() {
+
 
     }
   }

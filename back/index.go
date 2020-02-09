@@ -20,12 +20,13 @@ func renderIndexMain(ctx iris.Context) {
 	var sql string
 	forumsId := ctx.FormValue("fid")
 	page := ctx.FormValue("page")
+	rMode := ctx.FormValue("rmode")
 	p1, _ := strconv.Atoi(page)
 	t1 := p1*20 - 20
 	startRec := strconv.Itoa(t1)
 	stopRec := "20"
 
-	switch ctx.FormValue("rmode") {
+	switch rMode {
 	case "new":
 		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY dateline DESC limit " + startRec + "," + stopRec
 	case "self":
@@ -40,26 +41,44 @@ func renderIndexMain(ctx iris.Context) {
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
-			_, _ = ctx.JSON(string(b)) //不返回错误代码，强行执行
+			var ret [3]string
+			ret[0] = string(b)
+			ret[1], ret[2] = getTotalThreads(forumsId, rMode)
+			_, _ = ctx.JSON(ret) //不返回错误代码
 		}
 	}
 }
-func getTotalThreads(ctx iris.Context) {
+func getTotalThreads(forumsId string, rMode string) (string, string) {
 	var sql string
-	forumsId := ctx.FormValue("fid")
-
-	switch ctx.FormValue("rmode") {
+	var sql2 string
+	var forumsName string
+	switch rMode {
 	case "new":
-		sql = "explain select * from pre_forum_thread"
+		sql = "explain select * from pre_forum_thread" //最新
+		sql2 = ""
 	case "self":
-		sql = "select  COUNT(1) as rows from pre_forum_thread where authorid = " + forumsId
+		sql = "select  COUNT(1) as rows from pre_forum_thread where authorid = " + forumsId //指定版块
+		sql2 = "select username as name from pre_members where uid = " + forumsId
 	case "normal":
-		sql = "select  COUNT(1) as rows from pre_forum_thread where fid = " + forumsId
+		sql = "select  COUNT(1) as rows from pre_forum_thread where fid = " + forumsId //只看自己
+		sql2 = "select name from pre_forum_forum where fid = " + forumsId
 	}
 	var rst []map[string]string
 	rst, _ = mysql_con.Query(sql) //求出总行数
-	_, _ = ctx.JSON(rst[0]["rows"])
+	totalRow := rst[0]["rows"]
+
+	if sql2 != "" {
+		rst, _ = mysql_con.Query(sql2)
+		forumsName = rst[0]["name"]
+		if rMode=="self"{
+			forumsName = rst[0]["name"] + "的帖子"
+		}
+	} else {
+		forumsName = "最新的帖子"
+	}
+	return totalRow, forumsName
 }
+
 //ThreadsView
 func renderThreadsView(ctx iris.Context) {
 	page := ctx.FormValue("page")
@@ -85,6 +104,7 @@ func renderThreadsView(ctx iris.Context) {
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
+
 			_, _ = ctx.JSON(string(b)) //不返回错误代码，强行执行
 		}
 	}
@@ -108,6 +128,7 @@ func getForums(ctx iris.Context) {
 		}
 	}
 }
+
 //New Post
 func setNewPost(ctx iris.Context) {
 	if CheckLogin(ctx) == false {

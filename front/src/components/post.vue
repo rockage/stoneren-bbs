@@ -1,61 +1,77 @@
 <template>
-  <el-dialog
-    :modal="false"
-    v-show="currentIsShow"
-    :visible.sync="currentIsShow"
-    width="500px"
-    :close-on-click-modal="false"
-    @close="handleClose()"
-  >
-  <div class="edit_container">
-    <el-input
-      placeholder="帖子标题"
-      v-model="threadsTitle">
-    </el-input>
-    <quill-editor
-      v-model="content"
-      ref="myQuillEditor"
-      :options="editorOption"
-      @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
-      @change="onEditorChange($event)"
-      v-on:insertImage="insertImage($event)"
-    >
-    </quill-editor>
-    <el-button v-on:click="saveHtml">保存</el-button>
+  <div class="div-center" @mousedown="move" ref="divCenter" id="post_box">
 
-    <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;">
-    <img src="" id="myimg">
+    <div class="edit_container" ref="editContainer">
+      <el-row style="margin-top: 20px;">
+        <div style="
+          border: 1px solid #cccccc;">
+          <table border="0" style="width: 100%">
+
+            <td style="width: 85%">
+              <el-input
+                placeholder="帖子标题"
+                v-model="threadsTitle">
+              </el-input>
+            </td>
+            <td style="width: 3%"></td>
+            <td style="width: 6%">
+              <el-button v-on:click="saveHtml" style="text-align: right;" type="success" icon="el-icon-check"
+                         circle size="mini"></el-button>
+            </td>
+            <td style="width: 6%">
+              <el-button v-on:click="close" style="text-align: right;" type="warning" icon="el-icon-close"
+                         circle size="mini"></el-button>
+            </td>
+          </table>
+        </div>
+      </el-row>
+      <el-row>
+        <span style="display: none">{{dummy}}</span>
+        <quill-editor
+          v-model="content"
+          ref="myQuillEditor"
+          :options="editorOption"
+          @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
+          @change="onEditorChange($event)"
+          v-on:insertImage="insertImage($event)">
+        </quill-editor>
+        <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;">
+        <img src="" id="myimg">
+      </el-row>
+    </div>
   </div>
-  </el-dialog>
 </template>
-
 
 <script>
   //import {ImageDrop} from 'quill-image-drop-module'
-  import ImageResize from 'quill-image-resize-module'
   //Quill.register('modules/imageDrop', ImageDrop)
+
+  import ImageResize from 'quill-image-resize-module'
+
   Quill.register('modules/imageResize', ImageResize)
   const container = [
-    ['bold', 'italic', 'underline', 'strike'],
+    ['bold', 'italic'],
     ['blockquote', 'code-block'],
     [{'size': ['small', false, 'large', 'huge']}],
     [{'color': []}, {'background': []}],
     [{'align': []}],
-    ['clean'],
     ['link', 'image', 'rotate', 'video'],
   ]
   let myQuill //增加一个全局quill，代表当前quill实例
-  let Vue
+  let vm
   export default {
     name: "post",
     props: ['isShow',],
     data() {
       return {
+        dummy: '',
+        positionX: 0,
+        positionY: 0,
         currentIsShow: this.isShow,
         tid: '',
         rootThis: '',
         threadsTitle: '',
-        rotateImg: null,
+        rotateImg: '',
         editorOption: {
           placeholder: '输入内容...',
           modules: {
@@ -68,7 +84,7 @@
                   c.click()
                 },
                 'rotate': function () {
-                  Vue.rotateImage()
+                  vm.rotateImage()
                 },
               }
             },
@@ -97,11 +113,35 @@
       }
     },
     methods: {
-      handleClose: function () {
-        this.$emit('profileClose', this.currentIsShow);
+      move(e) {
+        let odiv = e.target;        //获取目标元素
+        //算出鼠标相对元素的位置
+        let disX = e.clientX - odiv.offsetLeft;
+        let disY = e.clientY - odiv.offsetTop;
+        document.onmousemove = (e) => {       //鼠标按下并移动的事件
+          //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+          let left = e.clientX - disX;
+          let top = e.clientY - disY;
+          //绑定元素位置到positionX和positionY上面
+          //this.positionX = top;
+          //this.positionY = left;
+          //移动当前元素
+          odiv.style.left = left + 'px';
+          odiv.style.top = top + 'px';
+        };
+        document.onmouseup = (e) => {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+      },
+      close: function () {
+
+        this.$destroy() //销毁VUE
+
       },
       handleClick: function (evt) {
         if (evt.target && evt.target.tagName && evt.target.tagName.toUpperCase() === 'IMG') {
+          //此处判断在编辑区点击的对象是否图片
           this.rotateImg = evt.target
         }
       },
@@ -146,10 +186,13 @@
         }
       },
       rotateImage: function () {
+        if (vm.rotateImg.src === '') {
+          return
+        }
         let cvs = document.createElement("canvas");
         let ctx = cvs.getContext("2d")
         let image = new Image()
-        image.src = Vue.rotateImg.src
+        image.src = vm.rotateImg.src
         image.onload = function () {
           let w = image.naturalWidth
           let h = image.naturalHeight;
@@ -167,7 +210,7 @@
           ctx.rotate(degrees * (Math.PI / 180))
           ctx.drawImage(image, x, y)
           ctx.restore()
-          Vue.rotateImg.src = cvs.toDataURL("image/jpeg")
+          vm.rotateImg.src = cvs.toDataURL("image/jpeg")
           myQuill.imageResize.hide()
         }
       },
@@ -175,9 +218,7 @@
         let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
         const vm = this
         param.append("tid", this.tid)
-        console.log('in post saveHtml tid:' + this.tid)
         param.append("uid", this.rootThis.$store.state.uid)
-        console.log('in post saveHtml tid:' + this.rootThis.$store.state.uid)
         param.append("threadsTitle", this.threadsTitle)
         param.append("postContens", this.content)
         this.axios.post('http://localhost:8081/setNewPost', param)
@@ -191,28 +232,42 @@
           })
       },
       initRotateButton: function () {      //在quill中新增一个旋转图片的按钮
-        const sourceEditorButton = document.querySelector('.ql-rotate')
+        const sourceEditorButton = document.querySelector('.ql-rotate') //每一个quill功能按钮都会自动加上一个ql-用以区别，如ql-image/ql-link等
         sourceEditorButton.style.cssText = "border:0px"
         sourceEditorButton.innerHTML = "<img src='/static/rotate.png'>"
         sourceEditorButton.title = "旋转图片"
       },
-    }
-    ,
+    },
+    updated() {
+      this.initRotateButton()
+    },
     mounted() {
-      this.initRotateButton() //初始化自定义按钮
-      Vue = this
+      vm = this
       myQuill = this.$refs.myQuillEditor.quill //全局quill实例
       myQuill.root.addEventListener('click', this.handleClick, false) //为全局quill创建一个根监听
-      let quillWidth = document.documentElement.clientWidth * 60 / 100
-      let quillHeight = document.documentElement.clientHeight * 50 / 100
-      myQuill.container.style.width = `${quillWidth}px`
-      myQuill.container.style.height = `${quillHeight}px`
+      //元素定位：
+      let div_center = this.$refs.divCenter
+      let edit_container = this.$refs.editContainer
+      let w = document.documentElement.clientWidth * 50 / 100
+      let h = document.documentElement.clientHeight * 50 / 100
+      myQuill.container.style.width = `${w}px`
+      myQuill.container.style.height = `${h}px`
+      div_center.style.width = `${w}px`
+      div_center.style.height = `${h}px`
+      edit_container.style.width = `${w}px`
+      edit_container.style.height = `${h}px`
 
       this.rootThis = this.GLOBAL.globalThis
-
+      this.dummy = "999"
+      //999是无意义的空渲染，在mounted阶段myQuill还未建造好，访问它会出错，
+      //只好将触发时机后移至updated阶段
+    },
+    destroyed() {
+      document.getElementById("post_location").removeChild(this.$el) //销毁DOM
     }
-    ,
   }
+
+
 </script>
 
 <style>
@@ -220,11 +275,21 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: left;
-    color: #2c3e50;
+    background-color: White
   }
 
   .ql-editor {
-
+    background-color: White
   }
+
+  .div-center {
+    position: fixed; /*定位*/
+    border: 1px gray;
+    background: #E4E7ED; /*设置一下背景*/
+    z-index: 99;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+
 </style>

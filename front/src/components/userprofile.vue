@@ -32,7 +32,6 @@
       return {
         message: '',
         dialogVisible: false,
-        rootThis: '',
         uid: '',
         gender: '',
         genderName: '',
@@ -55,7 +54,7 @@
     },
     methods: {
       viewThreads: function () {
-        this.rootThis.$router.push(
+        this.GLOBAL.root.$router.push(
           {
             name: 'userThreads',
             params: {uid: this.uid}
@@ -173,34 +172,10 @@
         if (day.length < 2) day = '0' + day;
         return [year, month, day].join('-');
       },
-      setProfile: function () {
-
-        let d = new Date(this.born), timestamp = Date.parse(d)
-        timestamp = String(timestamp / 1000)
-
-        if (timestamp === 'NaN') timestamp = null
-
-
-        let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
-        param.append("uid", this.rootThis.$store.state.uid)
-        param.append("password", this.getCookie('password'))
-        param.append("avatar", this.avatar)
-        param.append("gender", this.gender)
-        param.append("location", this.location)
-        param.append("born", timestamp)
-        param.append("mobilePhone", this.mobilePhone)
-        param.append("signature", this.signature)
-
-        this.axios.post('http://localhost:8081/setProfile', param)
-          .then((response) => {
-            this.$message.success(response.data)
-          })
-      },
     },
     mounted() {
       this.loading = true
       this.getProfile()
-      this.rootThis = this.GLOBAL.globalThis
     }
   }
 

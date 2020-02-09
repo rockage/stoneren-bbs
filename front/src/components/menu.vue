@@ -17,7 +17,7 @@
       label: '',
       icon: '',
       fid: '',
-      test:'',
+      test: '',
     },
     methods: {
       onCloseClick: function () {
@@ -25,16 +25,13 @@
         this.$emit("delete", this.text);
       },
       router_to: function () {
-        if (this.fid !== '0') {
-          this.$router.push({name: 'forumsview', params: {fid: this.fid}}).catch(err => {
-          })
-        } else {
-          this.$router.push({name: 'bbs'}).catch(err => {
-          })
-        }
+        this.GLOBAL.fid = this.fid
+        this.$router.push({name: 'forumsview', params: {fid: this.fid}}).catch(err => {
+          console.log(err.name)
+        })
       }
     }
-  };
+  }
 </script>
 <style scoped>
   .myMenu {

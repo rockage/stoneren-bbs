@@ -3,8 +3,8 @@
     <el-dialog
       title='我的资料'
       :modal="false"
-      v-show="currentIsShow"
-      :visible.sync="currentIsShow"
+      :visible.sync="dialogVisible"
+      v-if="dialogVisible"
       width="500px"
       :close-on-click-modal="false"
       @close="handleClose()"
@@ -98,10 +98,9 @@
 
   export default {
     name: "profile",
-    props: ['isShow',],
     data() {
       return {
-        currentIsShow: this.isShow,
+        dialogVisible: false,
         options: [],
         options2: [],
         gender: '',
@@ -115,26 +114,20 @@
         imgFile: '',
       }
     },
-    watch: {
-      isShow(val) {
-        this.currentIsShow = val
-      }
-    },
     computed: {
       passwd() {
-        return this.$store.state.passwd
+        return this.GLOBAL.root.$store.state.passwd
       },
       uid() {
-        return this.$store.state.uid
+        return this.GLOBAL.root.$store.state.uid
       },
       uname() {
-        return this.$store.state.uname
+        return this.GLOBAL.root.$store.state.uname
       },
     },
     methods: {
       handleClose: function () {
-        console.log('$emit close!')
-        this.$emit('profileClose', this.currentIsShow);
+
       },
       getCropData: function () {
         this.$refs.cropper.getCropData(data => {
@@ -185,9 +178,6 @@
                 vm.mobilePhone = ret[0].mobile
                 vm.signature = ret[0].signature
               } else {
-                console.log('in profile mounted uid=' + this.uid)
-                console.log('in profile mounted uname=' + this.uname)
-                console.log('in profile mounted passwd=' + this.passwd)
                 this.$message.error("资料读取失败")
               }
             })
@@ -226,7 +216,7 @@
       },
     },
     mounted() {
-      this.rootThis = this.GLOBAL.globalThis
+      this.root = this.GLOBAL.root
       this.getProfile()
     }
   }
