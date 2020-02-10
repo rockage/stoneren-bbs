@@ -1,5 +1,18 @@
 exports.install = function (Vue) {
 
+  Vue.prototype.getForumsData = function () {
+    this.axios.get('http://localhost:8081/getForums', {})
+      .then((response) => {
+        let arr = JSON.parse(response.data)
+        console.log(arr)
+        for (let i = 0, len = arr.length; i < len; i++) {
+          console.log(arr.data[i])
+
+        }
+        this.GLOBAL.forumsData = arr
+      })
+  }
+
   Vue.prototype.loginCheck = function (callback) {//全局函数1
     this.axios.get('http://localhost:8081/secret', {
       //携带cookie提交，mycookiesessionnameid是一个httponly cookie
@@ -8,39 +21,16 @@ exports.install = function (Vue) {
       callback(response.data)
     })
   }
+
   Vue.prototype.setCookie = function (c_name, value) {//全局函数2
-    /*
-    let date=new Date();
-    let expireDays=10; //将date设置为10天以后的时间
-    date.setTime(date.getTime()+expireDays*24*3600*1000) //1000毫秒=1秒，3600秒=1小时，24小时=1天
-    document.cookie = c_name + "=" + escape(value) + ";expires=" + date.toUTCString() + ";path=/"
-    */
     docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/");
   }
 
   Vue.prototype.getCookie = function (c_name) {//全局函数3
-    /*
-    let strcookie = document.cookie
-    let arrcookie = strcookie.split("; ")
-    //遍历匹配
-    for (let i = 0; i < arrcookie.length; i++) {
-      let arr = arrcookie[i].split("=")
-      if (arr[0] == c_name) {
-        return arr[1]
-      }
-    }
-    return null
-    */
     return docCookies.getItem(c_name)
-
   }
 
   Vue.prototype.delCookie = function (c_name) {//全局函数4
-    /*
-    let exdate = new Date();
-    exdate.setTime(exdate.getTime() - 1);
-    document.cookie = c_name + "=null;expires:-1;path=/"
-    */
     docCookies.removeItem(c_name);
   }
 
@@ -73,7 +63,9 @@ let docCookies = {
     return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
   },
   setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+      return false;
+    }
     let sExpires = "";
     if (vEnd) {
       switch (vEnd.constructor) {
@@ -92,8 +84,10 @@ let docCookies = {
     return true;
   },
   removeItem: function (sKey, sPath, sDomain) {
-    if (!sKey || !this.hasItem(sKey)) { return false; }
-    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + ( sDomain ? "; domain=" + sDomain : "") + ( sPath ? "; path=" + sPath : "");
+    if (!sKey || !this.hasItem(sKey)) {
+      return false;
+    }
+    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
     return true;
   },
   hasItem: function (sKey) {
@@ -101,7 +95,9 @@ let docCookies = {
   },
   keys: /* optional method: you can safely remove it! */ function () {
     let aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
-    for (let nIdx = 0; nIdx < aKeys.length; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+    for (let nIdx = 0; nIdx < aKeys.length; nIdx++) {
+      aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]);
+    }
     return aKeys;
   }
 };

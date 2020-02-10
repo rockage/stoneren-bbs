@@ -37,17 +37,18 @@ Vue.use(VueCropper)
 
 let globalVariable = { //vue普通的全局变量
   root: '', //模拟根实例$root
-  fid:0,
+  fid: 0,
+  forumsData: []
 }
 Vue.prototype.GLOBAL = globalVariable
 Vue.use(base)
-//Vue.component('post', Post) //自定义组件: <post> </post>
 Vue.component('bbsHeader', bbsHeader) //自定义组件: <bbsHeader> </bbsHeader>
 Vue.prototype.$login = Popup.LoginBox
 Vue.prototype.$password = Popup.PasswordBox
 Vue.prototype.$userprofile = Popup.UserProfileBox
 Vue.prototype.$post = Popup.PostBox
 Vue.prototype.$profile = Popup.ProFileBox
+
 
 new Vue({
   el: "#app",
@@ -61,6 +62,8 @@ new Vue({
   methods: {},
   mounted: function () {
     this.GLOBAL.root = this.$root //为所有动态实例提供根实例的访问
+    this.getForumsData()
+    console.log(this.GLOBAL.forumsData)
   },
 })
 

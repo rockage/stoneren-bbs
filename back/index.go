@@ -124,6 +124,7 @@ func getForums(ctx iris.Context) {
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
+			fmt.Println(string(b))
 			_, _ = ctx.JSON(string(b))
 		}
 	}

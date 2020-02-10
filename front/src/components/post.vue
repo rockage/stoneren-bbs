@@ -5,16 +5,29 @@
       <el-row style="margin-top: 20px;">
         <div style="
           border: 1px solid #cccccc;">
-          <table border="0" style="width: 100%">
+          <table border="1" style="width: 100%">
 
-            <td style="width: 85%">
+            <td style="width: 60%">
               <el-input
                 placeholder="帖子标题"
                 v-model="threadsTitle">
               </el-input>
             </td>
-            <td style="width: 3%"></td>
-            <td style="width: 6%">
+
+            <td style="width: 30%">
+
+              <el-select v-model="value" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+
+            </td>
+
+            <td style="width: 10%">
               <el-button v-on:click="saveHtml" style="text-align: right;" type="success" icon="el-icon-check"
                          circle size="mini"></el-button>
             </td>

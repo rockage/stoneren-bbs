@@ -135,14 +135,7 @@
         })
       },
       getForums: function () {
-        this.axios.get('http://localhost:8081/getForums', {})
-          .then((response) => {
-            let index = 0
-            for (let i of  JSON.parse(response.data)) {
-              this.addmyMenu(i['fid'], i['name'], '1-' + String(index), 'el-icon-s-unfold')
-              index++
-            }
-          })
+
       },
     },
     components: {
