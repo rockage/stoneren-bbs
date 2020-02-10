@@ -1,52 +1,62 @@
-exports.install = function (Vue) {
+//exports.install = function (Vue) {
 
-  Vue.prototype.getForumsData = function () {
-    this.axios.get('http://localhost:8081/getForums', {})
-      .then((response) => {
-        let arr = JSON.parse(response.data)
-        console.log(arr)
-        for (let i = 0, len = arr.length; i < len; i++) {
-          console.log(arr.data[i])
+export default {
+  install(Vue) {
 
-        }
-        this.GLOBAL.forumsData = arr
+    Vue.prototype.dataInit = function () {
+      const vm=this
+      return new Promise(function (resolve) {
+        vm.axios.get('http://localhost:8081/getForums', {})
+          .then((response) => {
+            let arr = JSON.parse(response.data)
+            vm.GLOBAL.forumsData = arr
+            resolve()
+          })
       })
-  }
+    }
 
-  Vue.prototype.loginCheck = function (callback) {//全局函数1
-    this.axios.get('http://localhost:8081/secret', {
-      //携带cookie提交，mycookiesessionnameid是一个httponly cookie
-      withCredentials: true
-    }).then((response) => {
-      callback(response.data)
-    })
-  }
+    Vue.prototype.loginCheck = function () {
+      const vm = this
+      return new Promise(function (resolve) {
+        vm.axios.get('http://localhost:8081/secret', {
+          //携带cookie提交，mycookiesessionnameid是一个httponly cookie
+          withCredentials: true
+        }).then((response) => {
+          resolve(response.data)
+        })
+      })
 
-  Vue.prototype.setCookie = function (c_name, value) {//全局函数2
-    docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/");
-  }
 
-  Vue.prototype.getCookie = function (c_name) {//全局函数3
-    return docCookies.getItem(c_name)
-  }
+    }
 
-  Vue.prototype.delCookie = function (c_name) {//全局函数4
-    docCookies.removeItem(c_name);
-  }
+    Vue.prototype.setCookie = function (c_name, value) {//全局函数2
+      docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/");
+    }
 
-  Vue.prototype.getLocalTime = function (nS) { //返回yyyy-mm-dd HH:MM:SS
-    if (isNull(nS)) nS = 1041350400
-    let ds = String(new Date(parseInt(nS) * 1000).toISOString())
-    ds = ds.replace(/(.+?)T(.+?).\d\d\dZ/, '$1 $2')
-    return ds
-  }
+    Vue.prototype.getCookie = function (c_name) {//全局函数3
+      return docCookies.getItem(c_name)
+    }
 
-  Vue.prototype.getLocalDate = function (nS) { //返回yyyy-mm-dd
-    if (isNull(nS)) nS = 1041350400 //2003-01-01 00:00:00
-    let ds = String(new Date(parseInt(nS) * 1000).toISOString())
-    ds = ds.replace(/(.+?)T.+?Z/, '$1')
-    //if (ds < '2003-01-01') ds = '上古时期'
-    return ds
+    Vue.prototype.delCookie = function (c_name) {//全局函数4
+      docCookies.removeItem(c_name);
+    }
+
+    Vue.prototype.getLocalTime = function (nS) { //返回yyyy-mm-dd HH:MM:SS
+      if (isNull(nS)) nS = 1041350400
+      let ds = String(new Date(parseInt(nS) * 1000).toISOString())
+      ds = ds.replace(/(.+?)T(.+?).\d\d\dZ/, '$1 $2')
+      return ds
+    }
+
+    Vue.prototype.getLocalDate = function (nS) { //返回yyyy-mm-dd
+      if (isNull(nS)) nS = 1041350400 //2003-01-01 00:00:00
+      let ds = String(new Date(parseInt(nS) * 1000).toISOString())
+      ds = ds.replace(/(.+?)T.+?Z/, '$1')
+      //if (ds < '2003-01-01') ds = '上古时期'
+      return ds
+    }
+
+
   }
 }
 
@@ -100,4 +110,4 @@ let docCookies = {
     }
     return aKeys;
   }
-};
+}

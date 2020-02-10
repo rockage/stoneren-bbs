@@ -166,6 +166,8 @@
       //页码重置规则：1) rMode模式转换；2) 论坛间fid切换；
       if (this.$route.meta.renderMode !== this.getContextData("currentMode")) this.currentPage = 1
 
+      this.GLOBAL.renderMode = this.$route.meta.renderMode //为全局变量赋值，因为extend组件不在Vue树上
+
       switch (this.$route.meta.renderMode) {
         case "new":
           this.fid = 0 //最新帖子模式，不指定论坛

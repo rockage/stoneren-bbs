@@ -19,9 +19,9 @@
               <el-select v-model="value" placeholder="请选择">
                 <el-option
                   v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :key="item.fid"
+                  :label="item.name"
+                  :value="item.fid">
                 </el-option>
               </el-select>
 
@@ -77,6 +77,8 @@
     props: ['isShow',],
     data() {
       return {
+        value: '',
+        options: [],
         dummy: '',
         positionX: 0,
         positionY: 0,
@@ -271,9 +273,19 @@
       edit_container.style.height = `${h}px`
 
       this.rootThis = this.GLOBAL.globalThis
-      this.dummy = "999"
-      //999是无意义的空渲染，在mounted阶段myQuill还未建造好，访问它会出错，
-      //只好将触发时机后移至updated阶段
+      this.dummy = "999" //999是无意义的空渲染，在mounted阶段myQuill还未建造好，访问它会出错，只能将触发时机后移至updated阶段
+      this.options = this.GLOBAL.forumsData
+      console.log(this.GLOBAL.fid)
+      if (this.GLOBAL.renderMode === 'new' || this.GLOBAL.renderMode === 'self') {
+        this.value = '2' //new 和 self 模式fid默认为水区
+      } else {
+        this.value = this.GLOBAL.fid
+      }
+
+
+
+
+
     },
     destroyed() {
       document.getElementById("post_location").removeChild(this.$el) //销毁DOM

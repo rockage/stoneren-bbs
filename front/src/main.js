@@ -37,8 +37,9 @@ Vue.use(VueCropper)
 
 let globalVariable = { //vue普通的全局变量
   root: '', //模拟根实例$root
-  fid: 0,
-  forumsData: []
+  fid: 0, //当前fid
+  forumsData: [], //各分论坛信息
+  renderMode: '', //渲染模式
 }
 Vue.prototype.GLOBAL = globalVariable
 Vue.use(base)
@@ -62,8 +63,6 @@ new Vue({
   methods: {},
   mounted: function () {
     this.GLOBAL.root = this.$root //为所有动态实例提供根实例的访问
-    this.getForumsData()
-    console.log(this.GLOBAL.forumsData)
   },
 })
 

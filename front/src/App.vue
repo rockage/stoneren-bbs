@@ -83,7 +83,7 @@
             break
         }
       },
-      autoLogin: function () {
+      autoLogin: async function () {
         const vm = this
         let auto = false, uname = '', pass = ''
         if (vm.getCookie('local') !== null) {
@@ -93,33 +93,33 @@
           pass = arr[2]
         }
         if (auto === true || uname !== '' || pass !== '') {
-          vm.loginCheck(function (data) { //先判断session能否登录
-            if (data !== "") {
-              store.commit('setLoginState', true)
-              store.commit('setUid', data.uid)
-              store.commit('setUname', data.username)
-              store.commit('setPasswd', pass)
-              console.log('session login')
-            } else {
-              vm.axios.get('http://localhost:8081/login', { //再使用cookie登录
-                params: {
-                  withCredentials: true,
-                  username: uname,
-                  password: pass,
+          let data = await vm.loginCheck()  //先判断session能否登录
+          if (data !== "") {
+            store.commit('setLoginState', true)
+            store.commit('setUid', data.uid)
+            store.commit('setUname', data.username)
+            store.commit('setPasswd', pass)
+            console.log('session login')
+          } else {
+            vm.axios.get('http://localhost:8081/login', { //再使用cookie登录
+              params: {
+                withCredentials: true,
+                username: uname,
+                password: pass,
+              }
+            })
+              .then((response) => {
+                if (response.data !== 'not found') {
+                  const ret = JSON.parse(response.data)
+                  store.commit('setLoginState', true)
+                  store.commit('setUid', ret[0].uid)
+                  store.commit('setUname', uname)
+                  store.commit('setPasswd', pass)
+                  console.log('cookie login')
                 }
               })
-                .then((response) => {
-                  if (response.data !== 'not found') {
-                    const ret = JSON.parse(response.data)
-                    store.commit('setLoginState', true)
-                    store.commit('setUid', ret[0].uid)
-                    store.commit('setUname', uname)
-                    store.commit('setPasswd', pass)
-                    console.log('cookie login')
-                  }
-                })
-            }
-          })
+          }
+
         } else {
           store.commit('setLoginState', false)
         }
@@ -134,7 +134,12 @@
           key: index,
         })
       },
-      getForums: function () {
+      getForumsInfo: function (info) {
+        let index =1
+        for (let i = 0; i < info.length; i++) {
+          this.addmyMenu(info[i].fid, info[i].name, '1-' + String(index), 'el-icon-s-unfold')
+          index++
+        }
 
       },
     },
@@ -144,9 +149,11 @@
     beforeMount() {
 
     },
-    mounted() {
+    mounted: async function () {
       this.autoLogin()
-      this.getForums()
+      await this.dataInit()
+      this.getForumsInfo(this.GLOBAL.forumsData)
+      console.log(this.GLOBAL.forumsData)
     },
   }
 </script>
