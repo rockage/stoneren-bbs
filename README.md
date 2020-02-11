@@ -1,2 +1,2 @@
 # stoneren-bbs
-web bbs by golang
+a web bbs base on golang
