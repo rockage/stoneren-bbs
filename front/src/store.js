@@ -8,9 +8,14 @@ const store = new Vuex.Store({
     loginState: false,
     uid: 0,
     uname: '',
-    passwd:'',
+    passwd: '',
+    forumsName: '',
   },
   mutations: {
+    forumsName(state, r) {
+      state.forumsName = r
+      this.GLOBAL.forumsName = r
+    },
     setLoginState(state, r) {
       state.loginState = r
     },

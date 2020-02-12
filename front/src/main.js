@@ -37,8 +37,10 @@ Vue.use(VueCropper)
 
 let globalVariable = { //vue普通的全局变量
   root: '', //模拟根实例$root
-  fid: 0, //当前fid
-  forumsData: [], //各分论坛信息
+  fid: 0, //当前论坛id
+  tid: 0, //当前主题id
+  forumsName: '',//当前论坛名称
+  forumsData: [], //全部子论坛信息
   renderMode: '', //渲染模式
 }
 Vue.prototype.GLOBAL = globalVariable

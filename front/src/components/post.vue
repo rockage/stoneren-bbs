@@ -1,21 +1,18 @@
 <template>
   <div class="div-center" @mousedown="move" ref="divCenter" id="post_box">
-
     <div class="edit_container" ref="editContainer">
       <el-row style="margin-top: 20px;">
         <div style="
           border: 1px solid #cccccc;">
-          <table border="1" style="width: 100%">
+          <table border="0" style="width: 100%">
 
-            <td style="width: 60%">
+            <td style="width: 50%">
               <el-input
                 placeholder="帖子标题"
                 v-model="threadsTitle">
               </el-input>
             </td>
-
             <td style="width: 30%">
-
               <el-select v-model="value" placeholder="请选择">
                 <el-option
                   v-for="item in options"
@@ -24,14 +21,12 @@
                   :value="item.fid">
                 </el-option>
               </el-select>
-
             </td>
-
-            <td style="width: 10%">
+            <td style="width: 10%;text-align: center;">
               <el-button v-on:click="saveHtml" style="text-align: right;" type="success" icon="el-icon-check"
                          circle size="mini"></el-button>
             </td>
-            <td style="width: 6%">
+            <td style="width: 10%;text-align: center;">
               <el-button v-on:click="close" style="text-align: right;" type="warning" icon="el-icon-close"
                          circle size="mini"></el-button>
             </td>
@@ -60,6 +55,7 @@
   //Quill.register('modules/imageDrop', ImageDrop)
 
   import ImageResize from 'quill-image-resize-module'
+  import store from '../store'
 
   Quill.register('modules/imageResize', ImageResize)
   const container = [
@@ -74,17 +70,15 @@
   let vm
   export default {
     name: "post",
-    props: ['isShow',],
+    store,
     data() {
       return {
         value: '',
+        tid:0,
         options: [],
         dummy: '',
         positionX: 0,
         positionY: 0,
-        currentIsShow: this.isShow,
-        tid: '',
-        rootThis: '',
         threadsTitle: '',
         rotateImg: '',
         editorOption: {
@@ -122,11 +116,6 @@
         content: ''
       }
     },
-    watch: {
-      isShow(val) {
-        this.currentIsShow = val
-      }
-    },
     methods: {
       move(e) {
         let odiv = e.target;        //获取目标元素
@@ -150,9 +139,7 @@
         };
       },
       close: function () {
-
         this.$destroy() //销毁VUE
-
       },
       handleClick: function (evt) {
         if (evt.target && evt.target.tagName && evt.target.tagName.toUpperCase() === 'IMG') {
@@ -233,7 +220,8 @@
         let param = new URLSearchParams() //axios如不采用URLSearchParams后端无法收到post请求
         const vm = this
         param.append("tid", this.tid)
-        param.append("uid", this.rootThis.$store.state.uid)
+        param.append("fid", this.value)
+        param.append("uid", store.state.uid)
         param.append("threadsTitle", this.threadsTitle)
         param.append("postContens", this.content)
         this.axios.post('http://localhost:8081/setNewPost', param)
@@ -271,21 +259,22 @@
       div_center.style.height = `${h}px`
       edit_container.style.width = `${w}px`
       edit_container.style.height = `${h}px`
-
-      this.rootThis = this.GLOBAL.globalThis
       this.dummy = "999" //999是无意义的空渲染，在mounted阶段myQuill还未建造好，访问它会出错，只能将触发时机后移至updated阶段
       this.options = this.GLOBAL.forumsData
-      console.log(this.GLOBAL.fid)
+      console.log('in post fid1:' + this.GLOBAL.fid)
+      console.log('in post rendermode:' + this.GLOBAL.renderMode)
+      this.value = '2'
+      for (let i = 0; i < this.GLOBAL.forumsData.length; i++) {
+        if (this.GLOBAL.root.$store.state.forumsName === this.GLOBAL.forumsData[i].name) { //从论坛数组里找出相匹配的fid
+          this.value = this.GLOBAL.forumsData[i].fid
+        }
+      }
       if (this.GLOBAL.renderMode === 'new' || this.GLOBAL.renderMode === 'self') {
         this.value = '2' //new 和 self 模式fid默认为水区
       } else {
         this.value = this.GLOBAL.fid
       }
-
-
-
-
-
+      console.log('in post fid2:' + this.GLOBAL.fid)
     },
     destroyed() {
       document.getElementById("post_location").removeChild(this.$el) //销毁DOM
@@ -316,5 +305,4 @@
     margin-top: 10px;
     margin-left: 10px;
   }
-
 </style>

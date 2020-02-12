@@ -3,21 +3,44 @@
 export default {
   install(Vue) {
 
-    Vue.prototype.dataInit = function () {
-      const vm=this
-      return new Promise(function (resolve) {
+
+    Vue.prototype.getContextData = function(key) { // sessionStorage取值
+      const str = sessionStorage.getItem(key);
+      if (typeof str == "string") {
+        try {
+          return JSON.parse(str) || 1 // ||1的意思：如果是0则为1
+        } catch (e) {
+          return str || 1
+        }
+      }
+    }
+
+
+    Vue.prototype.setContextData = function(key, value) { //sessionStorage存值
+      if (typeof value == "string") {
+        sessionStorage.setItem(key, value);
+      } else {
+        sessionStorage.setItem(key, JSON.stringify(value));
+      }
+    }
+
+
+
+    Vue.prototype.dataInit = function() {
+      const vm = this
+      return new Promise(function(resolve) {
         vm.axios.get('http://localhost:8081/getForums', {})
           .then((response) => {
             let arr = JSON.parse(response.data)
-            vm.GLOBAL.forumsData = arr
+            vm.GLOBAL.forumsData = arr //fid,name,status,displayorder
             resolve()
           })
       })
     }
 
-    Vue.prototype.loginCheck = function () {
+    Vue.prototype.loginCheck = function() {
       const vm = this
-      return new Promise(function (resolve) {
+      return new Promise(function(resolve) {
         vm.axios.get('http://localhost:8081/secret', {
           //携带cookie提交，mycookiesessionnameid是一个httponly cookie
           withCredentials: true
@@ -29,26 +52,26 @@ export default {
 
     }
 
-    Vue.prototype.setCookie = function (c_name, value) {//全局函数2
+    Vue.prototype.setCookie = function(c_name, value) { //全局函数2
       docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/");
     }
 
-    Vue.prototype.getCookie = function (c_name) {//全局函数3
+    Vue.prototype.getCookie = function(c_name) { //全局函数3
       return docCookies.getItem(c_name)
     }
 
-    Vue.prototype.delCookie = function (c_name) {//全局函数4
+    Vue.prototype.delCookie = function(c_name) { //全局函数4
       docCookies.removeItem(c_name);
     }
 
-    Vue.prototype.getLocalTime = function (nS) { //返回yyyy-mm-dd HH:MM:SS
+    Vue.prototype.getLocalTime = function(nS) { //返回yyyy-mm-dd HH:MM:SS
       if (isNull(nS)) nS = 1041350400
       let ds = String(new Date(parseInt(nS) * 1000).toISOString())
       ds = ds.replace(/(.+?)T(.+?).\d\d\dZ/, '$1 $2')
       return ds
     }
 
-    Vue.prototype.getLocalDate = function (nS) { //返回yyyy-mm-dd
+    Vue.prototype.getLocalDate = function(nS) { //返回yyyy-mm-dd
       if (isNull(nS)) nS = 1041350400 //2003-01-01 00:00:00
       let ds = String(new Date(parseInt(nS) * 1000).toISOString())
       ds = ds.replace(/(.+?)T.+?Z/, '$1')
@@ -56,23 +79,23 @@ export default {
       return ds
     }
 
-
   }
 }
 
 function isNull(e) {
-  if (typeof (e) === "undefined") return true
-  if (!e && typeof (e) != 'undefined' && e != 0) return true
+  if (typeof(e) === "undefined") return true
+  if (!e && typeof(e) != 'undefined' && e != 0) return true
   if (e !== e) return true
   if (String(e).length === 0) return true
   return false
 }
 
 let docCookies = {
-  getItem: function (sKey) {
-    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  getItem: function(sKey) {
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(
+      /[-.+*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
   },
-  setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+  setItem: function(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
     if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
       return false;
     }
@@ -90,21 +113,25 @@ let docCookies = {
           break;
       }
     }
-    document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+    document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ?
+      "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
     return true;
   },
-  removeItem: function (sKey, sPath, sDomain) {
+  removeItem: function(sKey, sPath, sDomain) {
     if (!sKey || !this.hasItem(sKey)) {
       return false;
     }
-    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ?
+      "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
     return true;
   },
-  hasItem: function (sKey) {
-    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+  hasItem: function(sKey) {
+    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=")).test(
+      document.cookie);
   },
-  keys: /* optional method: you can safely remove it! */ function () {
-    let aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+  keys: /* optional method: you can safely remove it! */ function() {
+    let aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(
+      /\s*(?:\=[^;]*)?;\s*/);
     for (let nIdx = 0; nIdx < aKeys.length; nIdx++) {
       aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]);
     }

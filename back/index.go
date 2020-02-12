@@ -7,6 +7,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/satori/go.uuid"
 	"io/ioutil"
+	"math"
 	"mysql_con"
 	"os"
 	"regexp"
@@ -70,7 +71,7 @@ func getTotalThreads(forumsId string, rMode string) (string, string) {
 	if sql2 != "" {
 		rst, _ = mysql_con.Query(sql2)
 		forumsName = rst[0]["name"]
-		if rMode=="self"{
+		if rMode == "self" {
 			forumsName = rst[0]["name"] + "的帖子"
 		}
 	} else {
@@ -91,6 +92,7 @@ func renderThreadsView(ctx iris.Context) {
 	var rst []map[string]string
 	var sql string
 	sql = "select pid,fid,tid,author,dateline,message,authorid," +
+		"(select subject from pre_forum_thread where tid = " + tid + ") as subject," +
 		"(select threads from pre_members where pre_members.uid = pre_forum_post.authorid) as threads," +
 		"(select posts from pre_members where pre_members.uid = pre_forum_post.authorid) as postsA," + //PostA是为了后继查询level，直接用post无效
 		"(select level from pre_level where pre_level.posts > postsA ORDER BY posts LIMIT 1) as level," +
@@ -99,6 +101,8 @@ func renderThreadsView(ctx iris.Context) {
 		"(select lastvisited from pre_members where pre_members.uid = pre_forum_post.authorid) as lastvisited," +
 		"(select signature from pre_members where pre_members.uid = pre_forum_post.authorid) as signature " +
 		"from pre_forum_post where tid = " + tid + " ORDER BY dateline limit " + startRec + "," + stopRec
+
+	fmt.Println(sql)
 
 	rst, ok = mysql_con.Query(sql)
 	if ok {
@@ -136,28 +140,54 @@ func setNewPost(ctx iris.Context) {
 		ctx.Text("login-error")
 		return
 	}
+	var sql string
+	fid := ctx.FormValue("fid")
 	tid := ctx.FormValue("tid")
-	uid := ctx.FormValue("uid")
+	author := ctx.FormValue("uname")
+	authorid := ctx.FormValue("uid")
+	dateline := strconv.FormatInt(time.Now().Unix(), 10)
+	message := ctx.FormValue("postContens")
+	useip := ctx.RemoteAddr()
 	threadsTitle := ctx.FormValue("threadsTitle")
-	postContens := ctx.FormValue("postContens")
-	fmt.Println("tid = " + tid)
-	fmt.Println("uid = " + uid)
+
+	fmt.Println("fid = ", fid)
+	fmt.Println("tid = ", tid)
+	fmt.Println("author = " + author)
+	fmt.Println("authorid = ", authorid)
+	fmt.Println("dateline = " + dateline)
+	fmt.Println("message = " + message)
+	fmt.Println("useip = " + useip)
 	fmt.Println("threadsTitle = " + threadsTitle)
-	fmt.Println("postContens = " + postContens)
-	// 105003
-	return
-	postContens = strings.Replace(postContens, "'", "\\'", -1)
-	postContens = strings.Replace(postContens, "</a>", "", -1)
+
+	message = strings.Replace(message, "'", "\\'", -1)
+	message = strings.Replace(message, "</a>", "", -1)
 	re, _ := regexp.Compile(`<a\s{1,}href(.+?)>`) //删除全部原生超链接
-	postContens = re.ReplaceAllString(postContens, "")
+	message = re.ReplaceAllString(message, "")
 	re = regexp.MustCompile(`<img src="data:.+?;base64,(.+?)">`)
-	for _, match := range re.FindAllStringSubmatch(postContens, -1) {
+	for _, match := range re.FindAllStringSubmatch(message, -1) {
 		data, _ := base64.StdEncoding.DecodeString(match[1])
 		fileName := saveAttachment(data)
 		src := "<img src=\"" + fileName + "\">"
-		postContens = strings.Replace(postContens, match[0], src, -1)
+		message = strings.Replace(message, match[0], src, -1)
 	}
-	mysql_con.Exec("UPDATE pre_forum_post set message = '" + postContens + "' where pid = 105003")
+
+	if tid != "0" {
+		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
+			"(" + fid + ", " + tid + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
+
+		fmt.Println(sql)
+		mysql_con.Exec(sql)
+		//算出总页数，返回给前端直接显示最后回复的帖子：
+		var rst []map[string]string
+		rst, _ = mysql_con.Query("select COUNT(1) as rows from pre_forum_post where tid = " + tid) //求出总行数
+		var i float64
+		i, _ = strconv.ParseFloat(rst[0]["rows"], 32)
+		page := math.Ceil(i / 20)
+		res := strconv.FormatFloat(page, 'E', -1, 32)
+		ctx.Text(res)
+
+	}
+
 }
 
 func saveAttachment(data []byte) string {

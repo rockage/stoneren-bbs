@@ -17,8 +17,7 @@
       </div>
     </el-card>
     <div style="text-align: right">
-      <el-button @click="viewThreads()">浏览{{genderName}}的主题 <i class="el-icon-notebook-1"></i></el-button>
-      <el-button @click="dialogVisible=false">关闭 <i class="el-icon-circle-close"></i></el-button>
+      <el-button type="primary" round @click="viewThreads()">浏览{{genderName}}的全部主题 <i class="el-icon-search"></i></el-button>
     </div>
 
 
