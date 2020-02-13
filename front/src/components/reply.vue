@@ -6,6 +6,7 @@
       @change="onEditorChange($event)" v-on:insertImage="insertImage($event)">
     </quill-editor>
 
+
     <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;">
     <img src="" id="myimg">
 
@@ -175,9 +176,7 @@
           return
         }
 
-        console.log(this.content.length)
-
-
+        
         this.setContextData("lastReplyTime", new Date().getTime())
         param.append("tid", this.tid)
         param.append("fid", this.fid)
@@ -211,12 +210,8 @@
       vm = this
       myQuill = this.$refs.myQuillEditor.quill //全局quill实例
       myQuill.root.addEventListener('click', this.handleClick, false) //为全局quill创建一个根监听
-      //元素定位：
-      let edit_container = this.$refs.editContainer
-      myQuill.container.style.width = `100%`
-      myQuill.container.style.height = `300px`
-      edit_container.style.width = `100%`
-      edit_container.style.height = `300px`
+
+      
       this.dummy = "999" //999是无意义的空渲染，在mounted阶段myQuill还未建造好，访问它会出错，只能将触发时机后移至updated阶段
       this.setContextData("lastReplyTime", new Date().getTime())
 
@@ -232,13 +227,17 @@
 
 <style>
   .edit_container {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+     width: 100%;
+     min-height: 300px;
+     max-height: 100%;
     background-color: White
+    
   }
 
   .ql-editor {
+     width: 100%;
+     min-height: 300px;
+     max-height: 100%;
     background-color: White
   }
 </style>

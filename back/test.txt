@@ -1,0 +1,345 @@
+<img data-src="//i0.hdslb.com/bfs/article/3c8d5150be0726a264c46227cc581810b002944d.png" style = "width:5121px;height:323px" width="1320" height="1888" data-size="48122" aid="34358841" class="video-card nomal" type="nomal"/>
+<!DOCTYPE html>
+<html>
+<head itemprop="Article" itemscope itemtype="http://schema.org/Article">
+    <meta charset="UTF-8">
+    <meta data-n-head="true" name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta name="theme-color" content="#de698c">
+    <meta http="Cache-Control" content="no-transform">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="applicable-device" content="pc">
+    <link rel="apple-touch-icon-precomposed" href="//static.hdslb.com/mobile/img/512.png">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="//www.bilibili.com/favicon.ico">
+    <link rel="apple-touch-icon" href="//www.bilibili.com/favicon.ico">
+    <meta name="name" content="关于有栖マナ的科普2.0">
+    <meta itemprop="title" name="title" content="关于有栖マナ的科普2.0">
+    <meta itemprop="description" name="description" content="过了差不多半年的第一次更新专栏，这次想让大家了解一下有关mana的一些介绍以及科普，如果有错以及漏的欢迎评论补充。新入坑的粉可以先看看自我介绍有栖マナ（Alice mana）原Project Paryi所属的虚拟Youtuber，现属于韩国Vtuber541E&amp;C是一只韩国狐狸，目前居住韩国, 妈妈是paryi有栖マナ年龄是217，生日是2月29日，据本人所说狐狸每过一百年就会长一条尾巴，颜色可以到九尾后在定（曾说过金色好像不错）身高155cm，耳朵有15cm目前貌似是和家人一起住，有个哥哥孤胆">
+    <meta itemprop="keywords" name="keywords" content="MANA,人类一败涂地,御姐音,火鸡面,风飘龙,孤胆英雄,黑魂3,层层恐惧,不死的传说,一生之敌,狐狸叫,以及国内,茶杯头,咩咩子,传说的开始,怪物猎人,受苦游戏,三养火鸡面,生命之名,圣诞贺图,CHA CHA,刷材料,动作类游戏,文化输出,YOUTUBE,twitch,xswl,LEMON,新玩具,不喜欢,学中文,名台词,多人联机,恐怖游戏,罗马音,片假名,MAN,假面骑士,万恶之源,越来越长,第一次,并没有,云玩家,直播间,亚马逊,小祖宗,打不过,在直播,柠檬水,了解一下,知识科普,mana,有栖マナ,黑白狐狸,黑白狐狐,">
+    <meta itemprop="author" name="author" content="kumasan_">
+    <meta itemprop="url" content="https://www.bilibili.com/read/cv1859635/">
+    <meta itemprop="image" content="https://i0.hdslb.com/bfs/article/24ba2d74e2d12a93773997a65991cd5781576bc8.jpg">
+    <meta itemprop="uploadDate" content="2019-1-13 8:54:34">
+    <meta itemprop="datePublished" content="2019-1-13 8:54:34">
+    <meta data-n-head="true" data-hid="og:type" property="og:type" content="article">
+    <meta data-n-head="true" data-hid="og:title" property="og:title" content="关于有栖マナ的科普2.0">
+    <meta data-n-head="true" data-hid="og:image" property="og:image" content="https://i0.hdslb.com/bfs/article/24ba2d74e2d12a93773997a65991cd5781576bc8.jpg">
+    <meta data-n-head="true" data-hid="og:url" property="og:url" content="http://www.bilibili.com/read/cv1859635/">
+    <meta name="renderer" content="webkit">
+    <meta name="spm_prefix" content="333.341">
+    <link data-n-head="true" rel="icon" type="image/x-icon" href="//www.bilibili.com/favicon.ico">
+    <link data-n-head="true" rel="apple-touch-icon-precomposed" type="image/x-icon" href="http://static.hdslb.com/mobile/img/512.png">
+    <link rel="Canonical" href="https://www.bilibili.com/read/cv1859635/">
+    <title>关于有栖マナ的科普2.0 - 哔哩哔哩</title>
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org/",
+        "@type": "Article",
+        "@id": "https://www.bilibili.com/read/cv1859635/",
+        "appid": "1580859622074471",
+        "title": "关于有栖マナ的科普2.0",
+        "images": "https://i0.hdslb.com/bfs/article/24ba2d74e2d12a93773997a65991cd5781576bc8.jpg",
+        "thumbnailUrl":"https://i0.hdslb.com/bfs/article/24ba2d74e2d12a93773997a65991cd5781576bc8.jpg",
+        "description": "过了差不多半年的第一次更新专栏，这次想让大家了解一下有关mana的一些介绍以及科普，如果有错以及漏的欢迎评论补充。新入坑的粉可以先看看自我介绍有栖マナ（Alice mana）原Project Paryi所属的虚拟Youtuber，现属于韩国Vtuber541E&amp;C是一只韩国狐狸，目前居住韩国, 妈妈是paryi有栖マナ年龄是217，生日是2月29日，据本人所说狐狸每过一百年就会长一条尾巴，颜色可以到九尾后在定（曾说过金色好像不错）身高155cm，耳朵有15cm目前貌似是和家人一起住，有个哥哥孤胆",
+        "pubDate": "2019-1-13 8:54:34"
+      }
+    </script>
+    <script>
+      window.original = {
+        cvid: "1859635",
+        author: {
+          name: "kumasan_",
+          mid: "4126460"
+        },
+        banner_url: "https://i0.hdslb.com/bfs/article/24ba2d74e2d12a93773997a65991cd5781576bc8.jpg",
+        reprint: "1",
+        summary: "过了差不多半年的第一次更新专栏，这次想让大家了解一下有关mana的一些介绍以及科普，如果有错以及漏的欢迎评论补充。新入坑的粉可以先看看自我介绍有栖マナ（Alice mana）原Project Paryi所属的虚拟Youtuber，现属于韩国Vtuber541E&amp;C是一只韩国狐狸，目前居住韩国, 妈妈是paryi有栖マナ年龄是217，生日是2月29日，据本人所说狐狸每过一百年就会长一条尾巴，颜色可以到九尾后在定（曾说过金色好像不错）身高155cm，耳朵有15cm目前貌似是和家人一起住，有个哥哥孤胆",
+        media: "",
+        actId: "0",
+        dispute: {
+          dispute: "",
+          dispute_url: ""
+        },
+        spoiler: "0"
+      }
+    </script>
+<link href="//s1.hdslb.com/bfs/static/jinkela/article/pcDetail.82a50843fb9728aec2de048a46cedca69241ef4d.css" rel="stylesheet"/></head>
+<body>
+<div class="z-top-container report-wrap-module">
+  <div class="nav-menu">
+    <div class="nav-mask"></div>
+    <div class="bili-wrapper clearfix">
+      <div class="nav-con fl">
+        <ul>
+          <li class="nav-item home">
+            <a href="//www.bilibili.com" title="主站" class="t">
+              <i class="bili-icon"></i>
+              主站
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-container">
+    <div class="nav-tab-bar">
+      
+        <a href="//www.bilibili.com/read/home?from=articleDetail" target="_self" class="logo">
+        </a>
+        <a href="//www.bilibili.com/read/home?from=articleDetail" target="_self" class="tab-item" data-tab-id="0">
+          <span>推荐</span>
+        </a>
+        
+          
+          <a href="//www.bilibili.com/read/douga?from=articleDetail" target="_self" class="tab-item  on" data-tab-id="2">
+            <span>动画</span>
+          </a>
+          
+        
+          
+          <a href="//www.bilibili.com/read/game?from=articleDetail" target="_self" class="tab-item " data-tab-id="1">
+            <span>游戏</span>
+          </a>
+          
+        
+          
+          <a href="//www.bilibili.com/read/cinephile?from=articleDetail" target="_self" class="tab-item " data-tab-id="28">
+            <span>影视</span>
+          </a>
+          
+        
+          
+          <a href="//www.bilibili.com/read/life?from=articleDetail" target="_self" class="tab-item " data-tab-id="3">
+            <span>生活</span>
+          </a>
+          
+        
+          
+          <a href="//www.bilibili.com/read/interest?from=articleDetail" target="_self" class="tab-item " data-tab-id="29">
+            <span>兴趣</span>
+          </a>
+          
+        
+          
+          <a href="//www.bilibili.com/read/lightnovel?from=articleDetail" target="_self" class="tab-item " data-tab-id="16">
+            <span>轻小说</span>
+          </a>
+          
+        
+          
+          <a href="//www.bilibili.com/read/technology?from=articleDetail" target="_self" class="tab-item " data-tab-id="17">
+            <span>科技</span>
+          </a>
+          
+        
+
+      
+    </div>
+    <div class="up-info-holder">
+      <div class="fixed-box">
+        <div class="up-info-block">
+          <a class="up-face-holder " href="//space.bilibili.com/4126460" target="_blank">
+            <img class="up-face-image" data-face-src="//i0.hdslb.com/bfs/face/9b5a2c76465167ed82c60aea198be63488ff2153.jpg" src="//static.hdslb.com/images/member/noface.gif">
+            
+            
+            
+            
+
+          </a>
+          <div class="up-info-right-block">
+            <div class="row">
+              <a class="up-name" href="//space.bilibili.com/4126460" target="_blank">kumasan_</a>
+              <span class="level"></span>
+              <div class="nameplate-holder">
+                <i class="nameplate"></i>
+              </div>
+            </div>
+            <div class="row-2">
+              粉丝:
+              <span class="fans-num"></span>
+              <span class="view">阅读:</span>
+              <span class="view-num"></span>
+            </div>
+          </div>
+        </div>
+        <div class="follow-btn-holder  ">
+          <span class="follow-btn">关注</span>
+        </div>
+        <div class="up-article-list-block hidden">
+          <div class="block-title">
+            推荐文章
+          </div>
+          <ul class="article-list">
+          </ul>
+        </div>
+        <div class="more">
+          <div class="top-bar">
+            <label>更多</label>
+          </div>
+          <a class="ac-link" href="//www.bilibili.com/read/apply/" target="_blank">
+            <div class="link">
+              <span class="icon">
+              </span>
+              <p class="title">成为创作者</p>
+              <p class="info">申请成为专栏UP主</p>
+            </div>
+          </a>
+          <a href="//www.bilibili.com/blackboard/help.html#专栏相关" target="_blank">
+            <div class="help">
+              <span class="icon">
+              </span>
+              <p class="title">专栏帮助</p>
+              <p class="info">查看专栏使用说明</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="right-side-bar">
+      <div class="to-comment">
+        <div class="comment-num-holder">
+          <span class="comment-num"></span>
+        </div>
+      </div>
+      <div class="to-top"></div>
+    </div>
+    <div class="head-container">
+        
+        <div class="banner-img-holder"></div>
+        
+        
+            <div class="bangumi-rating-container"></div>
+        
+        <div class="argue-flag hidden"></div>
+        <div class="title-container">
+            <h1 class="title">关于有栖マナ的科普2.0</h1>
+            <div class="info">
+                <a class="category-link" href="//www.bilibili.com/read/douga#rid=5" target="_blank"><span>动漫资讯</span></a>
+                <span class="create-time" data-ts="1568826947"></span>
+                <div class="article-data"></div>
+            </div>
+        </div>
+
+        
+        <div style="display:none" class="author-container">
+            <a class="author-face" href="//space.bilibili.com/4126460" target="_blank">
+                <img data-face-src="//i0.hdslb.com/bfs/face/9b5a2c76465167ed82c60aea198be63488ff2153.jpg" src="//i0.hdslb.com/bfs/face/9b5a2c76465167ed82c60aea198be63488ff2153.jpg" class="author-face-img">
+                
+                
+                
+            </a>
+            <a class="author-name" href="//space.bilibili.com/4126460" target="_blank">kumasan_</a>
+          <div class="attention-btn slim-border">关注</div>
+        </div>
+    </div>
+
+    <div class="article-holder"><p><strong>过了差不多半年的第一次更新专栏，这次想让大家了解一下有关mana的一些介绍以及科普，如果有错以及漏的欢迎评论补充。</strong></p><p><strong>新入坑的粉可以先看看自我介绍</strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/3c8d5150be0726a264c46227cc581810b002944d.png" width="1320" height="188" data-size="48122" aid="34358841" class="video-card nomal" type="nomal"/></figure><p><strong>有栖マナ（Alice mana）<span class="color-default">原</span><strong>Project Paryi</strong><span class="color-default">所属的虚拟Youtuber，现属于韩国Vtuber</span><strong>541E&amp;C</strong>是一只韩国狐狸，目前居住韩国, 妈妈是paryi</strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/c4135d48532482fae38a469c9cbdbc64a8b928c2.jpg" width="731" height="1476" data-size="128555"/><figcaption class="caption" contenteditable="false">有栖マナ</figcaption></figure><p><br/></p><p><strong>年龄是217，生日是2月29日，据本人所说狐狸每过一百年就会长一条尾巴，颜色可以到九尾后在定（曾说过金色好像不错）</strong></p><p><strong>身高155cm，</strong><span style="text-decoration:line-through;"><strong>耳朵有15cm</strong></span></p><p><strong><span class="color-default">目前貌似是和家人一起住，有个哥哥</span></strong></p><p><strong>孤胆英雄，不喜欢多人联机的游戏，曾说过FF14很无聊（</strong><span style="text-decoration:line-through;"><strong>因为你玩了个丢石头的</strong></span><strong>），和认识的人玩什么都行，甚至会去狙击，喜欢恐怖游戏，不喜欢在动作类游戏里还要动脑的游戏（一生之敌limbo），<span class="color-pink-03 font-size-20">不喜欢有人在评论说攻略或者剧透</span><span class="color-pink-04 font-size-20">。</span></strong><span style="text-decoration:line-through;" class="color-default"><strong><span style="text-decoration:line-through;" class="font-size-12">观看解密类游戏请自备降血压的药。</span></strong></span><strong><span class="color-pink-04 font-size-20"><span class="color-default font-size-20"></span><span class="color-default font-size-16">可以委婉提示，但被管理发现你在提示会被ban（</span></span></strong><span style="text-decoration:line-through;"><strong><span style="text-decoration:line-through;" class="color-default font-size-16">有群友提示被ban至今未解</span></strong></span><strong><span class="color-default font-size-16">）</span></strong></p><p><strong>怕虫子，喜欢恐怖游戏但是讨厌幽灵这种无实体的，僵尸类可以攻击到所以不怕。</strong></p><p><strong>可能因为恐怖游戏的关系经常做噩梦，对梦的记忆度很高，曾一度在被油管观众安慰后说出了“你们的噩梦就由mana全部吃掉”的话语</strong></p><p><strong>拥有强运体质，曾在怪物猎人里挖矿，想要白鸠石但是因为太欧挖五个矿只出了一个，后续直播提到游戏抽卡的时候跳脸观众</strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/48276cb4fd24810affac39d531952937987998f1.png" width="1320" height="188" data-size="43653" aid="50585030" class="video-card nomal" type="nomal"/></figure><p><br/></p><p><strong>喜欢吃火鸡面，曾有过给我火鸡面我就跟你走的危险发言，以及给钱的都是好人的发言。</strong></p><p><span class="color-pink-03 font-size-23"><strong>我的人生缺不了火鸡面    --------有栖</strong><strong>マナ</strong></span></p><p><strong>多次摆愿望单摆出了一个月份的量的火鸡面</strong></p><p><strong>曾因为自身声线原因被同学质疑和排斥，一度想要改变自己的声线</strong></p><p><strong>喜欢的男性唱见是<span class="vip-name-check fans-name this-is-vip"><a href="https://space.bilibili.com/387994725/" target="_blank">Mafumafu_Channel</a> mafumafu桑</span></strong></p><p><strong><span class="vip-name-check fans-name this-is-vip">自身跟Aimer的歌有不错的相性</span></strong></p><p><strong><span class="vip-name-check fans-name this-is-vip">最喜欢的V家曲是《君の脈で踊りたかった》</span></strong></p><p><strong>唱歌容易害羞，几次唱歌回都删档（曾经），歌声放开唱很好听，现在唱歌也不会害羞了，也经常唱。</strong><span style="text-decoration:line-through;"><strong>就是爱切歌</strong></span><br/></p><p><strong>一开始让mana奥术魔刃她是拒绝的，随着次数增多mana也变得不会害羞，而且手法也不像以前一样暴躁，越发娴熟，现在每周六会有一次定期奥术（中国时间11点）</strong><br/></p><p><strong>会画画而且很厉害，单图层上色不打草稿是基本操作，曾给自己画过两套衣服</strong><br/></p><p><strong>是蕾姆单推人，</strong><span style="text-decoration:line-through;"><strong>经常给自己的蕾姆手办洗可乐浴</strong></span></p><p><strong>可乐是百事党，因为韩国可口可乐贵，同时也喜欢喝酒（最近很少喝）</strong><br/></p><p><strong>喜欢的酒是</strong><strong>cruiser（酷</strong><strong>思</strong><strong>乐）</strong></p><p><strong>直播深夜场基本能见到mana的夜宵时间（曾经），现在很少直播中吃夜宵，但经常不吃晚饭就直播（担心）</strong></p><p><strong>在刚进入541更换立绘后收到了很多人的攻击（国内国外的粉丝都有），但mana没有逃避，选择全盘接受。</strong></p><p><strong>曾多次提及自己不喜欢角龙这个称呼，可用小祖宗/黑白狐狐</strong><span style="text-decoration:line-through;"><strong>foo↑foo↑</strong></span></p><p><strong>因为角龙不可爱，mhw里喜欢咩咩子。</strong></p><p><span style="text-decoration:line-through;" class="color-pink-03"><strong><a href="https://www.bilibili.com/video/av38430186">七国语</a></strong></span><strong>vtb，主语言韩语，其次日语，<span class="color-pink-03">不擅长日文汉字</span>，去油管互动能用假名而不是汉字的话会容易被mana读到，中文也在学习中，还请了家教</strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/e5ab86428edf4384912ed2c8639cac2251ce3a14.png" width="1320" height="188" data-size="34043" aid="55503733" class="video-card nomal" type="nomal"/></figure><p><strong>在进入541后更新了立绘，后续更新泳装，会不会有像ena阿琳那样的侧颜姿态不得而知。</strong><br/></p><p><br/></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/3c97ef1ae608efbaf794509849654622add34dbe.jpg" width="1463" height="2951" data-size="214765"/><figcaption class="caption" contenteditable="false">泳装白丝</figcaption></figure><p><br/></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/0f6591513df2f792e2705bfea3591b654563a333.jpg" width="1463" height="2951" data-size="216574"/><figcaption class="caption" contenteditable="false">泳装裸足</figcaption></figure><p><br/></p><p><strong>目前直播分twitch（韩语）  youtube（日语） bilibili（日语）三平台</strong></p><p><strong>转播问题因为特殊时期只好慢慢等待，有能力的可以自行过去看，<span class="color-pink-03">但要注意聊天室守则</span></strong></p><p><strong>twitch可以用网易UU（需会员）观看，twitch的付费订阅可用支付宝和微信</strong></p><p style="text-align: center;"><span class="color-pink-03 font-size-23"><strong>以下仅供参考，实际开播时间请以mana作息为准</strong></span></p><p><strong><br/></strong></p><p><strong>twitch（韩语）：周一到周三，中国时间晚上八点开播</strong></p><p><span class="color-pink-03 font-size-16"><strong>链接：https://www.twitch.tv/alicemana_v</strong></span></p><p><span class="color-default font-size-16"><strong>bilibili（日语）：中国时间 周五晚上九点开播</strong></span></p><p><span class="color-pink-03 font-size-16"><strong>链接：https://live.bilibili.com/3822389</strong></span></p><p><strong>youtube（日语）：中国时间 周六晚上11点asmr，周日晚上九点开播</strong></p><p><span class="color-pink-03 font-size-16"><strong>链接：https://www.youtube.com/channel/UCIaC5td9nGG6JeKllWLwFLA</strong></span></p><p><span class="color-default"><strong>推特不是很好动，但还是有看</strong></span></p><p><span class="color-default"></span><span class="color-pink-03"><strong>链接：https://twitter.com/Alicemana_v</strong></span></p><p><strong>早期提及自己因为海外运输太麻烦没有弄亚马逊愿望单，后在twitch的合作SC平台TOON里添加了自己的愿望单（韩国平台）</strong><br/></p><p><span class="color-pink-03"><strong>愿望单链接：https://toon.at/donate/636848959331139930 </strong></span><strong>（可用paypal，绑银联可用）</strong></p><p><strong>nga韩国组专楼<br/><span class="color-pink-03">链接：http://bbs.nga.cn/read.php?tid=17060961&amp;rand=716</span></strong></p><p><strong>同属于541在B站有号的还有<span class="vip-name-check fans-name this-is-vip"><a href="https://space.bilibili.com/1869304/" target="_blank">ENA에나</a>和<a href="https://space.bilibili.com/739296/" target="_blank"><span class="vip-name-check fans-name this-is-vip">Moarin_channel</span></a></span></strong></p><p><span class="color-pink-03 font-size-16"></span></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/4adb9255ada5b97061e610b682b8636764fe50ed.png" class="cut-off-5"/></figure><p><span class="color-pink-03 font-size-16"></span><br/></p><h1><span class="font-size-23">마하</span><span class="font-size-23">마하/マハマハ/</span>mahamaha</h1><p><strong>开播的问候语，打招呼用，意为mana hello</strong><br/></p><p><br/></p><h1><span class="font-size-23">마바</span><span class="font-size-23">마바/</span><span class="font-size-23">マ</span><span class="font-size-23">バ</span><span class="font-size-23">マ</span><span class="font-size-23">バ/mabamaba</span></h1><p><span class="font-size-23"><strong><span class="font-size-16">结束道别语，意为mana bye</span></strong><br/></span></p><p><span class="font-size-23"><strong><span class="font-size-16"><span class="font-size-23"><span class="color-default">マグニ/maguni</span></span><br/></span></strong></span></p><p><strong>mana的粉丝名称，来源是韩国戏剧里的角色</strong></p><p><br/></p><h1><span class="font-size-23"><strong>kyunkyun</strong></span></h1><p><strong><span class="font-size-16">狐狸叫，感谢打赏的时候就会kyun两声</span></strong><span class="font-size-23"><strong><br/></strong></span></p><p><span class="font-size-16"><br/></span></p><h1><span class="font-size-16">chuchu（啾啾）</span></h1><p><strong><span class="font-size-16">mana的特有命名，一般游戏里出现宠物需要取名，mana便会沉思一会，然后“你就是啾啾了”，后来玩了怪物猎人，给猫取名chuchu，前期宁愿让啾啾穿的好点也不愿意升级自己的装备</span><span style="text-decoration:line-through;" class="font-size-16">其实就是头铁</span></strong><strong><span class="font-size-16">，导致啾啾的的伤害比他还高，再加上mana前期不买药后期特省药，没血的时候就会大喊：啾——啾——，于是输出担当啾啾，防御担当啾啾，奶妈担当啾啾，带着mana猎杀了一条又一条的龙</span></strong></p><p><strong><span class="font-size-16">mana并不只是会啾啾一种命名，在MC回中<a href="https://www.bilibili.com/video/av40680191">三分钟了解mana的世界</a>，mana养了三只狗，被称为啾啾一家，名字分别是chuchu</span></strong><span style="text-decoration:line-through;"><strong><span style="text-decoration:line-through;" class="font-size-16">（记者）</span></strong></span><strong><span class="font-size-16">，chichi</span></strong><span style="text-decoration:line-through;"><strong><span style="text-decoration:line-through;" class="font-size-16"><strong><span style="text-decoration:line-through;" class="font-size-16">（anzu）</span></strong></span></strong></span><strong><span class="font-size-16">，chacha<strong><span style="text-decoration:line-through;" class="font-size-16">（所长）</span></strong></span></strong><strong><span class="font-size-16">。</span></strong></p><p><br/></p><h1><span style="text-decoration:line-through;"><strong>黑白角龙</strong></span><strong>（此处为由来科普，但并不希望看到的观众只记得角龙）</strong></h1><p><strong>一切的一切都是从mana触及怪物猎人后 打到下位风飘龙开始，mana穿着最开始的装备，以及被观众千劝万劝才升级了一次的双刀，打了三个晚上，才干掉了风飘龙，于是，沙雕群友们P了个图</strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/74771a88dc71da366af99eb130d71a312b9a21aa.jpg" width="454" height="513" data-size="23905"/><figcaption class="caption" contenteditable="false">万恶之源</figcaption></figure><p><strong>这就是一切的开始，后面在经历了各种头铁 mana干不死的传说后，结合怪物猎人，铁头狐狸也被戏称为黑白角龙。</strong><br/></p><p><br/></p><p><strong><br/></strong></p><h1><strong>小祖宗</strong></h1><p><strong><strong>这是目前mana国内粉丝对mana的亲切称呼之一（有人给mana科普过意思，是大家宠溺的人，或者公主的意思）。</strong></strong></p><p><strong><strong>mana一开始，还只是玩各种恐怖游戏，直到某个恶魔向mana推荐了茶杯头，这就是大家噩梦的开始，也是受苦铁头狐狸传说的开始，茶杯头后，mana又接触了一系列受苦游戏，怪物猎人，黑魂3，R6，一生之敌libom等一系列我忘了名字的游戏，由于直播时间越来越长，观众们就开始各种劝睡，然后大家就开始喊起了小祖宗这个及其贴切的称呼<br/></strong></strong></p><p style="text-align: center;"><span class="color-pink-03 font-size-20"><strong><strong><span class="font-size-20">“小祖宗我求求你看看攻略/下播睡觉吧”</span></strong></strong></span></p><p style="text-align: center;"><span class="color-pink-03 font-size-20"><strong><strong><span class="font-size-20">“不要”</span></strong></strong></span></p><h1><strong>mhw柠檬事件</strong></h1><p><strong>看过mana怪物猎人直播全程的，到后面有绝大部分都是柠檬人，因为怪物猎人出现了一只头铁狐刷了整整九，十个小时的时间都打不过的龙，那就是咩咩子，于是在第二天尝试多次仍然打不过后，mana终于有了升装备的打算，但是觉得刷材料很麻烦，于是不喜欢联机的mana第一次开了集合，并见识到了强者的世界，群里一些没睡的就开始嗨了，而且有一些人成功加入了集会（和mana放过烟花的饺鸽鸽），没进去以及没怪猎的都在直播评论刷起了柠檬，还有人用打赏点了一首lemon。</strong><br/></p><h1><strong>mana指定柠檬水和面和零食（这半年来mana也亮出了很多吃的图，吃的也是越来越好，就不举例了。）</strong></h1><p><strong>mana直播透露喜欢喝的水和经常吃的面和零食</strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/4e1678d467a15bc1d6d4fcb618c9967f3cdcb7aa.jpg" width="463" height="347" data-size="26554"/><figcaption class="caption" contenteditable="false">我看不懂！</figcaption></figure><p><strong>还有三养火鸡面。</strong></p><p><strong><br/></strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/3b24667338e8ae1f8d66c2bb2c6557a663d926b5.jpg" width="1193" height="699" data-size="54183"/><figcaption class="caption" contenteditable="false">데일리C 비타민워터(레몬/자몽) 500ml  </figcaption></figure><p><strong>一没注意就会连吃很多根的香肠</strong></p><p><br/></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/6164f0bcca8bc72db43355acf32fa9dc57abd91a.png" width="1072" height="748" data-size="436170"/><figcaption class="caption" contenteditable="false">韩国鱼肠 海地村鳕鱼肠</figcaption></figure><p><br/></p><p><strong class="font-size-16">以前经常播通宵，</strong><strong class="font-size-16">按最高记录是晚上八点到第二天早上九点，曾在凌晨的时候与ENA连麦说的名台词：为什么要睡觉。不过在3月后通宵变少 虽然有时还是会通宵</strong></p><p><strong><br/></strong></p><h1><strong>黑mana/白mana<br/></strong></h1><p><strong>最开始的黑白分明是玩层层恐惧的时候，给自己做了个相框，这样就出现了纯色mana。在一次</strong><strong>杂谈里</strong><strong><a href="https://www.bilibili.com/video/av38876532">av38876532</a>，</strong><strong>说了自己很喜欢这个框，于是黑白mana就出来了，再到后面因为观众的打赏，用御姐音说话，就开始了黑mana是御姐音平时是白mana的设定。</strong></p><p><strong>在后续透露黑mana声线很伤嗓子，现在也很少出现黑mana</strong></p><p><span class="font-size-23"><strong>玛龙</strong></span><br/></p><p><strong>mana的女儿，mana因为太多人喊她角龙，于是就画了个女儿代替她，叫做玛龙，为玛龙做过2Dlive，直播里只出现过一次</strong></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/7552e0c4e5a3cf62f04f66f1d2f652c8886d1143.png" width="472" height="459" data-size="219245"/><figcaption class="caption" contenteditable="false">玛龙</figcaption></figure><p><strong>后续还画过玛龙的成年形态 泳装等  观众也经常用玛龙的名字SC调侃mana妈妈</strong><br/></p><p><strong><br/></strong></p><p><span class="font-size-23"><strong>Alice ari</strong></span></p><p><span class="font-size-23"><strong>mana养的狗狗</strong></span></p><figure class="img-box" contenteditable="false"><img data-src="//i0.hdslb.com/bfs/article/96a53e497e129810e3b2588fe28bc7dc77c69266.png" width="1320" height="188" data-size="37777" aid="46702501" class="video-card nomal" type="nomal"/></figure><p><span class="font-size-23"><strong><br/></strong></span></p><p><span class="font-size-23"></span><span class="font-size-23"><strong>韩国地下DJ女皇</strong></span></p><p><span class="font-size-23"><strong><span class="font-size-16">唱歌是快节奏苦手，会跟不上拍，但是对rap很熟练，曾一度被称为韩国地下DJ女皇</span><br/></strong></span></p><p><br/></p><p><strong><br/></strong></p><p><span class="color-pink-03"><strong>时隔大半年的更新，想到什么补充什么，就先更新到这。</strong></span></p><p><strong>请各位了解之后可以在直播时出现不懂mana的人或者一般路人的时候可以耐心解答，而不是暴力驱赶，遇到乱刷梗的小鬼也请适当阻止但不要有过激言论，当然也不要自己去本人那或者其他vtb直播间乱刷，不然只是给他人对mana对mana粉全体增添不好的印象，粉丝群在mana搬运组动态有。</strong></p><p><strong>封面画师：<a href="https://space.bilibili.com/775407/" target="_blank"><span class="vip-name-check fans-name this-is-vip">元カレ</span></a></strong></p><p><br/></p><p><strong><br/></strong></p><p><br/></p></div>
+    
+    
+     
+    <ul class="tag-container">
+        
+        <li data-tag-id="626359" class="tag-item">
+          <span class="tag-border">
+            <span class="tag-border-inner"></span>
+          </span>
+          <span class="tag-content">知识科普</span>
+        </li>
+        
+        <li data-tag-id="2624068" class="tag-item">
+          <span class="tag-border">
+            <span class="tag-border-inner"></span>
+          </span>
+          <span class="tag-content">mana</span>
+        </li>
+        
+        <li data-tag-id="8048705" class="tag-item">
+          <span class="tag-border">
+            <span class="tag-border-inner"></span>
+          </span>
+          <span class="tag-content">有栖マナ</span>
+        </li>
+        
+        <li data-tag-id="9544697" class="tag-item">
+          <span class="tag-border">
+            <span class="tag-border-inner"></span>
+          </span>
+          <span class="tag-content">黑白狐狸</span>
+        </li>
+        
+        <li data-tag-id="11375855" class="tag-item">
+          <span class="tag-border">
+            <span class="tag-border-inner"></span>
+          </span>
+          <span class="tag-content">黑白狐狐</span>
+        </li>
+        
+    </ul>
+    
+    <div class="article-action">
+      <div class="ops">
+        <span class="like-btn">
+          <i class="icon-video-details_like"></i>
+          <span>--</span>
+        </span>
+        <span class="coin-btn">
+          <i class="icon-video-details_throw-coin"></i>
+          <span>--</span>
+        </span>
+        <span class="fav-btn">
+          <i class="icon-video-details_collection"></i>
+          <span>--</span>
+        </span>
+        <span class="share-container share-btn">
+          分享到：<span></span>
+        </span>
+      </div>
+      <div class="more">
+        <!-- <i class="icon-general_more-actions"></i> -->
+        <div class="more-ops-list">
+          <ul>
+            <li value="0">投诉或建议</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="article-list-holder-block"></div>
+    <div class="draft-holder-block">
+    </div>
+    <div class="b-head comment-title-block">
+      <span class="b-head-t comment-results" style="display: inline;"></span>
+      <span class="b-head-t">评论</span>
+    </div>
+    <div class="comment-holder"></div>
+
+</div>
+<div class="footer bili-footer report-wrap-module" id="home_footer"></div>
+<script src="//static.hdslb.com/public/intersection-observer.js"></script>
+<script src="//static.hdslb.com/public/timing.min.js"></script>
+<script>window.performanceLog.setSource('article');</script>
+<script src="//static.hdslb.com/js/jquery-3.3.1.min.js"></script>
+<script>
+  window.reportMsgObj = {}
+  window.reportConfig = {
+    sample : 1,
+    errorTracker : false ,
+    resourceTracker: false ,
+    scrollTracker: false,
+    msgObjects : 'reportMsgObj'
+  }
+</script>
+<script type="text/javascript" charset="utf-8" src="//s1.hdslb.com/bfs/seed/jinkela/header/header.js"></script>
+<script type="text/javascript" charset="utf-8" src="//static.hdslb.com/common/js/footer.js"></script>
+<link rel="stylesheet" type="text/css" href="//static.hdslb.com/phoenix/dist/css/comment.min.css">
+<script type="text/javascript" src="//static.hdslb.com/phoenix/dist/js/comment.min.js"></script>
+<script src="//s1.hdslb.com/bfs/static/biliapp/biliapp.js"></script>
+<!-- <script type="text/javascript" src="//s1.hdslb.com/bfs/seed/log/report/log-reporter.js" crossorigin></script> -->
+<script>
+  (function(){
+  var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?e6352779c080ceddc1bc4c6bbe047b69":"https://jspassport.ssl.qhimg.com/11.0.1.js?e6352779c080ceddc1bc4c6bbe047b69";
+  document.write('<script src="' + src + '" id="sozz"><\/script>');
+  })();
+</script>
+<script type="text/javascript" src="//s1.hdslb.com/bfs/static/jinkela/article/manifest.82a50843fb9728aec2de048a46cedca69241ef4d.js"></script><script type="text/javascript" src="//s1.hdslb.com/bfs/static/jinkela/article/vendor.82a50843fb9728aec2de048a46cedca69241ef4d.js"></script><script type="text/javascript" src="//s1.hdslb.com/bfs/static/jinkela/article/pcDetail.82a50843fb9728aec2de048a46cedca69241ef4d.js"></script></body>
+</html>

@@ -163,13 +163,26 @@ func setNewPost(ctx iris.Context) {
 	message = strings.Replace(message, "</a>", "", -1)
 	re, _ := regexp.Compile(`<a\s{1,}href(.+?)>`) //删除全部原生超链接
 	message = re.ReplaceAllString(message, "")
-	re = regexp.MustCompile(`<img src="data:.+?;base64,(.+?)">`)
+
+	re = regexp.MustCompile(`<img.+?src="data:.+?;base64,(.+?)">`) //用户上传的图片
 	for _, match := range re.FindAllStringSubmatch(message, -1) {
 		data, _ := base64.StdEncoding.DecodeString(match[1])
 		fileName := saveAttachment(data)
-		src := "<img src=\"" + fileName + "\">"
+		src := "<img style=\"max-width:100%;\" src=\"" + fileName + "\" >"
 		message = strings.Replace(message, match[0], src, -1)
 	}
+
+	reg0 := regexp.MustCompile(`(<img.+?)width\s{0,}=\s{0,}"\d{1,}"(.+?>)`) //去掉width
+	message = reg0.ReplaceAllString(message, "$1$2")
+
+	reg1 := regexp.MustCompile(`(<img.+?)height\s{0,}=\s{0,}"\d{1,}"(.+?>)`)  //去掉height
+	message = reg1.ReplaceAllString(message, "$1$2")
+
+	reg2 := regexp.MustCompile(`(<img.+?)|style\s{0,}=\s{0,}".+?"(.+?>)`) //去掉style
+	message = reg2.ReplaceAllString(message, "$1$2")
+
+	reg3 := regexp.MustCompile(`<img(.+?>)`)
+	message = reg3.ReplaceAllString(message, `<img style="max-width:100%;"$1`) //加上style, 前端的容器设为width=100%，图片设为max-width=100%，可实现自适应屏幕
 
 	if tid != "0" {
 		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
