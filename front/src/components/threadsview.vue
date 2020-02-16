@@ -2,7 +2,7 @@
   <div class="threadsview">
     <el-row>
       <div style="background-color: #cccccc;width: 100%;min-height: 40px;">
-        <bbs-button></bbs-button>
+        <bbs-button @ShowDataTable="ShowDataTable"></bbs-button>
 
         <el-col :span="18" :push="0" style="text-align: right;margin-top: 5px;">
           <el-pagination
@@ -17,156 +17,151 @@
         </el-col>
       </div>
     </el-row>
-    <el-row>
+    <div id="post_location" style="back-groundcolor:red;width=100%;"></div>
+    <div v-show="dataShow">
       <el-row>
-        <el-col :span="24">
-          <el-divider content-position="center"
-            ><span
-              style="font-size: medium;color: black;font-family: 'Microsoft YaHei',sans-serif"
-              >主题： {{ subject }}
-            </span>
-          </el-divider>
-        </el-col>
-      </el-row>
-      <el-table
-        :data="tableData"
-        style="width: 100%;"
-        :show-header="false"
-        :border="true"
-      >
-        <el-table-column label="" min-width="20%" className="my-cell">
-          <template slot-scope="scope">
-            <el-row style="margin-top: 20px" justify="center">
-              <el-col :span="24">
-                <img
-                  style="object-fit: fill;width: 60%;height: 60%;border-radius: 9px;"
-                  :src="
-                    scope.row.avatar ? scope.row.avatar : '/static/avatar.png'
-                  "
-                />
-              </el-col>
-            </el-row>
-            <el-row type="flex" justify="center">
-              <el-col :span="15" style="background-color: #EBEEF5">
-                <span
-                  class="author-text"
-                  style="font-size: small;font-weight: bold"
-                >
-                  <a
-                    href="javascript:void(0)"
-                    @click="userProfile(scope.row.author)"
-                  >{{ scope.row.author }}</a
-                  >
-                </span>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="author-text">回复帖子：</el-col>
-              <el-col :span="12" class="author-text" style="text-align: left">{{
-                scope.row.postsA
-              }}</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="author-text">发表主题：</el-col>
-              <el-col :span="12" class="author-text" style="text-align: left">{{
-                scope.row.threads
-              }}</el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="author-text">注册日期：</el-col>
-              <el-col :span="12" class="author-text" style="text-align: left"
-                >{{ getLocalDate(scope.row.regdate) }}
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12" class="author-text">最后登录：</el-col>
-              <el-col :span="12" class="author-text" style="text-align: left"
-                >{{ getLocalDate(scope.row.lastvisited) }}
-              </el-col>
-            </el-row>
-            <el-row type="flex" justify="center">
-              <el-col
-                :span="8"
-                class="author-text"
-                style="background-color: #EBEEF5;font-size: smaller;"
-                >武功等级：
-              </el-col>
-              <el-col
-                :span="8"
-                class="author-text"
-                style="background-color: #EBEEF5;text-align: left;font-size: smaller;"
-                >{{ scope.row.level }}
-              </el-col>
-            </el-row>
-          </template>
-        </el-table-column>
-        <el-table-column min-width="80%" className="my-cell-2">
-          <template slot-scope="scope">
-            <el-row>
-              <el-col :span="24">
-                <div class="grid-content" style="color: #909399;">
-                  <span>第{{ scope.row.indexNum }}楼</span
-                  ><span style="margin-right:15px;"></span
-                  ><span>发表于：{{ getLocalTime(scope.row.dateline) }}</span>
-
-                  <hr
-                    style="height:1px;border-width:0;color:#E4E7ED;background-color:#E4E7ED"
+        <el-row>
+          <el-col :span="24">
+            <el-divider content-position="center"
+              ><span
+                style="font-size: medium;color: black;font-family: 'Microsoft YaHei',sans-serif"
+                >主题： {{ subject }}
+              </span>
+            </el-divider>
+          </el-col>
+        </el-row>
+        <el-table
+          :data="tableData"
+          style="width: 100%;"
+          :show-header="false"
+          :border="true"
+        >
+          <el-table-column label="" min-width="20%" className="my-cell">
+            <template slot-scope="scope">
+              <el-row style="margin-top: 20px" justify="center">
+                <el-col :span="24">
+                  <img
+                    style="object-fit: fill;width: 60%;height: 60%;border-radius: 9px;"
+                    :src="
+                      scope.row.avatar ? scope.row.avatar : '/static/avatar.png'
+                    "
                   />
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <div
-                  class="grid-content"
-                  style="min-height:500px;max-height:100%;width:100%;"
-                  v-html="up(scope.row.message)"
-                ></div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <div class="grid-content">
-                  <hr
-                    style="height:1px;border-width:0;color:#E4E7ED;background-color:#E4E7ED"
-                    v-show="msgHr(scope.row.signature)"
-                  />
+                </el-col>
+              </el-row>
+              <el-row type="flex" justify="center">
+                <el-col :span="15" style="background-color: #EBEEF5">
                   <span
-                    style="margin-left: 5px;text-align: left;font-style: oblique;font-weight:bold;"
-                    >{{ scope.row.signature }}</span
+                    class="author-text"
+                    style="font-size: small;font-weight: bold"
                   >
-                </div>
-              </el-col>
-            </el-row>
-          </template>
-          <el-row> </el-row>
-        </el-table-column>
-      </el-table>
+                    <a
+                      href="javascript:void(0)"
+                      @click="userProfile(scope.row.author)"
+                      >{{ scope.row.author }}</a
+                    >
+                  </span>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12" class="author-text">回复帖子：</el-col>
+                <el-col
+                  :span="12"
+                  class="author-text"
+                  style="text-align: left"
+                  >{{ scope.row.postsA }}</el-col
+                >
+              </el-row>
+              <el-row>
+                <el-col :span="12" class="author-text">发表主题：</el-col>
+                <el-col
+                  :span="12"
+                  class="author-text"
+                  style="text-align: left"
+                  >{{ scope.row.threads }}</el-col
+                >
+              </el-row>
+              <el-row>
+                <el-col :span="12" class="author-text">注册日期：</el-col>
+                <el-col :span="12" class="author-text" style="text-align: left"
+                  >{{ getLocalDate(scope.row.regdate) }}
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12" class="author-text">最后登录：</el-col>
+                <el-col :span="12" class="author-text" style="text-align: left"
+                  >{{ getLocalDate(scope.row.lastvisited) }}
+                </el-col>
+              </el-row>
+              <el-row type="flex" justify="center">
+                <el-col
+                  :span="8"
+                  class="author-text"
+                  style="background-color: #EBEEF5;font-size: smaller;"
+                  >武功等级：
+                </el-col>
+                <el-col
+                  :span="8"
+                  class="author-text"
+                  style="background-color: #EBEEF5;text-align: left;font-size: smaller;"
+                  >{{ scope.row.level }}
+                </el-col>
+              </el-row>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="80%" className="my-cell-2">
+            <template slot-scope="scope">
+              <el-row>
+                <el-col :span="24">
+                  <div class="grid-content" style="color: #909399;">
+                    <span>第{{ scope.row.indexNum }}楼</span
+                    ><span style="margin-right:15px;"></span
+                    ><span>发表于：{{ getLocalTime(scope.row.dateline) }}</span>
 
-      <!--
-      <div
-        id="id2"
-        style="min-width:20%;min-height:400px;float:left;background-color: white"
-      ></div>
-      <div id="id3" style="min-width:80%;float:left;border:0px solid blue">
-        <reply
-          :tid="tid"
-          :fid="fid"
-          @replyFinished="renderMain($event)"
-        ></reply>
-      </div>
-      -->
-    </el-row>
-    <table border="0" style="width:100%">
-      <td style="width:20%"></td>
-      <td style="width:80%">
-        <reply
-          :tid="tid"
-          :fid="fid"
-          @replyFinished="renderMain($event)"
-        ></reply>
-      </td>
-    </table>
+                    <hr
+                      style="height:1px;border-width:0;color:#E4E7ED;background-color:#E4E7ED"
+                    />
+                  </div>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <div
+                    class="grid-content"
+                    style="min-height:500px;max-height:100%;width:100%;"
+                    v-html="up(scope.row.message)"
+                  ></div>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <div class="grid-content">
+                    <hr
+                      style="height:1px;border-width:0;color:#E4E7ED;background-color:#E4E7ED"
+                      v-show="msgHr(scope.row.signature)"
+                    />
+                    <span
+                      style="margin-left: 5px;text-align: left;font-style: oblique;font-weight:bold;"
+                      >{{ scope.row.signature }}</span
+                    >
+                  </div>
+                </el-col>
+              </el-row>
+            </template>
+            <el-row> </el-row>
+          </el-table-column>
+        </el-table>
+      </el-row>
+      <table border="0" style="width:100%">
+        <td style="width:20%"></td>
+        <td style="width:80%">
+          <reply
+            :tid="tid"
+            :fid="fid"
+            @replyFinished="renderMain($event)"
+          ></reply>
+        </td>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -178,20 +173,30 @@ export default {
   name: "threadsview",
   data() {
     return {
-      tid: this.$route.params.tid,
-      fid: 0,
       tableData: [],
       totalPosts: 0,
       messageBox: "",
       subject: "",
-      currentPage: 1
+      currentPage: 1,
+      dataShow: true
     };
   },
   components: {
     bbsButton,
     reply
   },
+  computed: {
+    fid: function() {
+      return this.$store.getters.fid;
+    },
+    tid: function() {
+      return this.$route.params.tid;
+    }
+  },
   methods: {
+    ShowDataTable: function() {
+      this.dataShow = !this.dataShow;
+    },
     userProfile: function(uname) {
       this.$userprofile({
         uname: uname
@@ -200,20 +205,8 @@ export default {
     msgHr: function(message) {
       return !!message;
     },
-    msgBox: function(message) {
-      //为了在帖子内容很少的时候撑大回帖内容区
-      if (message.length > 500) {
-        return "height: 100%;white-space: pre-line;";
-      } else {
-        return "height: 100px;white-space: pre-line;";
-      }
-    },
-    back: function() {
-      this.$router.back();
-    },
     up: function(str) {
       return str;
-
       str = str.replace(/\[i(=s)\]/gi, "[i]");
       str = str.replace(/</gi, "&lt;");
       str = str.replace(/>/gi, "&gt;");
@@ -287,22 +280,8 @@ export default {
               })
             );
           });
-
-          console.log(array);
-
-          vm.fid = array[0].fid;
-          vm.GLOBAL.fid = vm.fid;
-          //vm.fid是为了传递给子组件reply,
-          //这里赋值GLOBAL.fid又赋值一次，是为了应付一种情况：在threadview状态下直接F5刷新，GLOBAL.fid会被重置
           vm.subject = array[0].subject;
           vm.tableData = array;
-          for (let i = 0; i < vm.GLOBAL.forumsData.length; i++) {
-            if (vm.fid === vm.GLOBAL.forumsData[i].fid) {
-              //从论坛数组里找出相匹配的fid
-              vm.GLOBAL.root.$store.state.forumsName =
-                vm.GLOBAL.forumsData[i].name;
-            }
-          }
         });
     },
     getTotalPosts: function() {

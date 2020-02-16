@@ -24,20 +24,6 @@ export default {
       }
     }
 
-
-
-    Vue.prototype.dataInit = function() {
-      const vm = this
-      return new Promise(function(resolve) {
-        vm.axios.get('http://localhost:8081/getForums', {})
-          .then((response) => {
-            let arr = JSON.parse(response.data)
-            vm.GLOBAL.forumsData = arr //fid,name,status,displayorder
-            resolve()
-          })
-      })
-    }
-
     Vue.prototype.loginCheck = function() {
       const vm = this
       return new Promise(function(resolve) {

@@ -69,11 +69,9 @@
 
 <script>
 import myMenu from "./components/menu";
-import store from "./store";
 
 export default {
   name: "App",
-  store: store,
   data() {
     return {
       defaultActive: "2",
@@ -90,7 +88,7 @@ export default {
               name: "bbs"
             })
             .catch(err => {
-              console.log(err.name);
+
             });
           break;
         default:
@@ -111,11 +109,11 @@ export default {
       if (auto === true || uname !== "" || pass !== "") {
         let data = await vm.loginCheck(); //先判断session能否登录
         if (data !== "") {
-          store.commit("setLoginState", true);
-          store.commit("setUid", data.uid);
-          store.commit("setUname", data.username);
-          store.commit("setPasswd", pass);
-          console.log("session login,", data.username);
+          vm.$store.commit("loginState", true);
+          vm.$store.commit("uid", data.uid);
+          vm.$store.commit("uname", data.username);
+          vm.$store.commit("passwd", pass);
+          console.log("session login");
         } else {
           vm.axios
             .get("http://localhost:8081/login", {
@@ -129,37 +127,32 @@ export default {
             .then(response => {
               if (response.data !== "not found") {
                 const ret = JSON.parse(response.data);
-                store.commit("setLoginState", true);
-                store.commit("setUid", ret[0].uid);
-                store.commit("setUname", uname);
-                store.commit("setPasswd", pass);
+                vm.$store.commit("loginState", true);
+                vm.$store.commit("uid", ret[0].uid);
+                vm.$store.commit("uname", uname);
+                vm.$store.commit("passwd", pass);
                 console.log("cookie login");
               }
             });
         }
       } else {
-        store.commit("setLoginState", false);
+        vm.$store.commit("loginState", false);
       }
     },
 
-    addmyMenu: function(fid, label, index, icon) {
-      this.myMenus.push({
-        fid: fid,
-        label: label,
-        index: index,
-        icon: icon,
-        key: index
-      });
-    },
+    addmyMenu: function(fid, label, index, icon) {},
+
     getForumsInfo: function(info) {
       let index = 1;
       for (let i = 0; i < info.length; i++) {
-        this.addmyMenu(
-          info[i].fid,
-          info[i].name,
-          "1-" + String(index),
-          "el-icon-s-unfold"
-        );
+        this.myMenus.push({
+          fid: info[i].fid,
+          label: info[i].name,
+          index: "1-" + String(index),
+          icon: "el-icon-s-unfold",
+          key: index
+        });
+
         index++;
       }
     }
@@ -170,11 +163,8 @@ export default {
   beforeMount() {},
   mounted: async function() {
     this.autoLogin();
-    await this.dataInit();
-    let c = 1;
-    c = 2;
-
-    this.getForumsInfo(this.GLOBAL.forumsData);
+    await this.$store.dispatch("setFsname");
+    this.getForumsInfo(this.$store.getters.fsname);
   }
 };
 </script>

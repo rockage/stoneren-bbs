@@ -35,21 +35,12 @@ import VueCropper from 'vue-cropper'
 
 Vue.use(VueCropper)
 
-let globalVariable = { //vue普通的全局变量
-  root: '', //模拟根实例$root
-  fid: 0, //当前论坛id
-  tid: 0, //当前主题id
-  forumsName: '',//当前论坛名称
-  forumsData: [], //全部子论坛信息
-  renderMode: '', //渲染模式
-}
-Vue.prototype.GLOBAL = globalVariable
+
 Vue.use(base)
 Vue.component('bbsHeader', bbsHeader) //自定义组件: <bbsHeader> </bbsHeader>
 Vue.prototype.$login = Popup.LoginBox
 Vue.prototype.$password = Popup.PasswordBox
 Vue.prototype.$userprofile = Popup.UserProfileBox
-Vue.prototype.$post = Popup.PostBox
 Vue.prototype.$profile = Popup.ProFileBox
 
 
@@ -57,6 +48,7 @@ new Vue({
   el: "#app",
   store: store,
   router,
+  data: {},
   components: {
     App,
   },
@@ -64,7 +56,7 @@ new Vue({
 
   methods: {},
   mounted: function () {
-    this.GLOBAL.root = this.$root //为所有动态实例提供根实例的访问
+
   },
 })
 

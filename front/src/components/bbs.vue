@@ -2,7 +2,7 @@
   <div class="bbs">
     <el-row>
       <div style="background-color: #cccccc;width: 100%;min-height: 40px;">
-        <bbs-button></bbs-button>
+        <bbs-button @ShowDataTable="ShowDataTable"></bbs-button>
 
         <el-col :span="18" :push="0" style="text-align: right;margin-top: 5px;">
           <el-pagination
@@ -19,12 +19,12 @@
         </el-col>
       </div>
     </el-row>
-
+    <div id="post_location" style="back-groundcolor:red;width=100%;"></div>
     <div
       style="left:50%;top:50%;width: 100px;height: 100px;position: fixed;z-index: 99"
       v-loading="loading"
     ></div>
-    <el-table :data="tableData" border style="width: 100%">
+    <el-table :data="tableData" border style="width: 100%" v-show="dataShow">
       <el-table-column label="主题" min-width="60%">
         <template slot-scope="scope">
           <router-link
@@ -39,7 +39,7 @@
           <span style="margin-left: 10px"
             ><a
               href="javascript:void(0)"
-              @click="userProfile(scope.row.author)"
+              @click="userProfile({ uname: scope.row.author })"
               >{{ scope.row.author }}</a
             ></span
           >
@@ -54,7 +54,7 @@
           <span style="margin-left: 10px"
             ><a
               href="javascript:void(0)"
-              @click="userProfile(scope.row.lastposter)"
+              @click="userProfile({ uname: scope.row.lastposter })"
               >{{ scope.row.lastposter }}</a
             ></span
           >
@@ -87,24 +87,30 @@ export default {
   name: "bbs",
   data() {
     return {
-      postShow: true,
-      tid: this.$route.params.fid,
       tableData: null,
       totalPage: 0,
       currentForum: 0,
-      fid: "",
       loading: false,
       postVisible: false,
-      rMode: ""
+      dataShow: true
     };
   },
   components: {
     bbsButton
   },
   computed: {
+    fid: function() {
+      return this.$store.getters.fid;
+    },
+    uid: function() {
+      return this.$store.getters.uid;
+    },
+    rmode: function() {
+      return this.$store.getters.rmode;
+    },
     currentPage: {
-      //将currentPage放入computed的目的：当访问它的时候自动从session中取值，设置它的时候自动存入session
       get() {
+        //将currentPage放入computed：当访问它的时候自动从session中取值，设置它的时候自动存入session
         const str = sessionStorage.getItem("currentPage");
         if (typeof str == "string") {
           try {
@@ -124,10 +130,12 @@ export default {
     }
   },
   methods: {
+    ShowDataTable: function() {
+      this.dataShow = !this.dataShow;
+    },
     userProfile: function(uname) {
       this.$userprofile({ uname: uname });
     },
-
     renderMain: function(page) {
       this.currentPage = page;
       this.loading = true;
@@ -136,13 +144,13 @@ export default {
           params: {
             page: page,
             fid: this.fid,
-            rmode: this.$route.meta.renderMode
+            uid: this.$route.params.uid,
+            rmode: this.rmode
           }
         })
         .then(response => {
           this.tableData = JSON.parse(response.data[0]);
           this.totalPage = parseInt(response.data[1]);
-          this.GLOBAL.root.$store.state.forumsName = response.data[2]; //全局变量
           this.loading = false;
         });
     }
@@ -151,15 +159,16 @@ export default {
     //页码重置规则：1) rMode模式转换；2) 论坛间fid切换；
     if (this.$route.meta.renderMode !== this.getContextData("currentMode"))
       this.currentPage = 1;
+    this.setContextData("currentRenderMode", this.$route.meta.renderMode); // 写入session
 
-    this.GLOBAL.renderMode = this.$route.meta.renderMode; //为全局变量赋值，因为extend组件不在Vue树上
+    this.$store.commit("rmode", this.$route.meta.renderMode);
 
     switch (this.$route.meta.renderMode) {
       case "new":
-        this.fid = 0; //最新帖子模式，不指定论坛
+        //最新帖子模式，不指定论坛
         break;
       case "normal":
-        this.fid = this.$route.params.fid; //常规模式,不用设置fname，而是从远端返回
+        //this.fid = this.$route.params.fid; //常规模式,fid = 论坛编号
         if (
           String(this.$route.params.fid) !==
           String(this.getContextData("currentForum"))
@@ -167,15 +176,12 @@ export default {
           this.currentPage = 1;
         break;
       case "self":
-        this.fid = this.$route.params.uid; //只显示我的主题
+        //this.fid = this.$route.params.uid; //只显示我的主题
         break;
     }
+    this.renderMain(this.currentPage);
   },
   mounted: function() {
-    this.setContextData("currentForum", this.fid); //将当前fid存入session
-    this.setContextData("currentMode", this.$route.meta.renderMode); //将当前rMode存入session
-    this.GLOBAL.tid = 0; //进入主题列表而不是单一主题的时候tid置0
-    this.renderMain(this.currentPage);
   }
 };
 </script>
