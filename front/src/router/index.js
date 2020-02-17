@@ -10,21 +10,26 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'bbs',
       component: bbs,
-      meta: {renderMode: 'new'},
+      meta: {rmode: 'new'},
     },
     {
-      path: '/forums/view/:fid',
+      path: '/new/:page',
+      name: 'new',
+      component: bbs,
+      meta: {rmode: 'new'},
+    },
+    {
+      path: '/forums/view/:fid/:page',
       name: 'forumsview',
       component: bbs,
-      meta: {renderMode: 'normal'},
+      meta: {rmode: 'normal'},
     },
     {
-      path: '/threads/userThreads/:uid',
+      path: '/threads/userThreads/:uid/:page',
       name: 'userThreads',
       component: bbs,
-      meta: {renderMode: 'self'},
+      meta: {rmode: 'self'},
     },
     {
       path: '/threads/view/:tid',

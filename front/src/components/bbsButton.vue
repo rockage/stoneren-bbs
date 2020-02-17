@@ -20,9 +20,10 @@
     </el-col>
     <el-col :span="3" style="margin-top: 10px;margin-left: 0px">
       <span style="font-size: medium;"><i class="el-icon-location"></i></span>
-      <span style="color:#606266;font-size: small;font-weight: normal;">{{
+
+      <a href="javascript:void(0)" @click="jump" style="font-size:small;">{{
         forumsName
-      }}</span>
+      }}</a>
     </el-col>
   </div>
 </template>
@@ -33,6 +34,7 @@ import Vue from "vue";
 
 export default {
   name: "bbsButton",
+  inject: ["reload"],
   computed: {
     loginState() {
       return this.$store.getters.loginState;
@@ -42,19 +44,49 @@ export default {
     }
   },
   methods: {
+    jump: function() {
+      console.log(this.$router);
+      switch (this.$store.getters.rmode) {
+        case "new":
+          this.$router
+            .push({ name: "new", params: { page: 1 } })
+            .catch(err => {});
+          break;
+        case "normal":
+          this.$router
+            .push({
+              name: "forumsview",
+              params: { fid: this.$store.getters.fid, page: 1 }
+            })
+            .catch(err => {});
+          break;
+        case "self":
+          this.$router
+            .push({
+              name: "userThreads",
+              params: { uid: this.$store.getters.viewuid, page: 1 }
+            })
+            .catch(err => {});
+          break;
+      }
+    },
     xclose: function(event) {
-      //post窗口已销毁，继续向上报
+      //post.vue窗口已销毁，继续向上报
       this.$emit("ShowDataTable"); //改变一次showData的true/false值
+    },
+    postFinished: function(event) {
+      //post.vue完成，需要刷新页面
+      this.reload(); //页面刷新，从app.vue那里inject了一个reload方法过来
     },
     popupPost: function() {
       if (!document.getElementById("post_box")) {
         //只允许弹出一个post窗口
         const PostBox = Vue.extend(Post);
-        console.log(this.$root)
         let instance = new PostBox({
           propsData: {
             xclose: this.xclose,
-            root: this.$root
+            root: this.$root,
+            postFinished: this.postFinished 
           }
         });
         let PostEl = instance.$mount().$el;

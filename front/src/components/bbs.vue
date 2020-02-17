@@ -8,14 +8,13 @@
           <el-pagination
             small
             background
-            @current-change="renderMain"
+            @current-change="pageChange"
             layout="prev, pager, next"
             :total="this.totalPage"
             :page-size="20"
             :current-page="this.currentPage"
             style="text-align: right;"
-          >
-          </el-pagination>
+          ></el-pagination>
         </el-col>
       </div>
     </el-row>
@@ -29,51 +28,55 @@
         <template slot-scope="scope">
           <router-link
             :to="{ name: 'threadsview', params: { tid: scope.row.tid } }"
-          >
-            {{ scope.row.subject }}</router-link
-          >
+          >{{ scope.row.subject }}</router-link>
         </template>
       </el-table-column>
       <el-table-column label="作者" min-width="15%">
         <template slot-scope="scope">
-          <span style="margin-left: 10px"
-            ><a
+          <span style="margin-left: 10px">
+            <a
               href="javascript:void(0)"
               @click="userProfile({ uname: scope.row.author })"
-              >{{ scope.row.author }}</a
-            ></span
-          >
+            >{{ scope.row.author }}</a>
+          </span>
           <br />
-          <span style="margin-left: 10px">{{
+          <span style="margin-left: 10px">
+            {{
             getLocalTime(scope.row.dateline)
-          }}</span>
+            }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="最后发表" min-width="15%">
         <template slot-scope="scope">
-          <span style="margin-left: 10px"
-            ><a
+          <span style="margin-left: 10px">
+            <a
               href="javascript:void(0)"
               @click="userProfile({ uname: scope.row.lastposter })"
-              >{{ scope.row.lastposter }}</a
-            ></span
-          >
+            >{{ scope.row.lastposter }}</a>
+          </span>
           <br />
-          <span style="margin-left: 10px">{{
+          <span style="margin-left: 10px">
+            {{
             getLocalTime(scope.row.lastpost)
-          }}</span>
+            }}
+          </span>
         </template>
       </el-table-column>
 
       <el-table-column label="回复/浏览" min-width="10%">
         <template slot-scope="scope">
-          <span style="margin-left: 10px;font-size: 100%">{{
+          <span style="margin-left: 10px;font-size: 100%">
+            {{
             scope.row.replies
-          }}</span>
+            }}
+          </span>
           <br />
-          <span style="margin-left: 10px;color:#B3C0D1;">{{
+          <span style="margin-left: 10px;color:#B3C0D1;">
+            {{
             scope.row.views
-          }}</span>
+            }}
+          </span>
         </template>
       </el-table-column>
     </el-table>
@@ -81,7 +84,7 @@
 </template>
 
 <script>
-import bbsButton from "./bbsButton";
+import bbsButton from "./bbsButton"
 
 export default {
   name: "bbs",
@@ -93,95 +96,81 @@ export default {
       loading: false,
       postVisible: false,
       dataShow: true
-    };
+    }
   },
   components: {
     bbsButton
   },
   computed: {
-    fid: function() {
-      return this.$store.getters.fid;
+    fid: function () {
+      return this.$store.getters.fid
     },
-    uid: function() {
-      return this.$store.getters.uid;
+    uid: function () {
+      return this.$store.getters.uid
     },
-    rmode: function() {
-      return this.$store.getters.rmode;
+    rmode: function () {
+      return this.$store.getters.rmode
     },
-    currentPage: {
-      get() {
-        //将currentPage放入computed：当访问它的时候自动从session中取值，设置它的时候自动存入session
-        const str = sessionStorage.getItem("currentPage");
-        if (typeof str == "string") {
-          try {
-            return JSON.parse(str);
-          } catch (e) {
-            return str;
-          }
-        }
-      },
-      set(v) {
-        if (typeof v == "string") {
-          sessionStorage.setItem("currentPage", v);
-        } else {
-          sessionStorage.setItem("currentPage", JSON.stringify(v));
-        }
+    currentPage: function () {
+      let page = 0
+      if (!this.$route.params.page) {
+        page = 1
+      } else {
+        page = parseInt(this.$route.params.page)
       }
+      return page
     }
   },
   methods: {
-    ShowDataTable: function() {
-      this.dataShow = !this.dataShow;
+    ShowDataTable: function () {
+      this.dataShow = !this.dataShow
     },
-    userProfile: function(uname) {
-      this.$userprofile({ uname: uname });
+    userProfile: function (uname) {
+      this.$userprofile({ uname: uname })
     },
-    renderMain: function(page) {
-      this.currentPage = page;
-      this.loading = true;
+    pageChange: function (val) {
+      switch (this.$route.meta.rmode) {
+        case "new":
+          this.$router
+            .push({ name: "new", params: { page: val } })
+            .catch(err => { })
+          break
+        case "normal":
+          this.$router
+            .push({ name: "forumsview", params: { page: val } })
+            .catch(err => { })
+          break
+        case "self":
+          this.$router
+            .push({ name: "userThreads", params: { page: val } })
+            .catch(err => { })
+          break
+      }
+    },
+    renderMain: function () {
+      this.loading = true
       this.axios
         .get("http://localhost:8081/renderIndexMain", {
           params: {
-            page: page,
-            fid: this.fid,
+            page: this.currentPage,
+            fid: this.$route.params.fid,
             uid: this.$route.params.uid,
-            rmode: this.rmode
+            rmode: this.$route.meta.rmode
           }
         })
         .then(response => {
-          this.tableData = JSON.parse(response.data[0]);
-          this.totalPage = parseInt(response.data[1]);
-          this.loading = false;
-        });
+          this.tableData = JSON.parse(response.data[0])
+          this.totalPage = parseInt(response.data[1])
+          this.loading = false
+        })
     }
   },
-  created: function() {
-    //页码重置规则：1) rMode模式转换；2) 论坛间fid切换；
-    if (this.$route.meta.renderMode !== this.getContextData("currentMode"))
-      this.currentPage = 1;
-    this.setContextData("currentRenderMode", this.$route.meta.renderMode); // 写入session
-
-    this.$store.commit("rmode", this.$route.meta.renderMode);
-
-    switch (this.$route.meta.renderMode) {
-      case "new":
-        //最新帖子模式，不指定论坛
-        break;
-      case "normal":
-        //this.fid = this.$route.params.fid; //常规模式,fid = 论坛编号
-        if (
-          String(this.$route.params.fid) !==
-          String(this.getContextData("currentForum"))
-        )
-          this.currentPage = 1;
-        break;
-      case "self":
-        //this.fid = this.$route.params.uid; //只显示我的主题
-        break;
-    }
-    this.renderMain(this.currentPage);
+  created: function () {
+    this.$store.commit("rmode", this.$route.meta.rmode) //写入store
+    console.log(this.$store.getters.rmode)
   },
-  mounted: function() {
+  mounted: function () {
+    this.renderMain()
   }
 };
 </script>

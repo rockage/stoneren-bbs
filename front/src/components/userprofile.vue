@@ -67,10 +67,11 @@ export default {
   methods: {
     viewThreads: function() {
       this.root.$store.commit("fname", this.uname);
+      this.root.$store.commit("viewuid", this.uid); //为了bbsButton保存这个id
       this.root.$router
         .push({
           name: "userThreads",
-          params: { uid: this.uid }
+          params: { uid: this.uid,page:1 }
         })
         .catch(err => {
           this.$message.error(err);

@@ -24,11 +24,9 @@ export default {
     },
     router_to: function() {
       this.$store.commit("fid", this.fid);
-
-
-
+      
       this.$router
-        .push({ name: "forumsview", params: { fid: this.fid } })
+        .push({ name: "forumsview", params: { fid: this.fid,page:1 } })
         .catch(err => {
           console.log(err.name);
         });

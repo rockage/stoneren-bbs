@@ -65,10 +65,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
+    //edit by rockage
     new webpack.ProvidePlugin({
       'window.Quill': 'quill',
       'Quill': 'quill/dist/quill.js'
     })
+    
   ]
 })
 

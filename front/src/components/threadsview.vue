@@ -56,7 +56,7 @@
                   >
                     <a
                       href="javascript:void(0)"
-                      @click="userProfile(scope.row.author)"
+                      @click="userProfile({ uname: scope.row.author })"
                       >{{ scope.row.author }}</a
                     >
                   </span>

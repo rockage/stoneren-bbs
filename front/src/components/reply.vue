@@ -191,7 +191,7 @@
               return
             } else {
               myQuill.setText("")
-              this.$emit('replyFinished', response.data) //此处的resonse.data是计算好的分页值，回传给renderMain自动跳转到最后一页
+              this.$emit('replyFinished', response.data) //通知threadsview.vue自动跳转到最后一页
               vm.$message.success("发帖成功。")
             }
           })
@@ -210,10 +210,8 @@
       vm = this
       myQuill = this.$refs.myQuillEditor.quill //全局quill实例
       myQuill.root.addEventListener('click', this.handleClick, false) //为全局quill创建一个根监听
-
-      
       this.dummy = "999" //999是无意义的空渲染，在mounted阶段myQuill还未建造好，访问它会出错，只能将触发时机后移至updated阶段
-      this.setContextData("lastReplyTime", new Date().getTime())
+
 
 
 

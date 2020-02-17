@@ -11,13 +11,14 @@ const store = new Vuex.Store({
   })],
   state: {
     loginState: false,
-    uid: 0,
+    uid: 0, //当前登录id
     uname: '',
     passwd: '',
     fid: 0,
     fname: '',  //当前论坛名称
     fsname: '', //全部论坛名称
     rmode: '', //bbs渲染模式
+    viewuid: '',//查看某用户id
   },
   getters: {
     loginState: function (state) {
@@ -33,7 +34,14 @@ const store = new Vuex.Store({
       return state.passwd
     },
     fid: function (state) {
-      return state.fid
+      switch (state.rmode) {
+        case "new":
+          return 2
+        case "normal":
+          return state.fid
+        case "self":
+          return 2
+      }
     },
     fname: function (state) {
       let fs
@@ -60,6 +68,9 @@ const store = new Vuex.Store({
     rmode: function (state) {
       return state.rmode
     },
+    viewuid: function (state) {
+      return state.viewuid
+    },
   },
   mutations: {
     loginState: function (state, r) {
@@ -85,6 +96,9 @@ const store = new Vuex.Store({
     },
     rmode: function (state, r) {
       state.rmode = r
+    },
+    viewuid: function (state, r) {
+      state.viewuid = r
     },
   },
   actions: {

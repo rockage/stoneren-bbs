@@ -2,8 +2,8 @@ package mysql_con
 
 import (
 	"database/sql"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"strconv"
 )
 
 var DB *sql.DB
@@ -20,12 +20,17 @@ func initDB() bool {
 	return true
 }
 
-func Exec(SQL string) {
+func Exec(SQL string) string {
+	var ins string=""
 	if initDB() == true {
 		ret, _ := DB.Exec(SQL)
-		//		insID, _ := ret.LastInsertId()
-		fmt.Println(ret)
+		if ret != nil {
+			if LastInsertId, err := ret.LastInsertId(); nil == err {
+				ins=strconv.FormatInt(LastInsertId, 10)
+			}
+		}
 	}
+	return ins
 }
 
 func Query(SQL string) ([]map[string]string, bool) {

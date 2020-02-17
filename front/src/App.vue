@@ -16,7 +16,9 @@
             text-color="#ffffff"
           >
             <el-submenu index="1">
-              <template slot="title"><i class="el-icon-menu" />版块</template>
+              <template slot="title">
+                <i class="el-icon-menu" />版块
+              </template>
               <div v-if="myMenus && myMenus.length > 0">
                 <myMenu
                   is="myMenu"
@@ -30,18 +32,18 @@
                 />
               </div>
             </el-submenu>
-            <el-menu-item index="2" @click="router_to(2)"
-              ><i class="el-icon-time"></i>最新</el-menu-item
-            >
-            <el-menu-item index="3" @click="router_to(3)"
-              ><i class="el-icon-sunny"></i>最热</el-menu-item
-            >
-            <el-menu-item index="4" @click="router_to(4)"
-              ><i class="el-icon-user"></i>用户</el-menu-item
-            >
-            <el-menu-item index="5" @click="router_to(5)"
-              ><i class="el-icon-s-data"></i>排行榜</el-menu-item
-            >
+            <el-menu-item index="2" @click="router_to(2)">
+              <i class="el-icon-time"></i>最新
+            </el-menu-item>
+            <el-menu-item index="3" @click="router_to(3)">
+              <i class="el-icon-sunny"></i>最热
+            </el-menu-item>
+            <el-menu-item index="4" @click="router_to(4)">
+              <i class="el-icon-user"></i>用户
+            </el-menu-item>
+            <el-menu-item index="5" @click="router_to(5)">
+              <i class="el-icon-s-data"></i>排行榜
+            </el-menu-item>
           </el-menu>
         </div>
       </el-col>
@@ -50,7 +52,7 @@
     <el-row>
       <el-col :span="24">
         <div style="margin-top: 0px;margin-bottom: 0px">
-          <router-view :key="$route.fullPath"></router-view>
+          <router-view :key="$route.fullPath" v-if="isRouterAlive"></router-view>
         </div>
       </el-col>
     </el-row>
@@ -58,9 +60,10 @@
     <el-row>
       <div style="text-align: center">
         <el-divider content-position="center">
-          <a target="_blank" href="https://github.com/rockage/stoneren-bbs"
-            >https://github.com/rockage/stoneren-bbs</a
-          >
+          <a
+            target="_blank"
+            href="https://github.com/rockage/stoneren-bbs"
+          >https://github.com/rockage/stoneren-bbs</a>
         </el-divider>
       </div>
     </el-row>
@@ -76,20 +79,28 @@ export default {
     return {
       defaultActive: "2",
       dialogVisible: false,
-      myMenus: []
+      myMenus: [],
+      isRouterAlive: true
+    };
+  },
+  provide() {
+    return {
+      reload: this.reload
     };
   },
   methods: {
+    reload: function() {
+      this.isRouterAlive = false;
+      this.$nextTick(function() {
+        this.isRouterAlive = true;
+      });
+    },
     router_to: function(f) {
       switch (f) {
         case 2:
           this.$router
-            .push({
-              name: "bbs"
-            })
-            .catch(err => {
-
-            });
+            .push({ name: "new", params: { page: 1 } })
+            .catch(err => {});
           break;
         default:
           break;

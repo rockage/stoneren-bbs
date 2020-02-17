@@ -19,6 +19,7 @@ import (
 //FillMain
 func renderIndexMain(ctx iris.Context) {
 	var sql string
+	var id string
 	fid := ctx.FormValue("fid")
 	uid := ctx.FormValue("uid")
 	page := ctx.FormValue("page")
@@ -28,15 +29,24 @@ func renderIndexMain(ctx iris.Context) {
 	startRec := strconv.Itoa(t1)
 	stopRec := "20"
 
+	fmt.Println(fid)
+	fmt.Println(uid)
+	fmt.Println(page)
+	fmt.Println(rMode)
+
 	switch rMode {
 	case "new":
-		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY dateline DESC limit " + startRec + "," + stopRec
+		id = ""
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY lastpost DESC limit " + startRec + "," + stopRec
 	case "self":
-		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where authorid = " + uid + " ORDER BY dateline DESC limit " + startRec + "," + stopRec
+		id = uid
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where authorid = " + uid + " ORDER BY lastpost DESC limit " + startRec + "," + stopRec
 	case "normal":
-		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + fid + " ORDER BY dateline DESC limit " + startRec + "," + stopRec
+		id = fid
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + fid + " ORDER BY lastpost DESC limit " + startRec + "," + stopRec
 	}
 	fmt.Println(sql)
+
 	var ok bool
 	var rst []map[string]string
 	rst, ok = mysql_con.Query(sql)
@@ -45,20 +55,20 @@ func renderIndexMain(ctx iris.Context) {
 		if err == nil {
 			var ret [3]string
 			ret[0] = string(b)
-			ret[1]= getTotalThreads(fid, rMode)
+			ret[1] = getTotalThreads(id, rMode)
 			_, _ = ctx.JSON(ret) //不返回错误代码
 		}
 	}
 }
-func getTotalThreads(forumsId string, rMode string) (string) {
+func getTotalThreads(id string, rMode string) string {
 	var sql string
 	switch rMode {
 	case "new":
-		sql = "explain select * from pre_forum_thread" //最新
+		sql = "explain select * from pre_forum_thread" //最新,不需要指定id
 	case "self":
-		sql = "select  COUNT(1) as rows from pre_forum_thread where authorid = " + forumsId //指定版块
+		sql = "select  COUNT(1) as rows from pre_forum_thread where authorid = " + id //指定版块(fid)
 	case "normal":
-		sql = "select  COUNT(1) as rows from pre_forum_thread where fid = " + forumsId //只看自己
+		sql = "select  COUNT(1) as rows from pre_forum_thread where fid = " + id //只看自己(uid)
 	}
 	var rst []map[string]string
 	rst, _ = mysql_con.Query(sql) //求出总行数
@@ -87,14 +97,10 @@ func renderThreadsView(ctx iris.Context) {
 		"(select lastvisited from pre_members where pre_members.uid = pre_forum_post.authorid) as lastvisited," +
 		"(select signature from pre_members where pre_members.uid = pre_forum_post.authorid) as signature " +
 		"from pre_forum_post where tid = " + tid + " ORDER BY dateline limit " + startRec + "," + stopRec
-
-	fmt.Println(sql)
-
 	rst, ok = mysql_con.Query(sql)
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
-
 			_, _ = ctx.JSON(string(b)) //不返回错误代码，强行执行
 		}
 	}
@@ -114,7 +120,6 @@ func getForums(ctx iris.Context) {
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
-			fmt.Println(string(b))
 			_, _ = ctx.JSON(string(b))
 		}
 	}
@@ -127,6 +132,7 @@ func setNewPost(ctx iris.Context) {
 		return
 	}
 	var sql string
+	var rst []map[string]string
 	fid := ctx.FormValue("fid")
 	tid := ctx.FormValue("tid")
 	author := ctx.FormValue("uname")
@@ -134,16 +140,7 @@ func setNewPost(ctx iris.Context) {
 	dateline := strconv.FormatInt(time.Now().Unix(), 10)
 	message := ctx.FormValue("postContens")
 	useip := ctx.RemoteAddr()
-	threadsTitle := ctx.FormValue("threadsTitle")
-
-	fmt.Println("fid = ", fid)
-	fmt.Println("tid = ", tid)
-	fmt.Println("author = " + author)
-	fmt.Println("authorid = ", authorid)
-	fmt.Println("dateline = " + dateline)
-	fmt.Println("message = " + message)
-	fmt.Println("useip = " + useip)
-	fmt.Println("threadsTitle = " + threadsTitle)
+	subject := ctx.FormValue("threadsTitle")
 
 	message = strings.Replace(message, "'", "\\'", -1)
 	message = strings.Replace(message, "</a>", "", -1)
@@ -161,7 +158,7 @@ func setNewPost(ctx iris.Context) {
 	reg0 := regexp.MustCompile(`(<img.+?)width\s{0,}=\s{0,}"\d{1,}"(.+?>)`) //去掉width
 	message = reg0.ReplaceAllString(message, "$1$2")
 
-	reg1 := regexp.MustCompile(`(<img.+?)height\s{0,}=\s{0,}"\d{1,}"(.+?>)`)  //去掉height
+	reg1 := regexp.MustCompile(`(<img.+?)height\s{0,}=\s{0,}"\d{1,}"(.+?>)`) //去掉height
 	message = reg1.ReplaceAllString(message, "$1$2")
 
 	reg2 := regexp.MustCompile(`(<img.+?)|style\s{0,}=\s{0,}".+?"(.+?>)`) //去掉style
@@ -170,21 +167,35 @@ func setNewPost(ctx iris.Context) {
 	reg3 := regexp.MustCompile(`<img(.+?>)`)
 	message = reg3.ReplaceAllString(message, `<img style="max-width:100%;"$1`) //加上style, 前端的容器设为width=100%，图片设为max-width=100%，可实现自适应屏幕
 
+	rst, _ = mysql_con.Query("SELECT posts,threads from pre_members where uid = " + authorid) //求出总行数
+	posts, _ := strconv.Atoi(rst[0]["posts"])
+	threads, _ := strconv.Atoi(rst[0]["threads"]) //先算出现有posts和threads
+	posts++
+	threads++
+
 	if tid != "0" { //回帖
 		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
 			"(" + fid + ", " + tid + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
-		fmt.Println(sql)
 		mysql_con.Exec(sql)
 		//算出总页数，返回给前端直接显示最后回复的帖子：
-		var rst []map[string]string
 		rst, _ = mysql_con.Query("select COUNT(1) as rows from pre_forum_post where tid = " + tid) //求出总行数
 		var i float64
 		i, _ = strconv.ParseFloat(rst[0]["rows"], 32)
 		page := math.Ceil(i / 20)
 		res := strconv.FormatFloat(page, 'E', -1, 32)
+		mysql_con.Exec("update pre_members set posts = " + strconv.Itoa(posts) + " WHERE uid = " + authorid) //写入自增后的posts
 		ctx.Text(res)
-
 	} else { //开新主题
+		sql = "INSERT INTO pre_forum_thread ( fid, author, authorid, subject, dateline, lastpost, lastposter, views, replies) VALUES " +
+			"(" + fid + ", '" + author + "', " + authorid + ", '" + subject + "', '" + dateline + "', '" + dateline + "', '" + author + "', 1, 1)"
+		insID := mysql_con.Exec(sql) // 新增主题
+		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
+			"(" + fid + ", " + insID + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
+		mysql_con.Exec(sql)                                                                                                                // 新增第一条回复
+		sql = "update pre_members set posts = " + strconv.Itoa(posts) + ",threads = " + strconv.Itoa(threads) + " WHERE uid = " + authorid //写入自增后的posts,threads
+		mysql_con.Exec(sql)
+
+		ctx.Text("success")
 
 	}
 
@@ -210,7 +221,6 @@ func resetPosts(ctx iris.Context) {
 	var rst3 []map[string]string
 	rst, _ = mysql_con.Query("SELECT uid,username from pre_members ORDER BY uid")
 
-	fmt.Println(rst[0])
 	if rst != nil {
 		for _, v := range rst {
 			uid := v["uid"]
@@ -228,6 +238,5 @@ func resetPosts(ctx iris.Context) {
 		}
 	} else {
 	}
-
 	fmt.Println()
 }
