@@ -17,7 +17,7 @@
           >
             <el-submenu index="1">
               <template slot="title">
-                <i class="el-icon-menu" />版块
+                <i class="el-icon-menu" />论坛
               </template>
               <div v-if="myMenus && myMenus.length > 0">
                 <myMenu
@@ -33,16 +33,10 @@
               </div>
             </el-submenu>
             <el-menu-item index="2" @click="router_to(2)">
-              <i class="el-icon-time"></i>最新
+              <i class="el-icon-time"></i>帖子
             </el-menu-item>
-            <el-menu-item index="3" @click="router_to(3)">
-              <i class="el-icon-sunny"></i>最热
-            </el-menu-item>
-            <el-menu-item index="4" @click="router_to(4)">
+            <el-menu-item index="4" @click="router_to(3)">
               <i class="el-icon-user"></i>用户
-            </el-menu-item>
-            <el-menu-item index="5" @click="router_to(5)">
-              <i class="el-icon-s-data"></i>排行榜
             </el-menu-item>
           </el-menu>
         </div>
@@ -63,7 +57,7 @@
           <a
             target="_blank"
             href="https://github.com/rockage/stoneren-bbs"
-          >https://github.com/rockage/stoneren-bbs</a>
+          >stoneren-bbs@github</a>
         </el-divider>
       </div>
     </el-row>
@@ -102,6 +96,11 @@ export default {
             .push({ name: "new", params: { page: 1 } })
             .catch(err => {});
           break;
+        case 3:
+          this.$router
+            .push({ name: "usersview", params: { page: 1,rmode:'regdate' } })
+            .catch(err => {});
+          break;          
         default:
           break;
       }

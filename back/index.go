@@ -45,7 +45,6 @@ func renderIndexMain(ctx iris.Context) {
 		id = fid
 		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + fid + " ORDER BY lastpost DESC limit " + startRec + "," + stopRec
 	}
-	fmt.Println(sql)
 
 	var ok bool
 	var rst []map[string]string
@@ -53,10 +52,10 @@ func renderIndexMain(ctx iris.Context) {
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
-			var ret [3]string
-			ret[0] = string(b)
-			ret[1] = getTotalThreads(id, rMode)
-			_, _ = ctx.JSON(ret) //不返回错误代码
+			var returnValue [3]string
+			returnValue[0] = string(b)
+			returnValue[1] = getTotalThreads(id, rMode)
+			_, _ = ctx.JSON(returnValue) //不返回错误代码
 		}
 	}
 }
@@ -74,6 +73,38 @@ func getTotalThreads(id string, rMode string) string {
 	rst, _ = mysql_con.Query(sql) //求出总行数
 	totalRow := rst[0]["rows"]
 	return totalRow
+}
+
+//forumView
+func users(ctx iris.Context) {
+	var sql string
+	page := ctx.FormValue("page")
+	rmode := ctx.FormValue("rmode")
+	p1, _ := strconv.Atoi(page)
+	t1 := p1*20 - 20
+	startRec := strconv.Itoa(t1)
+	stopRec := "20"
+	var rst []map[string]string
+	var ok bool
+
+	switch rmode {
+	case "regdate":
+		sql = "select uid,username,regdate,posts from pre_members" + " ORDER BY regdate limit " + startRec + "," + stopRec
+	case "posts":
+		sql = "select uid,username,regdate,posts from pre_members" + " ORDER BY posts desc limit " + startRec + "," + stopRec
+	}
+	var returnValue [2]string
+	rst, ok = mysql_con.Query(sql)
+	if ok {
+		b, err := json.Marshal(rst)
+		if err == nil {
+			returnValue[0] = string(b)
+			sql = "explain select * from pre_members" //获得总用户数
+			rst, _ = mysql_con.Query(sql)
+			returnValue[1] = rst[0]["rows"]
+			_, _ = ctx.JSON(returnValue)
+		}
+	}
 }
 
 //ThreadsView

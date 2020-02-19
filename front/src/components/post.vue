@@ -69,10 +69,7 @@ Quill.register("modules/imageResize", ImageResize)
 const container = [
   ["bold", "italic"],
   ["blockquote", "code-block"],
-  [{ size: ["small", false, "large", "huge"] }],
-  [{ color: [] }, { background: [] }],
-  [{ align: [] }],
-  ["link", "image", "rotate", "video"]
+  ["image", "rotate"]
 ]
 let myQuill //用来访问quill实例
 let vm

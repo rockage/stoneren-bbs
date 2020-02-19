@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import bbs from '../components/bbs'
 import threadsview from '../components/threadsview'
+import usersview from '../components/usersview'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/threads/view/:tid',
       name: 'threadsview',
       component: threadsview
+    },
+    {
+      path: '/users/:rmode/:page',
+      name: 'usersview',
+      component: usersview
     },
   ]
 })

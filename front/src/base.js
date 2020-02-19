@@ -61,7 +61,7 @@ export default {
       if (isNull(nS)) nS = 1041350400 //2003-01-01 00:00:00
       let ds = String(new Date(parseInt(nS) * 1000).toISOString())
       ds = ds.replace(/(.+?)T.+?Z/, '$1')
-      //if (ds < '2003-01-01') ds = '上古时期'
+      
       return ds
     }
 

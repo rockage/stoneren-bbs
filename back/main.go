@@ -36,6 +36,7 @@ func main() {
 	index.Get("/secret", secret)
 	index.Get("/login", login)
 	index.Get("/logout", logout)
+	index.Get("/users", users)
 	index.Get("/resetPosts", resetPosts)
 
 	index.Get("/setNewPasswd", SetNewPasswd)
@@ -43,12 +44,13 @@ func main() {
 	index.Get("/getUserProfile", GetUserProfile)
 	index.Post("/setProfile", SetProfile)
 
+
 	data := app.Party("/data", crs) //所有请求先过crs中间件
 	data.Get("/getGender", getGender)
 	data.Get("/getLocation", getLocation)
 	data.Get("/getLevel", getLevel)
 
-	test()
+
 
 	app.Run(iris.Addr(":8081"), iris.WithoutServerError(iris.ErrServerClosed))
 
