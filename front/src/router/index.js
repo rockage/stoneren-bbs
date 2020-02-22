@@ -15,19 +15,19 @@ export default new Router({
       meta: {rmode: 'new'},
     },
     {
-      path: '/new/:page',
+      path: '/new/:sortmode/:page',
       name: 'new',
       component: bbs,
       meta: {rmode: 'new'},
     },
     {
-      path: '/forums/view/:fid/:page',
+      path: '/forums/view/:sortmode/:fid/:page',
       name: 'forumsview',
       component: bbs,
       meta: {rmode: 'normal'},
     },
     {
-      path: '/threads/userThreads/:uid/:page',
+      path: '/threads/userThreads/:sortmode/:uid/:page',
       name: 'userThreads',
       component: bbs,
       meta: {rmode: 'self'},
@@ -38,7 +38,7 @@ export default new Router({
       component: threadsview
     },
     {
-      path: '/users/:rmode/:page',
+      path: '/users/:sortmode/:page',
       name: 'usersview',
       component: usersview
     },

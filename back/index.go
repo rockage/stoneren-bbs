@@ -20,10 +20,12 @@ import (
 func renderIndexMain(ctx iris.Context) {
 	var sql string
 	var id string
+	var sort string
 	fid := ctx.FormValue("fid")
 	uid := ctx.FormValue("uid")
 	page := ctx.FormValue("page")
 	rMode := ctx.FormValue("rmode")
+	sortmode := ctx.FormValue("sortmode")
 	p1, _ := strconv.Atoi(page)
 	t1 := p1*20 - 20
 	startRec := strconv.Itoa(t1)
@@ -34,16 +36,23 @@ func renderIndexMain(ctx iris.Context) {
 	fmt.Println(page)
 	fmt.Println(rMode)
 
+	switch sortmode {
+	case "date":
+		sort = "lastpost DESC"
+	case "posts":
+		sort = "replies DESC"
+	}
+
 	switch rMode {
 	case "new":
 		id = ""
-		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY lastpost DESC limit " + startRec + "," + stopRec
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread ORDER BY " + sort + " limit " + startRec + "," + stopRec
 	case "self":
 		id = uid
-		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where authorid = " + uid + " ORDER BY lastpost DESC limit " + startRec + "," + stopRec
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where authorid = " + uid + " ORDER BY " + sort + " limit " + startRec + "," + stopRec
 	case "normal":
 		id = fid
-		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + fid + " ORDER BY lastpost DESC limit " + startRec + "," + stopRec
+		sql = "select tid,author,subject,dateline,lastpost,lastposter,views,replies from pre_forum_thread where fid = " + fid + " ORDER BY " + sort + " limit " + startRec + "," + stopRec
 	}
 
 	var ok bool
@@ -79,7 +88,7 @@ func getTotalThreads(id string, rMode string) string {
 func users(ctx iris.Context) {
 	var sql string
 	page := ctx.FormValue("page")
-	rmode := ctx.FormValue("rmode")
+	sortmode := ctx.FormValue("sortmode")
 	p1, _ := strconv.Atoi(page)
 	t1 := p1*20 - 20
 	startRec := strconv.Itoa(t1)
@@ -87,8 +96,10 @@ func users(ctx iris.Context) {
 	var rst []map[string]string
 	var ok bool
 
-	switch rmode {
-	case "regdate":
+	fmt.Println(sortmode)
+
+	switch sortmode {
+	case "date":
 		sql = "select uid,username,regdate,posts from pre_members" + " ORDER BY regdate limit " + startRec + "," + stopRec
 	case "posts":
 		sql = "select uid,username,regdate,posts from pre_members" + " ORDER BY posts desc limit " + startRec + "," + stopRec
@@ -118,6 +129,7 @@ func renderThreadsView(ctx iris.Context) {
 	var ok bool
 	var rst []map[string]string
 	var sql string
+
 	sql = "select pid,fid,tid,author,dateline,message,authorid," +
 		"(select subject from pre_forum_thread where tid = " + tid + ") as subject," +
 		"(select threads from pre_members where pre_members.uid = pre_forum_post.authorid) as threads," +

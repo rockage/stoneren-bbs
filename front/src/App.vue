@@ -93,14 +93,14 @@ export default {
       switch (f) {
         case 2:
           this.$router
-            .push({ name: "new", params: { page: 1 } })
+            .push({ name: "new", params: { page: 1,rmode:'new',sortmode:'date' } })
             .catch(err => {});
           break;
         case 3:
           this.$router
-            .push({ name: "usersview", params: { page: 1,rmode:'regdate' } })
+            .push({ name: "usersview", params: { page: 1,sortmode:'date' } })
             .catch(err => {});
-          break;          
+          break;
         default:
           break;
       }
@@ -123,7 +123,6 @@ export default {
           vm.$store.commit("uid", data.uid);
           vm.$store.commit("uname", data.username);
           vm.$store.commit("passwd", pass);
-          console.log("session login");
         } else {
           vm.axios
             .get("http://localhost:8081/login", {
@@ -141,7 +140,6 @@ export default {
                 vm.$store.commit("uid", ret[0].uid);
                 vm.$store.commit("uname", uname);
                 vm.$store.commit("passwd", pass);
-                console.log("cookie login");
               }
             });
         }

@@ -9,8 +9,8 @@
                 <el-button size="mini" @click="sortChange">{{srotLabel}}</el-button>
               </div>
             </div>
-            <div class="center">
-              <el-col :span="24" :push="0" style="text-align: right;margin-top: 5px;">
+            <div class="center" style="margin-top: 7px;">
+
                 <el-pagination
                   small
                   @current-change="pageChange"
@@ -20,7 +20,7 @@
                   :current-page="this.currentPage"
                   style="text-align: right;"
                 ></el-pagination>
-              </el-col>
+
             </div>
           </article>
         </section>
@@ -45,9 +45,7 @@
       <el-table-column label="注册日期">
         <template slot-scope="scope">
           <span class="info">
-            {{
-            getLocalDate(scope.row.regdate)
-            }}
+            {{ getLocalDate(scope.row.date) }}
           </span>
         </template>
       </el-table-column>
@@ -55,9 +53,7 @@
       <el-table-column label="发帖数">
         <template slot-scope="scope">
           <span style="margin-left: 10px;font-size: 100%">
-            {{
-            scope.row.posts
-            }}
+            {{ scope.row.posts }}
           </span>
         </template>
       </el-table-column>
@@ -66,107 +62,106 @@
 </template>
 
 <script>
-import bbsButton from "./bbsButton"
+    import bbsButton from "./bbsButton"
 
-export default {
-  name: "usersview",
-  data() {
-    return {
-      tableData: null,
-      totalPage: 0,
-      loading: false,
-      rmode: this.$route.params.rmode
-    }
-  },
-  components: {
-    bbsButton
-  },
-  computed: {
-    srotLabel: function () {
-      if (this.rmode === 'regdate') {
-        return "排序：日期"
-      } else {
-        return "排序：发帖"
-      }
-    },
-    currentPage: function () {
-      let page = 0
-      if (!this.$route.params.page) {
-        page = 1
-      } else {
-        page = parseInt(this.$route.params.page)
-      }
-      return page
-    }
-  },
-  methods: {
-    sortChange: function () {
-      if (this.rmode === 'regdate') {
-        this.rmode = "posts"
-      } else {
-        this.rmode = "regdate"
-      }
-      this.pageChange(1)
-    },
-    userProfile: function (uname) {
-      this.$userprofile({ uname: username })
-    },
-    pageChange: function (val) {
+    export default {
+        name: "usersview",
+        data() {
+            return {
+                tableData: null,
+                totalPage: 0,
+                loading: false,
+                sortmode: this.$route.params.sortmode
+            }
+        },
+        components: {
+            bbsButton
+        },
+        computed: {
+            srotLabel: function () {
+                if (this.sortmode === 'date') {
+                    return "排序：时间"
+                } else {
+                    return "排序：发帖"
+                }
+            },
+            currentPage: function () {
+                let page = 0
+                if (!this.$route.params.page) {
+                    page = 1
+                } else {
+                    page = parseInt(this.$route.params.page)
+                }
+                return page
+            }
+        },
+        methods: {
+            sortChange: function () {
+                if (this.sortmode === 'date') {
+                    this.sortmode = "posts"
+                } else {
+                    this.sortmode = "date"
+                }
+                this.pageChange(1)
+            },
+            userProfile: function (uname) {
+                this.$userprofile(uname)
+            },
+            pageChange: function (val) {
+                this.$router
+                    .push({name: "usersview", params: {page: val, sortmode: this.sortmode}})
+                    .catch(err => {
+                    })
 
-      console.log(this.rmode)
-      this.$router
-        .push({ name: "usersview", params: { page: val, rmode: this.rmode } })
-        .catch(err => { })
 
+            },
+            renderMain: function () {
+                this.loading = true
+                this.axios
+                    .get("http://localhost:8081/users", {
+                        params: {
+                            page: this.currentPage,
+                            sortmode: this.sortmode
+                        }
+                    })
+                    .then(response => {
+                        this.tableData = JSON.parse(response.data[0])
+                        this.totalPage = parseInt(response.data[1])
+                        this.loading = false
+                    })
+            }
+        },
 
-    },
-    renderMain: function () {
-      this.loading = true
-      this.axios
-        .get("http://localhost:8081/users", {
-          params: {
-            page: this.currentPage,
-            rmode: this.rmode
-          }
-        })
-        .then(response => {
-          this.tableData = JSON.parse(response.data[0])
-          this.totalPage = parseInt(response.data[1])
-          this.loading = false
-        })
-    }
-  },
-
-  mounted: function () {
-    this.renderMain()
-  }
-};
+        mounted: function () {
+            this.renderMain()
+        }
+    };
 </script>
 <style scoped>
-.info {
-font-size: smaller;
-color:#C0C4CC;
-margin-left: 10px
-}
+  .info {
+    font-size: smaller;
+    color: #C0C4CC;
+    margin-left: 10px
+  }
 
-.author-text {
-  text-align: left;
-  margin-left: 10px;
-  color: #909399;
-  font-size: x-small;
-}
+  .author-text {
+    text-align: left;
+    margin-left: 10px;
+    color: #909399;
+    font-size: x-small;
+  }
 
   .layout.flex article {
     display: flex;
   }
 
   .layout.flex .left {
-    width:40%;
-   }
+    width: 40%;
+  }
 
 
   .layout.flex .center {
     flex: 1;
   }
-  
+
 </style>

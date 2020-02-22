@@ -38,10 +38,8 @@ Vue.use(VueCropper)
 
 Vue.use(base)
 Vue.component('bbsHeader', bbsHeader) //自定义组件: <bbsHeader> </bbsHeader>
-Vue.prototype.$login = Popup.LoginBox
-Vue.prototype.$password = Popup.PasswordBox
 Vue.prototype.$userprofile = Popup.UserProfileBox
-Vue.prototype.$profile = Popup.ProFileBox
+
 
 
 new Vue({
