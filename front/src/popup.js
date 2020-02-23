@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import ProfileBox from "./components/userprofile.vue"
+import UserProfileBoxInstance from "./components/userprofile.vue"
 
 //以下所有通过动态方法new新建的Vue实例都不能访问$root, 需创建时传递
 
@@ -11,7 +11,7 @@ function UserProfileBox(data) {
   }
 
   if (!document.getElementById("ProfileBox")) {
-    const UserProfile = Vue.extend(ProfileBox)
+    const UserProfile = Vue.extend(UserProfileBoxInstance)
     let instance = new UserProfile({
       propsData: {
         root: this.$root,

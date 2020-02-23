@@ -5,21 +5,22 @@
         <section class="layout flex">
           <article>
             <div class="left">
-              <div class="author-text" style="margin-top:5px;">
-                <el-button size="mini" @click="sortChange">{{srotLabel}}</el-button>
+              <div class="author-text" style="margin-top:13px;">
+                <a href="javascript:void(0)" @click="sortChange">{{srotLabel}}</a>
               </div>
             </div>
             <div class="center" style="margin-top: 7px;">
 
-                <el-pagination
-                  small
-                  @current-change="pageChange"
-                  layout="prev, pager, next"
-                  :total="this.totalPage"
-                  :page-size="20"
-                  :current-page="this.currentPage"
-                  style="text-align: right;"
-                ></el-pagination>
+              <el-pagination
+                small
+                @current-change="pageChange"
+                layout="prev, pager, next"
+                :total="this.totalPage"
+                :page-size="20"
+                :current-page="this.currentPage"
+                style="text-align: right;"
+                :pager-count="5"
+              ></el-pagination>
 
             </div>
           </article>
@@ -42,11 +43,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="注册日期">
+      <el-table-column label="注册/最后">
         <template slot-scope="scope">
-          <span class="info">
-            {{ getLocalDate(scope.row.date) }}
-          </span>
+          <div style="display: flex;flex-direction: column;">
+            <div class="info" > {{ getLocalDate(scope.row.regdate) }}</div>
+            <div class="info" > {{ getLocalDate(scope.row.lastvisited) }}</div>
+          </div>
         </template>
       </el-table-column>
 
@@ -79,10 +81,13 @@
         },
         computed: {
             srotLabel: function () {
-                if (this.sortmode === 'date') {
-                    return "排序：时间"
-                } else {
-                    return "排序：发帖"
+                switch (this.sortmode) {
+                    case "date":
+                        return "排序：注册时间"
+                    case "last":
+                        return "排序：最后访问"
+                    case "posts":
+                        return "排序：发帖总数"
                 }
             },
             currentPage: function () {
@@ -97,11 +102,19 @@
         },
         methods: {
             sortChange: function () {
-                if (this.sortmode === 'date') {
-                    this.sortmode = "posts"
-                } else {
-                    this.sortmode = "date"
+                console.log(this.sortmode)
+                switch (this.sortmode) {
+                    case "date":
+                        this.sortmode = "last"
+                        break
+                    case "last":
+                        this.sortmode = "posts"
+                        break
+                    case "posts":
+                        this.sortmode = "date"
+                        break
                 }
+                console.log(this.sortmode)
                 this.pageChange(1)
             },
             userProfile: function (uname) {
@@ -118,7 +131,7 @@
             renderMain: function () {
                 this.loading = true
                 this.axios
-                    .get("http://localhost:8081/users", {
+                    .get("users", {
                         params: {
                             page: this.currentPage,
                             sortmode: this.sortmode

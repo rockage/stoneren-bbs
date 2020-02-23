@@ -104,7 +104,7 @@ const store = new Vuex.Store({
   actions: {
     setFsname: ({ commit }) => { //异步mutation必须使用actions
       return new Promise(function (resolve) {
-        axios.get('http://localhost:8081/getForums', {})
+        axios.get('getForums', {})
           .then((response) => {
             commit('fsname', JSON.parse(response.data))
             resolve('asynced')

@@ -31,11 +31,6 @@ func renderIndexMain(ctx iris.Context) {
 	startRec := strconv.Itoa(t1)
 	stopRec := "20"
 
-	fmt.Println(fid)
-	fmt.Println(uid)
-	fmt.Println(page)
-	fmt.Println(rMode)
-
 	switch sortmode {
 	case "date":
 		sort = "lastpost DESC"
@@ -96,13 +91,13 @@ func users(ctx iris.Context) {
 	var rst []map[string]string
 	var ok bool
 
-	fmt.Println(sortmode)
-
 	switch sortmode {
 	case "date":
-		sql = "select uid,username,regdate,posts from pre_members" + " ORDER BY regdate limit " + startRec + "," + stopRec
+		sql = "select uid,username,regdate,posts,lastvisited from pre_members" + " ORDER BY regdate limit " + startRec + "," + stopRec
+	case "last":
+		sql = "select uid,username,regdate,posts,lastvisited from pre_members" + " ORDER BY lastvisited desc limit " + startRec + "," + stopRec
 	case "posts":
-		sql = "select uid,username,regdate,posts from pre_members" + " ORDER BY posts desc limit " + startRec + "," + stopRec
+		sql = "select uid,username,regdate,posts,lastvisited from pre_members" + " ORDER BY posts desc limit " + startRec + "," + stopRec
 	}
 	var returnValue [2]string
 	rst, ok = mysql_con.Query(sql)

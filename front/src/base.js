@@ -70,7 +70,7 @@ export default {
     Vue.prototype.loginCheck = function () {
       const vm = this
       return new Promise(function (resolve) {
-        vm.axios.get('http://localhost:8081/secret', {
+        vm.axios.get('secret', {
           //携带cookie提交，mycookiesessionnameid是一个httponly cookie
           withCredentials: true
         }).then((response) => {
@@ -82,7 +82,7 @@ export default {
     }
 
     Vue.prototype.setCookie = function (c_name, value) { //全局函数2
-      docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/");
+      docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/","");
     }
 
     Vue.prototype.getCookie = function (c_name) { //全局函数3

@@ -59,9 +59,6 @@
 
 <script>
 
-    import ImageResize from 'quill-image-resize-module'
-
-    Quill.register("modules/imageResize", ImageResize)
 
     const container = [
         ["bold", "italic"],
@@ -107,15 +104,6 @@
                             maxStack: 50,
                             userOnly: false
                         },
-                        //imageDrop: true,
-                        imageResize: {
-                            displayStyles: {
-                                backgroundColor: "black",
-                                border: "none",
-                                color: "white"
-                            },
-                            modules: ["Resize", "DisplaySize", "Toolbar"]
-                        }
                     }
                 },
                 content: ""
@@ -160,7 +148,7 @@
             },
             onInputImgChange: function () {
                 let file = document.getElementById("inputImg").files[0]
-                let vm=this
+                let vm = this
                 if (window.FileReader) {
                     let fr = new FileReader()
                     fr.readAsDataURL(file) //开始加载文件
@@ -202,7 +190,6 @@
                     ctx.drawImage(image, x, y)
                     ctx.restore()
                     vm.rotateImg.src = cvs.toDataURL("image/jpeg")
-                    myQuill.imageResize.hide()
                 }
             },
             saveHtml: function () {
@@ -233,10 +220,10 @@
                 param.append("threadsTitle", vm.threadsTitle)
                 param.append("postContens", vm.content)
                 this.axios
-                    .post("http://localhost:8081/setNewPost", param)
+                    .post("setNewPost", param)
                     .then(response => {
                         if (response.data === "login-error") {
-                            vm.$login()
+                            vm.$message.error("登录后才可以发帖。")
                             return
                         } else {
                             myQuill.setText("")

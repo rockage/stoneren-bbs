@@ -9,6 +9,9 @@ import (
 var DB *sql.DB
 
 func initDB() bool {
+	//DigitalOcean: 206.189.68.176
+	//Tencent：193.112.15.230
+	//CloudCone: 173.82.105.39
 	path := "root:Kkndcc110!@tcp(193.112.15.230:3306)/Stoneren?charset=utf8"
 	DB, _ = sql.Open("mysql", path)
 	DB.SetConnMaxLifetime(100)

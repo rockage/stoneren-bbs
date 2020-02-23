@@ -2,11 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 	"mysql_con"
 	"regexp"
+	"strconv"
+	"time"
 )
 
 // sessions.go
@@ -34,11 +35,8 @@ func secret(ctx iris.Context) {
 		ctx.WriteString("")
 		return
 	}
-
 	retJson := "{\"username\":\"" + session.GetString("username") + "\",\"uid\":\"" + session.GetString("uid") + "\"}"
-	fmt.Println(retJson)
 	ctx.WriteString(retJson)
-
 }
 
 // login
@@ -53,6 +51,9 @@ func login(ctx iris.Context) {
 		session.Set("authenticated", true)
 		session.Set("username", username)
 
+		unixTime := strconv.FormatInt(time.Now().Unix(), 10)
+		mysql_con.Exec("update pre_members set lastvisited = " + unixTime + " where uid =" + rst[0]["uid"]) //写入最后登录时间
+
 		b, err := json.Marshal(rst)
 		if err == nil {
 			uid := string(b)
@@ -60,6 +61,7 @@ func login(ctx iris.Context) {
 			match := reg.FindStringSubmatch(uid)
 			session.Set("uid", match[1])
 			_, _ = ctx.JSON(uid)
+
 		}
 	} else {
 		ctx.Text("not found")

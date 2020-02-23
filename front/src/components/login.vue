@@ -75,7 +75,7 @@
                 if (uname !== "" && passwd !== "") {
                     let vm = this;
                     this.axios
-                        .get("http://localhost:8081/login", {
+                        .get("login", {
                             withCredentials: true,
                             params: {
                                 username: uname,

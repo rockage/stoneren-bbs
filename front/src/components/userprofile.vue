@@ -79,25 +79,30 @@
                 let vm = this;
                 //Next
                 this.axios
-                    .get("http://localhost:8081/data/getGender", {})
+                    .get("data/getGender", {})
                     .then(response => {
+                        console.log("Fire 1")
+
                         this.options = JSON.parse(response.data);
                         //Next:
                         this.axios
-                            .get("http://localhost:8081/data/getLocation", {})
+                            .get("data/getLocation", {})
                             .then(response => {
+                                console.log("Fire 2")
                                 this.options2 = JSON.parse(response.data);
                                 //Next:
                                 this.axios
-                                    .get("http://localhost:8081/getUserProfile", {
+                                    .get("getUserProfile", {
                                         params: {
                                             uname: this.uname
                                         }
                                     })
                                     .then(response => {
+                                        console.log("Fire 3")
+                                        console.log(response.data)
                                         if (response.data !== "error") {
-                                            this.dialogVisible = true;
                                             const ret = JSON.parse(response.data);
+                                            console.log(ret)
                                             vm.uid = ret[0].uid;
                                             vm.gender = ret[0].gender;
                                             vm.location = ret[0].location;
@@ -116,7 +121,7 @@
                                             vm.regdate = this.getLocalDate(ret[0].regdate);
                                             //Next:
                                             this.axios
-                                                .get("http://localhost:8081/data/getLevel", {
+                                                .get("data/getLevel", {
                                                     params: {
                                                         posts: vm.posts
                                                     }
@@ -221,6 +226,7 @@
             }
         },
         mounted() {
+            console.log(this.uname)
             this.getProfile();
         },
         destroyed() {

@@ -125,7 +125,7 @@ export default {
           vm.$store.commit("passwd", pass);
         } else {
           vm.axios
-            .get("http://localhost:8081/login", {
+            .get("login", {
               //再使用cookie登录
               params: {
                 withCredentials: true,

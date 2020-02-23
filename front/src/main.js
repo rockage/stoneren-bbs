@@ -18,6 +18,10 @@ Vue.use(VueQuillEditor)
 Vue.prototype.md5 = md5
 Vue.prototype.axios = axios
 axios.defaults.withCredentials = true
+//axios.defaults.baseURL = 'http://206.189.68.176:8081/'
+//axios.defaults.baseURL = 'http://localhost:8081/'
+axios.defaults.baseURL = 'http://stoneren.net:8081/'
+
 
 Vue.config.productionTip = false
 Vue.config.devtools = false

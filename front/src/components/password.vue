@@ -86,7 +86,7 @@
                 }
 
                 this.axios
-                    .get("http://localhost:8081/setNewPasswd", {
+                    .get("setNewPasswd", {
                         params: {
                             uid: vm.root.$store.getters.uid,
                             username: vm.root.$store.getters.uname,
@@ -99,7 +99,7 @@
                             vm.$message.success("修改成功，用新密码重新登录。");
                             vm.close()
                             this.axios
-                                .get("http://localhost:8081/logout", {
+                                .get("logout", {
                                     withCredentials: true
                                 })
                                 .then(response => {

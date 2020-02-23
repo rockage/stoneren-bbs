@@ -2,7 +2,8 @@
   <div class="threadsview">
     <bbs-button @ShowDataTable="ShowDataTable"></bbs-button>
     <el-row>
-      <div style="background-color: #cccccc;width: 100%;min-height: 30px;display: flex;justify-content:center;align-items:center;">
+      <div
+        style="background-color: #cccccc;width: 100%;min-height: 30px;display: flex;justify-content:center;align-items:center;">
         <el-pagination
           small
           @current-change="handleCurrentChange"
@@ -24,65 +25,47 @@
           </el-col>
         </el-row>
 
-        <el-table :data="tableData" style="width: 100%;" :show-header="false" :border="true">
+        <el-table :data="tableData" style="width: 100%;" :show-header="false" :border="true" stripe>
           <el-table-column label class="my-cell">
             <template slot-scope="scope">
               <el-row>
                 <el-col :span="24">
-                  <div class="grid-content" style="color: #909399;">
-                    <span>第{{ scope.row.indexNum }}楼</span>
-                    <span style="margin-right:15px;"></span>
-                    <span>发表于：{{ getLocalTime(scope.row.dateline) }}</span>
-
-                    <hr style="height:1px;border-width:0;color:#E4E7ED;background-color:#E4E7ED"/>
+                  <div style="color: #909399;margin-bottom:5px;text-align: left;background: aliceblue">
+                    <span class="info" style="margin-left: 0px">第{{ scope.row.indexNum }}楼</span>
+                    <span class="info">发表于：{{ getLocalTime(scope.row.dateline) }}</span>
                   </div>
                 </el-col>
               </el-row>
 
-              <section class="layout flex">
-                <article>
-                  <div class="left">
-                    <img
-                      style="object-fit: fill;border-radius: 10px;"
-                      :src="
-                      scope.row.avatar ? scope.row.avatar : '/static/avatar.png'
-                    "
-                    />
-                  </div>
-                  <div class="center">
-                    <div
-                      class="author-text"
-                      style="text-align:left;font-size: medium;font-weight: bold"
-                    >
-                      <a
-                        href="javascript:void(0)"
-                        @click="userProfile({ uname: scope.row.author })"
-                      >{{ scope.row.author }}</a>
-                    </div>
-                    <div class="author-text">主题：{{ scope.row.threads }}</div>
-                    <div class="author-text">回复：{{ scope.row.postsA }}</div>
-                    <div class="author-text">注册日期：{{ getLocalDate(scope.row.regdate) }}</div>
-                    <div class="author-text">最后登录：{{ getLocalDate(scope.row.lastvisited) }}</div>
-                    <div class="author-text">武功等级：{{ scope.row.level }}</div>
-                  </div>
-                </article>
-              </section>
+              <div style="display: flex;justify-content:flex-start;">
+
+                <img style="object-fit: fill;border-radius: 50%;" width="50" height="50"
+                     :src="scope.row.avatar ? scope.row.avatar : '/static/avatar.png'"/>
+
+                <div >
+                  <a href="javascript:void(0)" style="font-size: medium;font-weight: bold;margin-left: 25px" @click="userProfile({ uname: scope.row.author })">{{ scope.row.author}}
+                  </a>
+
+                  <span class="info">回帖：{{ scope.row.postsA }}</span>
+                  <span class="info">等级：{{ scope.row.level }}</span>
+                </div>
+              </div>
 
               <el-row>
-                <hr class="style-three">
+
                 <el-col :span="24">
                   <div
                     class="grid-content"
-                    style="min-height:300px;max-height:100%;width:100%;margin-top:10px"
+                    style="min-height:100px;max-height:100%;width:100%;margin-top:5px"
                     v-html="up(scope.row.message)"
                   ></div>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24">
-                  <div class="grid-content">
+                  <div style="text-align: right;">
                     <span
-                      style="margin-left: 5px;text-align: left;font-style: oblique;font-weight:bold;"
+                      style="font-style: oblique;font-weight:bold;color: #909399"
                     >{{ scope.row.signature }}</span>
                   </div>
                 </el-col>
@@ -91,7 +74,8 @@
           </el-table-column>
         </el-table>
       </el-row>
-      <div style="background-color: #cccccc;width: 100%;min-height: 30px;display: flex;justify-content:center;align-items:center;">
+      <div
+        style="background-color: #cccccc;width: 100%;min-height: 30px;display: flex;justify-content:center;align-items:center;">
         <el-pagination
           small
           @current-change="handleCurrentChange"
@@ -206,7 +190,7 @@
                 this.currentPage = page
                 let vm = this
                 this.axios
-                    .get("http://localhost:8081/renderThreadsView", {
+                    .get("renderThreadsView", {
                         params: {
                             page: page,
                             tid: this.tid
@@ -228,7 +212,7 @@
             },
             getTotalPosts: function () {
                 this.axios
-                    .get("http://localhost:8081/getTotalPosts", {
+                    .get("getTotalPosts", {
                         params: {
                             tid: this.tid
                         }
@@ -263,43 +247,12 @@
     vertical-align: top;
   }
 
-  .author-text {
-    text-align: left;
-    margin-left: 10px;
+  .info {
+    font-size: smaller;
     color: #909399;
-    font-size: x-small;
+    margin-left: 25px;
+     max-width: 90%;
+    min-width: 90%;
   }
-
-
-  .layout.flex article {
-    display: flex;
-  }
-
-  .layout.flex .left {
-    width: 40%;
-  }
-
-
-  .layout.flex .center {
-    flex: 1;
-  }
-
-  hr.style-two { /*透明渐变水平线*/
-    width: 80%;
-    margin: 0 auto;
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-  }
-
-  hr.style-three { /*渐变*/
-    width: 90%;
-    margin: 0 auto;
-    border: 0;
-    height: 1px;
-    background: #333;
-    background-image: linear-gradient(to right, #F2F6FC, #F2F6FC, #F2F6FC);
-  }
-
 
 </style>

@@ -137,17 +137,17 @@
             getProfile: function () {
                 let vm = this;
                 this.axios
-                    .get("http://localhost:8081/data/getGender", {})
+                    .get("data/getGender", {})
                     .then(response => {
                         this.options = JSON.parse(response.data);
                         //Next:
                         this.axios
-                            .get("http://localhost:8081/data/getLocation", {})
+                            .get("data/getLocation", {})
                             .then(response => {
                                 this.options2 = JSON.parse(response.data);
                                 //Next:
                                 this.axios
-                                    .get("http://localhost:8081/getProfile", {
+                                    .get("getProfile", {
                                         params: {
                                             uid: vm.uid
                                         }
@@ -201,7 +201,7 @@
                         param.append("mobilePhone", vm.mobilePhone);
                         param.append("signature", vm.signature);
                         vm.axios
-                            .post("http://localhost:8081/setProfile", param)
+                            .post("setProfile", param)
                             .then(response => {
                                 vm.$message.success(response.data);
                                 vm.close()

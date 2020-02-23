@@ -18,10 +18,8 @@
   </div>
 </template>
 <script>
-    import ImageResize from 'quill-image-resize-module'
     import store from '../store.js'
 
-    Quill.register('modules/imageResize', ImageResize)
     const container = [
         ["bold", "italic"],
         ["blockquote", "code-block"],
@@ -62,15 +60,6 @@
                             delay: 1000,
                             maxStack: 50,
                             userOnly: false
-                        },
-                        //imageDrop: true,
-                        imageResize: {
-                            displayStyles: {
-                                backgroundColor: 'black',
-                                border: 'none',
-                                color: 'white'
-                            },
-                            modules: ['Resize', 'DisplaySize', 'Toolbar']
                         },
                     },
                 },
@@ -134,7 +123,6 @@
                     ctx.drawImage(image, x, y)
                     ctx.restore()
                     vm.rotateImg.src = cvs.toDataURL("image/jpeg")
-                    myQuill.imageResize.hide()
                 }
             },
             saveHtml: function () {
@@ -159,10 +147,10 @@
                 param.append("uname", store.state.uname)
                 param.append("threadsTitle", this.threadsTitle)
                 param.append("postContens", this.content)
-                this.axios.post('http://localhost:8081/setNewPost', param)
+                this.axios.post('setNewPost', param)
                     .then((response) => {
                         if (response.data === 'login-error') {
-                            vm.$login()
+                            vm.$message.error("登录后才可以发帖。")
                             return
                         } else {
                             myQuill.setText("")

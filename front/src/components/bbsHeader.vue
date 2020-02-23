@@ -71,7 +71,7 @@
         methods: {
             resetPosts: function () {
                 this.axios
-                    .get("http://localhost:8081/resetPosts", {
+                    .get("resetPosts", {
                         params: {}
                     })
                     .then(response => {
@@ -100,7 +100,7 @@
                     case "4":
                         let vm = this
                         this.axios
-                            .get("http://localhost:8081/logout", {
+                            .get("logout", {
                                 withCredentials: true
                             })
                             .then(response => {

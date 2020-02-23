@@ -161,7 +161,7 @@
                 if (!this.$route.meta.rmode) rmode = 'new'
 
                 this.axios
-                    .get("http://localhost:8081/renderIndexMain", {
+                    .get("renderIndexMain", {
                         params: {
                             page: this.currentPage,
                             fid: this.$route.params.fid,
