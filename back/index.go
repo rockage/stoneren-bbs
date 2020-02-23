@@ -252,6 +252,31 @@ func saveAttachment(data []byte) string {
 	return fileName
 }
 
+/* In Server version
+func saveAttachment(data []byte) string {
+	dir_file := "/usr/local/nginx/html/static/attachment/" + time.Now().Format("2006-01") + "/"
+	dir_database := "/static/attachment/" + time.Now().Format("2006-01") + "/"
+	fmt.Println("dir file"+dir_file)
+	fmt.Println("data file"+dir_database)
+
+	myUuid := uuid.NewV4()
+	_, err := os.Stat(dir_file)
+	if err != nil {
+		err = os.Mkdir(dir_file, 0777)
+	}
+
+	uutext := myUuid.String() + ".jpg"
+
+	fileName := dir_file + uutext
+	fmt.Println(fileName)
+	err = ioutil.WriteFile(fileName, data, 0666)
+
+	databaseName := dir_database + uutext
+	fmt.Println(databaseName)
+	return databaseName
+}
+*/
+
 // resetPosts
 func resetPosts(ctx iris.Context) {
 	var rst []map[string]string

@@ -17,7 +17,7 @@
                 layout="prev, pager, next"
                 :total="this.totalPage"
                 :page-size="20"
-                :current-page="this.currentPage"
+                :current-page="currentPage"
                 style="text-align: right;"
                 :pager-count="5"
               ></el-pagination>
@@ -60,6 +60,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      small
+      @current-change="pageChange"
+      layout="prev, pager, next"
+      :total="this.totalPage"
+      :page-size="20"
+      :current-page="currentPage"
+      style="text-align: right;"
+      :pager-count="5"
+    ></el-pagination>
   </div>
 </template>
 

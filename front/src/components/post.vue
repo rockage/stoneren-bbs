@@ -201,6 +201,11 @@
                     return
                 }
 
+                if (this.threadsTitle.length > 30) {
+                    vm.$message.error("帖子标题太长了!")
+                    return
+                }
+
                 if (this.content.length < 10) {
                     vm.$message.error("发帖内容至少3个字符!")
                     return

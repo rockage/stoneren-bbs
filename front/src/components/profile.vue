@@ -2,7 +2,8 @@
   <div class="div-center" ref="divCenter" id="profileBox">
 
     <div style="display: flex;justify-content:space-between">
-      <div class="left"> 我的资料
+      <div style="text-align: left;margin-top:10px;margin-left: 10px;">
+        <el-button type="primary" size="small" @click="setProfile">保存</el-button>
       </div>
       <div class="right">
         <a href="javascript:void(0)" @click="close()">
@@ -10,61 +11,63 @@
         </a>
       </div>
     </div>
-    <hr style="width: 90%;">
-
+    <hr style="width: 100%;">
 
     <div class="info">用户名：{{ uname }} / uid：{{ uid }}</div>
     <div class="info">E-mail：{{ email }}</div>
 
     <div style="text-align: center">
 
-
-      <div style="width:90%;height:250px;margin-top: 10px;margin-left: 5%;margin-right: 5%;">
-        <vue-cropper
-          autoCrop
-          :img="avatarSrc"
-          ref="cropper"
-          centerBox/>
+      <div style="display: flex;justify-content:center; align-items:center;">
+        <div style="width:150px;height:150px;margin-top: 10px;margin-left: 5%;margin-right: 5%;">
+          <vue-cropper
+            autoCrop
+            :img="avatarSrc"
+            ref="cropper"
+            centerBox/>
+        </div>
+        <div>
+          <el-button
+            round
+            size="small"
+            @click="clickFile()"
+            style="margin:10px 0">从相册中选择<i class="el-icon-picture-outline el-icon--right"></i>
+          </el-button>
+        </div>
       </div>
-
-      <div style="margin-left: 10px;text-align: center;">
-        <el-button
-          round
-          size="small"
-          @click="clickFile()"
-          style="margin:10px 0">从相册中选择<i class="el-icon-picture-outline el-icon--right"></i>
-        </el-button>
-      </div>
-
       <hr style="width: 90%;">
-      <div>
-        <el-select v-model="gender" placeholder="性别" class="info">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
+
+      <div style="display: flex;justify-content:center; ">
+        <div style="width: 150px">
+          <el-select v-model="gender" placeholder="性别" class="info">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+        <div style="width: 150px">
+          <el-select v-model="location" placeholder="省份" prefix-icon="el-icon-s-custom" class="info">
+            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
       </div>
-      <div>
-        <el-select v-model="location" placeholder="省份" prefix-icon="el-icon-s-custom" class="info">
-          <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
-      <div>
+      <div style="display: flex;justify-content:center; ">
+        <div style="width: 150px">
         <el-date-picker v-model="born" type="date" placeholder="出生日期" class="info">
         </el-date-picker>
       </div>
-      <div>
+        <div style="width: 150px">
         <el-input placeholder="手机" prefix-icon="el-icon-mobile" v-model="mobilePhone" class="info">
         </el-input>
       </div>
-      <div>
+      </div>
+
+      <div style="width: 96%;margin-left: 7px;">
         <el-input placeholder="个性签名" prefix-icon="el-icon-edit-outline" v-model="signature" class="info">
         </el-input>
       </div>
 
-      <div style="text-align: left;margin-left: 5%;margin-bottom: 10px">
-        <el-button type="primary" @click="setProfile">保存</el-button>
-      </div>
+
 
 
     </div>
@@ -185,8 +188,19 @@
             },
             setProfile: function () {
                 let vm = this
+
+                if (vm.mobilePhone.length > 20) {
+                    vm.$message.error("手机号码太长了!")
+                    return
+                }
+
+                if (vm.signature.length > 30) {
+                    vm.$message.error("个性签名太长了!")
+                    return
+                }
+
                 this.$refs.cropper.getCropData(data => {
-                    this.transImage(data, 130,130, function (data) {
+                    this.transImage(data, 130, 130, function (data) {
                         let d = new Date(vm.born)
                         let timestamp = Date.parse(d);
                         timestamp = String(timestamp / 1000);
@@ -249,6 +263,7 @@
     display: flex;
     justify-content: space-between
   }
+
   .left {
     flex: 1;
     font-size: medium;
@@ -256,6 +271,7 @@
     margin-top: 5px;
     margin-left: 5px;
   }
+
   .right {
     margin-top: 5px;
     margin-right: 5px;

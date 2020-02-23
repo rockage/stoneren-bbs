@@ -1,9 +1,11 @@
 <template>
   <div class="div-center" ref="divCenter" id="passwdBox">
 
-    <div style="display: flex;justify-content:space-between">
-      <div class="left"> 修改密码
+    <div style="display: flex;justify-content:space-between;">
+      <div style="text-align: left;margin-top:10px;margin-left: 10px;">
+        <el-button type="primary" size="small" @click="btnClick">保存</el-button>
       </div>
+
       <div class="right">
         <a href="javascript:void(0)" @click="close()">
           <i class="el-icon-close" style="font-size:150%;"></i>
@@ -38,9 +40,6 @@
         style="margin-bottom: 15px;width: 90%"
       >
       </el-input>
-    </div>
-    <div style="text-align: left;margin-left: 5%">
-      <el-button type="primary" @click="btnClick">提交</el-button>
     </div>
 
   </div>
@@ -133,7 +132,7 @@
     text-align: left;
     max-width: 90%;
     min-width: 330px;
-    min-height: 300px;
+    min-height: 200px;
     left: 5%;
     top: 10%;
   }

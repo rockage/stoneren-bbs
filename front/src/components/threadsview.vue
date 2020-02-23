@@ -24,8 +24,10 @@
             >主题： {{ subject }}</span>
           </el-col>
         </el-row>
-
-        <el-table :data="tableData" style="width: 100%;" :show-header="false" :border="true" stripe>
+        <div
+          v-loading="loading"
+        ></div>
+        <el-table :data="tableData" style="width: 100%;" :show-header="false" :border="true" stripe v-show="!loading">
           <el-table-column label class="my-cell">
             <template slot-scope="scope">
               <el-row>
@@ -104,6 +106,7 @@
                 messageBox: "",
                 subject: "",
                 currentPage: 1,
+                loading: false,
                 dataShow: true
             }
         },
@@ -208,6 +211,7 @@
                         })
                         vm.subject = array[0].subject
                         vm.tableData = array
+                        this.loading = false
                     })
             },
             getTotalPosts: function () {
@@ -226,12 +230,13 @@
             }
         },
         mounted() {
+            this.loading = true
             this.getTotalPosts()
         }
     };
 </script>
 
-<style>
+<style scoped>
   .el-table .cell {
     white-space: pre-line;
   }

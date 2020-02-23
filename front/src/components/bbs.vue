@@ -2,14 +2,14 @@
   <div class="bbs">
     <bbs-button @ShowDataTable="ShowDataTable"></bbs-button>
 
-    <div
-      style="background-color: #EBEEF5;width: 100%;min-height: 40px;display: flex;justify-content:space-between;align-items:center;">
+    <div style="background-color: #EBEEF5;display: flex;justify-content: space-between;align-items:center;">
 
 
       <div class="info" style="font-size: x-small">
         <a href="javascript:void(0)" @click="sortChange">{{srotLabel}}</a>
       </div>
-      <div class="center">
+
+      <div >
         <el-pagination
           small
           @current-change="pageChange"
@@ -24,11 +24,7 @@
 
     </div>
 
-    <div id="post_location" style="width:100%;"></div>
-    <div
-      style="left:50%;top:50%;width: 100px;height: 100px;position: fixed;z-index: 99"
-      v-loading="loading"
-    ></div>
+    <div id="post_location"></div>
     <el-table :data="tableData" border style="width: 100%" v-show="dataShow" :show-header="false" stripe>
       <el-table-column label="主题" min-width="60%">
         <template slot-scope="scope">
@@ -188,21 +184,10 @@
 </script>
 <style scoped>
 
-  .layout.flex article {
-    display: flex;
-  }
-
-  .layout.flex .left {
-  }
-
   .info {
     font-size: smaller;
     color: #C0C4CC;
     margin-left: 10px
   }
 
-
-  .layout.flex .center {
-    flex: 1;
-  }
 </style>
