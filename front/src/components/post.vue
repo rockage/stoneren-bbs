@@ -47,9 +47,6 @@
           :options="editorOption"
           v-on:insertImage="insertImage($event)"
         ></quill-editor>
-        <div style="text-align:left;margin-top:10px;">
-          <el-button v-on:click="saveHtml" type="success" icon="el-icon-check">发表主题</el-button>
-        </div>
         <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;"/>
         <img src id="myimg"/>
       </el-row>
@@ -63,7 +60,7 @@
     const container = [
         ["bold", "italic"],
         ["blockquote", "code-block"],
-        ["image", "rotate"]
+        ["image", "rotate","post"],
     ]
     let myQuill //用来访问quill实例
     let vm
@@ -96,7 +93,10 @@
                                 },
                                 rotate: function () {
                                     vm.rotateImage()
-                                }
+                                },
+                                'post': function () {
+                                    vm.saveHtml()
+                                },
                             }
                         },
                         history: {
@@ -245,6 +245,11 @@
                 sourceEditorButton.style.cssText = "border:0px"
                 sourceEditorButton.innerHTML = "<img src='/static/rotate.png'>"
                 sourceEditorButton.title = "旋转图片"
+
+                const postButton = document.querySelector('.ql-post') //每一个quill功能按钮都会自动加上一个ql-用以区别，如ql-image/ql-link等
+                postButton.style.cssText = "border:0px"
+                postButton.innerHTML = "<img src='/static/post.png'>"
+                postButton.title = "发帖"
             }
         },
         updated() {

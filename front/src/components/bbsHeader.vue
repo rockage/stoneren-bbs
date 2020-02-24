@@ -5,7 +5,7 @@
       <tr>
         <td width="150">
           <img
-            src="/static/logo3.png"
+            src="/static/logo.png"
             style="margin-top: 10px;margin-left: 10px"
           />
           <button @click="resetPosts" style="display: none">统计发帖数</button>

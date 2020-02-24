@@ -1,4 +1,6 @@
 <template>
+
+
   <div class="edit_container" ref="editContainer">
 
     <span style="display: none">{{dummy}}</span>
@@ -11,9 +13,6 @@
     <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;">
     <img src="" id="myimg">
 
-    <el-button v-on:click="saveHtml" style="text-align: center;margin-top: 10px" type="success" icon="el-icon-check">
-      发表回复
-    </el-button>
 
   </div>
 </template>
@@ -23,7 +22,7 @@
     const container = [
         ["bold", "italic"],
         ["blockquote", "code-block"],
-        ["image", "rotate"]
+        ["image", "rotate","post"],
     ]
     let myQuill //增加一个全局quill，代表当前quill实例
     let vm
@@ -53,6 +52,9 @@
                                 },
                                 'rotate': function () {
                                     vm.rotateImage()
+                                },
+                                'post': function () {
+                                    vm.saveHtml()
                                 },
                             }
                         },
@@ -164,6 +166,11 @@
                 sourceEditorButton.style.cssText = "border:0px"
                 sourceEditorButton.innerHTML = "<img src='/static/rotate.png'>"
                 sourceEditorButton.title = "旋转图片"
+
+                const postButton = document.querySelector('.ql-post') //每一个quill功能按钮都会自动加上一个ql-用以区别，如ql-image/ql-link等
+                postButton.style.cssText = "border:0px"
+                postButton.innerHTML = "<img src='/static/post.png'>"
+                postButton.title = "发帖"
             },
         },
         updated() {
