@@ -7,12 +7,14 @@ import (
 )
 
 var DB *sql.DB
+var MySQLServer string
+var MySQLPasswd string
 
 func initDB() bool {
-	//DigitalOcean: 206.189.68.176
 	//Tencent：193.112.15.230
 	//CloudCone: 173.82.105.39
-	path := "root:Kkndcc110!@tcp(193.112.15.230:3306)/Stoneren?charset=utf8"
+
+	path := "root:" + MySQLPasswd + "@tcp(" + MySQLServer + ":3306)/Stoneren?charset=utf8"
 	DB, _ = sql.Open("mysql", path)
 	DB.SetConnMaxLifetime(100)
 	DB.SetMaxIdleConns(10)
@@ -24,12 +26,12 @@ func initDB() bool {
 }
 
 func Exec(SQL string) string {
-	var ins string=""
+	var ins string = ""
 	if initDB() == true {
 		ret, _ := DB.Exec(SQL)
 		if ret != nil {
 			if LastInsertId, err := ret.LastInsertId(); nil == err {
-				ins=strconv.FormatInt(LastInsertId, 10)
+				ins = strconv.FormatInt(LastInsertId, 10)
 			}
 		}
 	}

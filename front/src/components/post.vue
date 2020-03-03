@@ -60,7 +60,8 @@
     const container = [
         ["bold", "italic"],
         ["blockquote", "code-block"],
-        ["image", "rotate","post"],
+        [{'size': ['small', false, 'large', 'huge']}],
+        ['link',"image", "rotate","post"],
     ]
     let myQuill //用来访问quill实例
     let vm
@@ -309,5 +310,12 @@
     text-align: left;
     max-width: 100%;
     min-height: 300px;
+  }
+  .ql-clipboard {
+    position: fixed;
+    display: none;
+
+    left: 50%;
+    top: 50%;
   }
 </style>

@@ -1,14 +1,47 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
+	_ "github.com/icattlecoder/godaemon"
 	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
-	_ "github.com/icattlecoder/godaemon"
+	"log"
+	"mysql_con"
+	"os"
 )
 
+var AttachmentDir string
+var AttachmentDatabase string
+
 func main() {
+
+	mysql_con.MySQLServer = "Hello World"
+
+	file, err := os.Open("config")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	var config [4]string
+	var i int = 0
+	for scanner.Scan() {
+		config[i] = scanner.Text()
+		i++
+	}
+	AttachmentDir = config[0]
+	AttachmentDatabase = config[1]
+	mysql_con.MySQLServer = config[2]
+	mysql_con.MySQLPasswd = config[3]
+
+	fmt.Println("Global Settings:")
+	fmt.Println("AttachmentDir: ", AttachmentDir)
+	fmt.Println("AttachmentDatabase: ", AttachmentDatabase)
+	fmt.Println("MySQLServer: ", mysql_con.MySQLServer+"@"+mysql_con.MySQLPasswd)
 
 	crs := cors.New(cors.Options{ //crs相当于一个中间件，允许所有主机通过
 		AllowedOrigins:   []string{"*"}, //
@@ -39,12 +72,10 @@ func main() {
 	index.Get("/getUserProfile", GetUserProfile)
 	index.Post("/setProfile", SetProfile)
 
-
 	data := app.Party("/data", crs) //所有请求先过crs中间件
 	data.Get("/getGender", getGender)
 	data.Get("/getLocation", getLocation)
 	data.Get("/getLevel", getLevel)
-
 
 	app.Run(iris.Addr(":8081"), iris.WithoutServerError(iris.ErrServerClosed))
 

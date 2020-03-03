@@ -11,6 +11,7 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+
 Vue.use(ElementUI)
 
 
@@ -18,10 +19,9 @@ Vue.use(VueQuillEditor)
 Vue.prototype.md5 = md5
 Vue.prototype.axios = axios
 axios.defaults.withCredentials = true
-//axios.defaults.baseURL = 'http://206.189.68.176:8081/'
 //axios.defaults.baseURL = 'http://localhost:8081/'
 axios.defaults.baseURL = 'http://stoneren.net:8081/'
-
+//axios.defaults.baseURL = 'http://18.222.181.59:8081/'
 
 Vue.config.productionTip = false
 Vue.config.devtools = false
@@ -43,7 +43,6 @@ Vue.use(VueCropper)
 Vue.use(base)
 Vue.component('bbsHeader', bbsHeader) //自定义组件: <bbsHeader> </bbsHeader>
 Vue.prototype.$userprofile = Popup.UserProfileBox
-
 
 
 new Vue({

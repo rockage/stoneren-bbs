@@ -22,7 +22,8 @@
     const container = [
         ["bold", "italic"],
         ["blockquote", "code-block"],
-        ["image", "rotate","post"],
+        [{'size': ['small', false, 'large', 'huge']}],
+        ['link',"image", "rotate","post"],
     ]
     let myQuill //增加一个全局quill，代表当前quill实例
     let vm
@@ -201,5 +202,12 @@
     min-height: 300px;
     max-height: 100%;
     background-color: White
+  }
+  .ql-clipboard {
+    position: fixed;
+    display: none;
+
+    left: 50%;
+    top: 50%;
   }
 </style>

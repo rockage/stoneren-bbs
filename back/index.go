@@ -238,7 +238,7 @@ func setNewPost(ctx iris.Context) {
 	}
 
 }
-
+/*
 func saveAttachment(data []byte) string {
 	dir := "../front/static/attachment/" + time.Now().Format("2006-01") + "/"
 	myUuid := uuid.NewV4()
@@ -251,8 +251,8 @@ func saveAttachment(data []byte) string {
 	fileName = strings.Replace(fileName, "../front", "", -1) //去掉../front，否则前端无法读取
 	return fileName
 }
-
-/* In Server version
+*/
+// In Server version
 func saveAttachment(data []byte) string {
 	dir_file := "/usr/local/nginx/html/static/attachment/" + time.Now().Format("2006-01") + "/"
 	dir_database := "/static/attachment/" + time.Now().Format("2006-01") + "/"
@@ -275,7 +275,7 @@ func saveAttachment(data []byte) string {
 	fmt.Println(databaseName)
 	return databaseName
 }
-*/
+
 
 // resetPosts
 func resetPosts(ctx iris.Context) {

@@ -58,7 +58,7 @@
                 <el-col :span="24">
                   <div
                     class="grid-content"
-                    style="min-height:100px;max-height:100%;width:100%;margin-top:5px"
+                    style="min-height:100px;max-height:100%;width:100%;margin-top:5px;white-space: pre-line;"
                     v-html="up(scope.row.message)"
                   ></div>
                 </el-col>
@@ -211,7 +211,8 @@
                         })
                         vm.subject = array[0].subject
                         vm.tableData = array
-                        this.loading = false
+                        vm.$store.commit("bbstitle",vm.subject)
+                        vm.loading = false
                     })
             },
             getTotalPosts: function () {
@@ -250,6 +251,10 @@
   .el-table .my-cell-2 {
     text-align: left;
     vertical-align: top;
+  }
+
+  .el-table .cell {
+    white-space: pre-line;
   }
 
   .info {

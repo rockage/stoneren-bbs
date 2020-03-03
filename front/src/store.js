@@ -19,8 +19,12 @@ const store = new Vuex.Store({
     fsname: '', //全部论坛名称
     rmode: '', //bbs渲染模式
     viewuid: '',//查看某用户id
+    bbstitle: '',
   },
   getters: {
+    bbstitle: function (state) {
+      return state.bbstitle
+    },
     loginState: function (state) {
       return state.loginState
     },
@@ -73,6 +77,9 @@ const store = new Vuex.Store({
     },
   },
   mutations: {
+    bbstitle: function (state, r) {
+      state.bbstitle = r
+    },
     loginState: function (state, r) {
       state.loginState = r
     },

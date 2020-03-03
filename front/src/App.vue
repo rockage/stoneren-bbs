@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <title>{{bbstitle}}</title>
     <el-row>
       <bbsHeader></bbsHeader>
     </el-row>
@@ -76,8 +77,13 @@
                 defaultActive: "2",
                 dialogVisible: false,
                 myMenus: [],
-                isRouterAlive: true
+                isRouterAlive: true,
             };
+        },
+        computed: {
+            bbstitle() {
+                return this.$store.getters.bbstitle
+            },
         },
         provide() {
             return {
@@ -179,6 +185,7 @@
             this.autoLogin();
             await this.$store.dispatch("setFsname");
             this.getForumsInfo(this.$store.getters.fsname);
+            this.$store.commit("bbstitle", "石凳BBS");
         }
     };
 </script>
