@@ -1,12 +1,11 @@
 <template>
   <div class="div-center" @mousedown="move" ref="divCenter" id="post_box">
     <!-- post_box为了不重复开启 -->
-
     <table border="0" width="100%">
       <tbody>
       <tr>
         <td valign="top">
-          <span style="  font-size: medium;color: #909399;margin-left:10px">发新主题</span>
+
         </td>
         <td align="right">
             <span style="margin-top:5px;" ref="divClose">
@@ -41,12 +40,12 @@
     <div class="edit_container" ref="editContainer">
       <el-row>
         <span style="display: none">{{ dummy }}</span>
-        <quill-editor
+        <quillEditor
           v-model="content"
           ref="myQuillEditor"
           :options="editorOption"
           v-on:insertImage="insertImage($event)"
-        ></quill-editor>
+        ></quillEditor>
         <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;"/>
         <img src id="myimg"/>
       </el-row>
@@ -61,16 +60,22 @@
         ["bold", "italic"],
         ["blockquote", "code-block"],
         [{'size': ['small', false, 'large', 'huge']}],
-        ['link',"image", "rotate","post"],
+        ['link', "image", "rotate", "post"],
     ]
-    let myQuill //用来访问quill实例
+    let myQuill
     let vm
+
+    import { quillEditor } from 'vue-quill-editor'
+
     export default {
         name: "post",
         props: {
             xclose: Function,
             postFinished: Function,
-            root: Object
+            root: Object,
+        },
+        components: {
+            quillEditor,
         },
         data() {
             return {
@@ -260,7 +265,6 @@
             vm = this
             myQuill = this.$refs.myQuillEditor.quill //全局quill实例
             myQuill.root.addEventListener("click", this.handleClick, false) //为全局quill创建一个根监听
-
             this.dummy = "999" //在mounted阶段myQuill还未建造好，只能将触发时机后移至updated阶段
             this.value = String(this.root.$store.getters.fid)
             this.options = this.root.$store.getters.fsname
@@ -311,6 +315,7 @@
     max-width: 100%;
     min-height: 300px;
   }
+
   .ql-clipboard {
     position: fixed;
     display: none;

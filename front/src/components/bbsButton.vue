@@ -17,7 +17,6 @@
 </template>
 <script>
     import Post from "../components/post.vue"
-    import Vue from "vue"
 
     export default {
         name: "bbsButton",
@@ -75,7 +74,6 @@
                 if (!document.getElementById("post_box")) {
                     //只允许弹出一个post窗口
                     const PostBox = Vue.extend(Post)
-
                     let instance = new PostBox({
                         propsData: {
                             xclose: this.xclose,

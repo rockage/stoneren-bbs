@@ -67,15 +67,16 @@ func getTotalThreads(id string, rMode string) string {
 	var sql string
 	switch rMode {
 	case "new":
-		sql = "explain select * from pre_forum_thread" //最新,不需要指定id
+		sql = "select COUNT(1) as counts from pre_forum_thread" //最新,不需要指定id
 	case "self":
-		sql = "select  COUNT(1) as rows from pre_forum_thread where authorid = " + id //指定版块(fid)
+		sql = "select COUNT(1) as counts from pre_forum_thread where authorid = " + id //指定版块(fid)
 	case "normal":
-		sql = "select  COUNT(1) as rows from pre_forum_thread where fid = " + id //只看自己(uid)
+		sql = "select COUNT(1) as counts from pre_forum_thread where fid = " + id //只看自己(uid)
 	}
+	fmt.Println(sql)
 	var rst []map[string]string
 	rst, _ = mysql_con.Query(sql) //求出总行数
-	totalRow := rst[0]["rows"]
+	totalRow := rst[0]["counts"]
 	return totalRow
 }
 
@@ -105,9 +106,9 @@ func users(ctx iris.Context) {
 		b, err := json.Marshal(rst)
 		if err == nil {
 			returnValue[0] = string(b)
-			sql = "explain select * from pre_members" //获得总用户数
+			sql = "select count(1) as counts from pre_members" //获得总用户数
 			rst, _ = mysql_con.Query(sql)
-			returnValue[1] = rst[0]["rows"]
+			returnValue[1] = rst[0]["counts"]
 			_, _ = ctx.JSON(returnValue)
 		}
 	}
@@ -146,8 +147,8 @@ func renderThreadsView(ctx iris.Context) {
 func getTotalPosts(ctx iris.Context) {
 	posts := ctx.FormValue("tid")
 	var rst []map[string]string
-	rst, _ = mysql_con.Query("select COUNT(1) as rows from pre_forum_post where tid = " + posts) //求出总行数
-	_, _ = ctx.JSON(rst[0]["rows"])
+	rst, _ = mysql_con.Query("select COUNT(1) as counts from pre_forum_post where tid = " + posts) //求出总行数
+	_, _ = ctx.JSON(rst[0]["counts"])
 }
 
 //forumView
@@ -216,9 +217,9 @@ func setNewPost(ctx iris.Context) {
 			"(" + fid + ", " + tid + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
 		mysql_con.Exec(sql)
 		//算出总页数，返回给前端直接显示最后回复的帖子：
-		rst, _ = mysql_con.Query("select COUNT(1) as rows from pre_forum_post where tid = " + tid) //求出总行数
+		rst, _ = mysql_con.Query("select COUNT(1) as counts from pre_forum_post where tid = " + tid) //求出总行数
 		var i float64
-		i, _ = strconv.ParseFloat(rst[0]["rows"], 32)
+		i, _ = strconv.ParseFloat(rst[0]["counts"], 32)
 		page := math.Ceil(i / 20)
 		res := strconv.FormatFloat(page, 'E', -1, 32)
 		mysql_con.Exec("update pre_members set posts = " + strconv.Itoa(posts) + " WHERE uid = " + authorid) //写入自增后的posts
@@ -254,7 +255,7 @@ func saveAttachment(data []byte) string {
 */
 // In Server version
 func saveAttachment(data []byte) string {
-	dir_file := "/usr/local/nginx/html/static/attachment/" + time.Now().Format("2006-01") + "/"
+	dir_file := AttachmentDir + time.Now().Format("2006-01") + "/"
 	dir_database := "/static/attachment/" + time.Now().Format("2006-01") + "/"
 	fmt.Println("dir file"+dir_file)
 	fmt.Println("data file"+dir_database)

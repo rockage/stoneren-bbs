@@ -18,8 +18,6 @@ var AttachmentDatabase string
 
 func main() {
 
-	mysql_con.MySQLServer = "Hello World"
-
 	file, err := os.Open("config")
 	if err != nil {
 		log.Fatal(err)
@@ -27,21 +25,19 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	var config [4]string
+	var config [3]string
 	var i int = 0
 	for scanner.Scan() {
 		config[i] = scanner.Text()
 		i++
 	}
 	AttachmentDir = config[0]
-	AttachmentDatabase = config[1]
-	mysql_con.MySQLServer = config[2]
-	mysql_con.MySQLPasswd = config[3]
+	mysql_con.MySQLServer = config[1]
+	mysql_con.MySQLPasswd = config[2]
 
 	fmt.Println("Global Settings:")
 	fmt.Println("AttachmentDir: ", AttachmentDir)
-	fmt.Println("AttachmentDatabase: ", AttachmentDatabase)
-	fmt.Println("MySQLServer: ", mysql_con.MySQLServer+"@"+mysql_con.MySQLPasswd)
+	fmt.Println("MySQLServer: @", mysql_con.MySQLServer+":"+mysql_con.MySQLPasswd)
 
 	crs := cors.New(cors.Options{ //crs相当于一个中间件，允许所有主机通过
 		AllowedOrigins:   []string{"*"}, //

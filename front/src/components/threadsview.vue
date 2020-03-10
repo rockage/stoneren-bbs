@@ -87,7 +87,6 @@
           :current-page="currentPage"
         ></el-pagination>
       </div>
-      <div class="author-text" style="margin-left:0px;margin-top:5px;">发表回复：</div>
       <reply :tid="tid" :fid="fid" @replyFinished="renderMain($event)"></reply>
     </div>
   </div>

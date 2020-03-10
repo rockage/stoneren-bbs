@@ -25,12 +25,20 @@
         [{'size': ['small', false, 'large', 'huge']}],
         ['link',"image", "rotate","post"],
     ]
+
+
+    import { quillEditor } from 'vue-quill-editor'
+
+
     let myQuill //增加一个全局quill，代表当前quill实例
     let vm
     export default {
         name: "reply",
         store,
         props: ['tid', 'fid'],
+        components: {
+            quillEditor,
+        },
         data() {
             return {
                 value: '',
