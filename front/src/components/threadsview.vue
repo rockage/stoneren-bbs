@@ -14,7 +14,7 @@
         ></el-pagination>
       </div>
     </el-row>
-    <div id="post_location" style="back-groundcolor:red;width=100%;"></div>
+    <div id="post_location"></div>
     <div v-show="dataShow">
       <el-row>
         <el-row>
@@ -35,6 +35,7 @@
                   <div style="color: #909399;margin-bottom:5px;text-align: left;background: aliceblue">
                     <span class="info" style="margin-left: 0px">第{{ scope.row.indexNum }}楼</span>
                     <span class="info">发表于：{{ getLocalTime(scope.row.dateline) }}</span>
+                    <a class="info" href="javascript:void(0)" @click="editPost">编辑</a>
                   </div>
                 </el-col>
               </el-row>
@@ -95,6 +96,7 @@
 <script>
     import bbsButton from "./bbsButton"
     import reply from "./reply"
+    import Post from "../components/post.vue"
 
     export default {
         name: "threadsview",
@@ -122,6 +124,20 @@
             }
         },
         methods: {
+            editPost:function(){
+                if (!document.getElementById("post_box")) {
+                    const PostBox = Vue.extend(Post)
+                    let instance = new PostBox({
+                        propsData: {
+                            xclose: this.xclose,
+                            root: this.$root,
+                            postFinished: this.postFinished
+                        }
+                    })
+                    let PostEl = instance.$mount().$el
+                    document.getElementById("post_location").appendChild(PostEl)
+                }
+            },
             ShowDataTable: function () {
                 this.dataShow = !this.dataShow
             },

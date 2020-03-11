@@ -37,8 +37,7 @@
       <template slot="prepend">主 题：</template>
     </el-input>
 
-    <div class="edit_container" ref="editContainer">
-      <el-row>
+    <div id="quill-container">
         <span style="display: none">{{ dummy }}</span>
         <quillEditor
           v-model="content"
@@ -48,7 +47,6 @@
         ></quillEditor>
         <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;"/>
         <img src id="myimg"/>
-      </el-row>
     </div>
   </div>
 </template>
@@ -65,7 +63,7 @@
     let myQuill
     let vm
 
-    import { quillEditor } from 'vue-quill-editor'
+    import {quillEditor} from 'vue-quill-editor'
 
     export default {
         name: "post",
@@ -278,10 +276,17 @@
 <style>
   .edit_container {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     background-color: White;
   }
+
+  #quill-container {
+    height: 555px;
+    min-height: 100%;
+    padding: 5px;
+
+  }
+
+
 
   .div-sendto {
     font-size: small;
@@ -299,27 +304,25 @@
     background-color: White;
     max-width: 100%;
     min-height: 300px;
+    max-height: 300px;
+    overflow-y: scroll;
   }
 
   .div-center {
-    position: static; /*定位*/
     border: 1px gray;
     background: #e4e7ed; /*设置一下背景*/
     z-index: 99;
     border-radius: 5px;
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-bottom: 200px;
-    max-height: 100%;
-    text-align: left;
-    max-width: 100%;
-    min-height: 300px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
   }
 
   .ql-clipboard {
     position: fixed;
     display: none;
-
     left: 50%;
     top: 50%;
   }
