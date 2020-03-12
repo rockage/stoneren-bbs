@@ -53,10 +53,11 @@ func main() {
 	index := app.Party("/", crs) //所有请求先过crs中间件
 	index.Get("/renderIndexMain", renderIndexMain)
 	index.Get("/renderThreadsView", renderThreadsView)
-	//index.Get("/getTotalThreads", getTotalThreads)
 	index.Get("/getTotalPosts", getTotalPosts)
 	index.Get("/getForums", getForums)
 	index.Post("/setNewPost", setNewPost)
+	index.Get("/getPost", getPost)
+
 	index.Get("/secret", secret)
 	index.Get("/login", login)
 	index.Get("/logout", logout)

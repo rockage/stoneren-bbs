@@ -164,6 +164,21 @@ func getForums(ctx iris.Context) {
 	}
 }
 
+
+//EditPost
+func getPost(ctx iris.Context) {
+	var rst []map[string]string
+	var ok bool
+	rst, ok = mysql_con.Query("select message from pre_forum_post where pid = 105192")
+	if ok {
+		b, err := json.Marshal(rst)
+		if err == nil {
+			_, _ = ctx.JSON(string(b))
+		}
+	}
+}
+
+
 //New Post
 func setNewPost(ctx iris.Context) {
 	if CheckLogin(ctx) == false {
@@ -239,21 +254,6 @@ func setNewPost(ctx iris.Context) {
 	}
 
 }
-/*
-func saveAttachment(data []byte) string {
-	dir := "../front/static/attachment/" + time.Now().Format("2006-01") + "/"
-	myUuid := uuid.NewV4()
-	_, err := os.Stat(dir)
-	if err != nil {
-		err = os.Mkdir(dir, 0777)
-	}
-	fileName := dir + myUuid.String() + ".jpg"
-	err = ioutil.WriteFile(fileName, data, 0666)
-	fileName = strings.Replace(fileName, "../front", "", -1) //去掉../front，否则前端无法读取
-	return fileName
-}
-*/
-// In Server version
 func saveAttachment(data []byte) string {
 	dir_file := AttachmentDir + time.Now().Format("2006-01") + "/"
 	dir_database := "/static/attachment/" + time.Now().Format("2006-01") + "/"

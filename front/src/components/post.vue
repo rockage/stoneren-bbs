@@ -1,7 +1,7 @@
 <template>
   <div class="div-center" @mousedown="move" ref="divCenter" id="post_box">
     <!-- post_box为了不重复开启 -->
-    <table border="0" width="100%">
+    <table border="0" width="100%" v-show="reply">
       <tbody>
       <tr>
         <td valign="top">
@@ -31,22 +31,24 @@
         </td>
       </tr>
       </tbody>
+      <tr>
+        <el-input placeholder="请输入标题" v-model="threadsTitle">
+          <template slot="prepend">主 题：</template>
+        </el-input>
+      </tr>
     </table>
 
-    <el-input placeholder="请输入标题" v-model="threadsTitle">
-      <template slot="prepend">主 题：</template>
-    </el-input>
 
     <div id="quill-container">
-        <span style="display: none">{{ dummy }}</span>
-        <quillEditor
-          v-model="content"
-          ref="myQuillEditor"
-          :options="editorOption"
-          v-on:insertImage="insertImage($event)"
-        ></quillEditor>
-        <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;"/>
-        <img src id="myimg"/>
+      <span style="display: none">{{ dummy }}</span>
+      <quillEditor
+        v-model="content"
+        ref="myQuillEditor"
+        :options="editorOption"
+        v-on:insertImage="insertImage($event)"
+      ></quillEditor>
+      <input type="file" id="inputImg" @change="onInputImgChange($event)" style="display:none;"/>
+      <img src id="myimg"/>
     </div>
   </div>
 </template>
@@ -55,10 +57,8 @@
 
 
     const container = [
-        ["bold", "italic"],
-        ["blockquote", "code-block"],
-        [{'size': ['small', false, 'large', 'huge']}],
-        ['link', "image", "rotate", "post"],
+        [{'size': [false, 'large', 'huge']}],
+        ["code-block", 'link', "image", "rotate", "post"],
     ]
     let myQuill
     let vm
@@ -84,6 +84,7 @@
                 positionY: 0,
                 threadsTitle: "",
                 rotateImg: "",
+                reply: '',
                 editorOption: {
                     placeholder: "",
                     modules: {
@@ -92,6 +93,7 @@
                             handlers: {
                                 // 拦截image的click事件
                                 image: function () {
+                                    this.title = "图片"
                                     let c = document.getElementById("inputImg")
                                     c.click()
                                 },
@@ -254,6 +256,15 @@
                 postButton.style.cssText = "border:0px"
                 postButton.innerHTML = "<img src='/static/post.png'>"
                 postButton.title = "发帖"
+            },
+            loadPostContens: function () {
+                console.log("fire in!")
+                this.axios
+                    .get("getPost")
+                    .then(response => {
+                      console.log(response.data)
+                        myQuill.content=response.data
+                    })
             }
         },
         updated() {
@@ -266,6 +277,11 @@
             this.dummy = "999" //在mounted阶段myQuill还未建造好，只能将触发时机后移至updated阶段
             this.value = String(this.root.$store.getters.fid)
             this.options = this.root.$store.getters.fsname
+            console.log(this.reply)
+
+            this.loadPostContens()
+
+
         },
         destroyed() {
             document.getElementById("post_location").removeChild(this.$el) //销毁DOM
@@ -278,14 +294,6 @@
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     background-color: White;
   }
-
-  #quill-container {
-    height: 555px;
-    min-height: 100%;
-    padding: 5px;
-
-  }
-
 
 
   .div-sendto {
@@ -302,9 +310,8 @@
 
   .ql-editor {
     background-color: White;
-    max-width: 100%;
-    min-height: 300px;
-    max-height: 300px;
+    width: 100%;
+    height: 500px;
     overflow-y: scroll;
   }
 
@@ -316,6 +323,8 @@
     position: fixed;
     top: 50%;
     left: 50%;
+    width: 90%;
+    height: 680px;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }

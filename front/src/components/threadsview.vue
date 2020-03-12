@@ -47,7 +47,7 @@
 
                 <div >
                   <a href="javascript:void(0)" style="font-size: medium;font-weight: bold;margin-left: 25px" @click="userProfile({ uname: scope.row.author })">{{ scope.row.author}}
-                  </a>
+                  </a><BR/>
 
                   <span class="info">回帖：{{ scope.row.postsA }}</span>
                   <span class="info">等级：{{ scope.row.level }}</span>
@@ -131,6 +131,7 @@
                         propsData: {
                             xclose: this.xclose,
                             root: this.$root,
+                            reply:true,
                             postFinished: this.postFinished
                         }
                     })
