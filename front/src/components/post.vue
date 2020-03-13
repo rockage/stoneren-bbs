@@ -262,8 +262,10 @@
                 this.axios
                     .get("getPost")
                     .then(response => {
-                      console.log(response.data)
-                        myQuill.content=response.data
+                      let ret= JSON.parse(response.data)
+
+                      console.log(ret[0].message)
+                        this.content=ret[0].message
                     })
             }
         },
