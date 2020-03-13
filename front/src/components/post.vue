@@ -1,44 +1,30 @@
 <template>
   <div class="div-center" @mousedown="move" ref="divCenter" id="post_box">
     <!-- post_box为了不重复开启 -->
-    <table border="0" width="100%" v-show="reply">
-      <tbody>
-      <tr>
-        <td valign="top">
 
-        </td>
-        <td align="right">
-            <span style="margin-top:5px;" ref="divClose">
-              <a href="javascript:void(0)" @click="close()">
-                <i class="el-icon-close" style="font-size:150%;"></i>
-              </a>
-            </span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="div-sendto">发表到：</div>
-        </td>
-        <td width="100%" align="left" bgcolor="#FFFFFF">
-          <el-select style=" margin-left: 0px;" v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.key"
-              :label="item.name"
-              :value="item.fid"
-            ></el-option>
-          </el-select>
-        </td>
-      </tr>
-      </tbody>
-      <tr>
-        <el-input placeholder="请输入标题" v-model="threadsTitle">
-          <template slot="prepend">主 题：</template>
-        </el-input>
-      </tr>
-    </table>
+    <div style="display: flex;justify-content:flex-end;margin-top:5px;" ref="divClose">
+      <a href="javascript:void(0)" @click="close()">
+        <i class="el-icon-close" style="font-size:150%;"></i>
+      </a>
+    </div>
 
+    <div v-show="!reply">
+      <div style="align-items: center;display: flex;justify-content: space-between;">
+        <div class="div-sendto">发表到：</div>
 
+        <el-select style="width: 100%;" v-model="value" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.key"
+            :label="item.name"
+            :value="item.fid"
+          ></el-option>
+        </el-select>
+      </div>
+      <el-input placeholder="请输入标题" v-model="threadsTitle">
+        <template slot="prepend">主 题：</template>
+      </el-input>
+    </div>
     <div id="quill-container">
       <span style="display: none">{{ dummy }}</span>
       <quillEditor
@@ -71,6 +57,7 @@
             xclose: Function,
             postFinished: Function,
             root: Object,
+            reply: Boolean,
         },
         components: {
             quillEditor,
@@ -84,7 +71,6 @@
                 positionY: 0,
                 threadsTitle: "",
                 rotateImg: "",
-                reply: '',
                 editorOption: {
                     placeholder: "",
                     modules: {
@@ -258,14 +244,11 @@
                 postButton.title = "发帖"
             },
             loadPostContens: function () {
-                console.log("fire in!")
                 this.axios
                     .get("getPost")
                     .then(response => {
-                      let ret= JSON.parse(response.data)
-
-                      console.log(ret[0].message)
-                        this.content=ret[0].message
+                        let ret = JSON.parse(response.data)
+                        this.content = ret[0].message
                     })
             }
         },
@@ -279,10 +262,10 @@
             this.dummy = "999" //在mounted阶段myQuill还未建造好，只能将触发时机后移至updated阶段
             this.value = String(this.root.$store.getters.fid)
             this.options = this.root.$store.getters.fsname
-            console.log(this.reply)
 
-            this.loadPostContens()
-
+            if (this.reply) { //帖子编辑
+                this.loadPostContens()
+            }
 
         },
         destroyed() {
@@ -300,14 +283,15 @@
 
   .div-sendto {
     font-size: small;
-    min-width: 82px;
-    min-height: 38px;
-    margin-left: 0px;
+    min-width: 88px;
+    height: 38px;
     background-color: #f2f6fc;
-    text-align: center;
-    line-height: 40px;
     color: #909399;
     border-radius: 5px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
   }
 
   .ql-editor {
