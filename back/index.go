@@ -164,12 +164,12 @@ func getForums(ctx iris.Context) {
 	}
 }
 
-
 //EditPost
 func getPost(ctx iris.Context) {
 	var rst []map[string]string
 	var ok bool
-	rst, ok = mysql_con.Query("select message from pre_forum_post where pid = 105192")
+	pid := ctx.FormValue("pid")
+	rst, ok = mysql_con.Query("select message from pre_forum_post where pid = " + pid)
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
@@ -177,7 +177,6 @@ func getPost(ctx iris.Context) {
 		}
 	}
 }
-
 
 //New Post
 func setNewPost(ctx iris.Context) {
@@ -257,8 +256,8 @@ func setNewPost(ctx iris.Context) {
 func saveAttachment(data []byte) string {
 	dir_file := AttachmentDir + time.Now().Format("2006-01") + "/"
 	dir_database := "/static/attachment/" + time.Now().Format("2006-01") + "/"
-	fmt.Println("dir file"+dir_file)
-	fmt.Println("data file"+dir_database)
+	fmt.Println("dir file" + dir_file)
+	fmt.Println("data file" + dir_database)
 
 	myUuid := uuid.NewV4()
 	_, err := os.Stat(dir_file)
@@ -276,7 +275,6 @@ func saveAttachment(data []byte) string {
 	fmt.Println(databaseName)
 	return databaseName
 }
-
 
 // resetPosts
 func resetPosts(ctx iris.Context) {
