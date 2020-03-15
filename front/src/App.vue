@@ -35,7 +35,7 @@
               </div>
             </el-submenu>
             <el-menu-item index="2" @click="router_to(2)">
-              <i class="el-icon-time"></i>帖子
+              <i class="el-icon-time"></i>新帖
             </el-menu-item>
             <el-menu-item index="4" @click="router_to(3)">
               <i class="el-icon-user"></i>用户

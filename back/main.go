@@ -74,6 +74,6 @@ func main() {
 	data.Get("/getLocation", getLocation)
 	data.Get("/getLevel", getLevel)
 
-	app.Run(iris.Addr(":8081"), iris.WithoutServerError(iris.ErrServerClosed))
+	_ = app.Run(iris.Addr(":8081"), iris.WithoutServerError(iris.ErrServerClosed))
 
 }

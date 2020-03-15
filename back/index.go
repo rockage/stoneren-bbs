@@ -184,23 +184,34 @@ func setNewPost(ctx iris.Context) {
 		ctx.Text("login-error")
 		return
 	}
+
 	var sql string
 	var rst []map[string]string
 	fid := ctx.FormValue("fid")
 	tid := ctx.FormValue("tid")
-	author := ctx.FormValue("uname")
+	pid := ctx.FormValue("pid")
 	authorid := ctx.FormValue("uid")
-	dateline := strconv.FormatInt(time.Now().Unix(), 10)
-	message := ctx.FormValue("postContens")
-	useip := ctx.RemoteAddr()
+	author := ctx.FormValue("uname")
 	subject := ctx.FormValue("threadsTitle")
-
+	message := ctx.FormValue("postContens")
+	postmode := ctx.FormValue("postMode")
+	dateline := strconv.FormatInt(time.Now().Unix(), 10)
+	useip := ctx.RemoteAddr()
+	/*
+		fmt.Println("forumid:"+fid)
+		fmt.Println("threadid:"+tid)
+		fmt.Println("postid:"+pid)
+		fmt.Println("uid:"+authorid)
+		fmt.Println("uname:"+author)
+		fmt.Println("threadsTitle:"+subject)
+		fmt.Println("postContens:"+message)
+		fmt.Println("postMode:"+postmode)
+	*/
+	//message = strings.Replace(message, "</a>", "", -1)
+	//re, _ := regexp.Compile(`<a\s{1,}href(.+?)>`) //删除全部原生超链接
+	//message = re.ReplaceAllString(message, "")
 	message = strings.Replace(message, "'", "\\'", -1)
-	message = strings.Replace(message, "</a>", "", -1)
-	re, _ := regexp.Compile(`<a\s{1,}href(.+?)>`) //删除全部原生超链接
-	message = re.ReplaceAllString(message, "")
-
-	re = regexp.MustCompile(`<img.+?src="data:.+?;base64,(.+?)">`) //用户上传的图片
+	re := regexp.MustCompile(`<img.+?src="data:.+?;base64,(.+?)">`) //用户上传的图片
 	for _, match := range re.FindAllStringSubmatch(message, -1) {
 		data, _ := base64.StdEncoding.DecodeString(match[1])
 		fileName := saveAttachment(data)
@@ -226,7 +237,19 @@ func setNewPost(ctx iris.Context) {
 	posts++
 	threads++
 
-	if tid != "0" { //回帖
+	switch postmode {
+	case "new":
+		sql = "INSERT INTO pre_forum_thread ( fid, author, authorid, subject, dateline, lastpost, lastposter, views, replies) VALUES " +
+			"(" + fid + ", '" + author + "', " + authorid + ", '" + subject + "', '" + dateline + "', '" + dateline + "', '" + author + "', 1, 1)"
+		insID := mysql_con.Exec(sql) // 新增主题
+		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
+			"(" + fid + ", " + insID + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
+		mysql_con.Exec(sql)                                                                                                                // 新增第一条回复
+		sql = "update pre_members set posts = " + strconv.Itoa(posts) + ",threads = " + strconv.Itoa(threads) + " WHERE uid = " + authorid //写入自增后的posts,threads
+		mysql_con.Exec(sql)
+		_, _ = ctx.Text(insID)
+
+	case "reply":
 		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
 			"(" + fid + ", " + tid + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
 		mysql_con.Exec(sql)
@@ -237,18 +260,16 @@ func setNewPost(ctx iris.Context) {
 		page := math.Ceil(i / 20)
 		res := strconv.FormatFloat(page, 'E', -1, 32)
 		mysql_con.Exec("update pre_members set posts = " + strconv.Itoa(posts) + " WHERE uid = " + authorid) //写入自增后的posts
-		ctx.Text(res)
-	} else { //开新主题
-		sql = "INSERT INTO pre_forum_thread ( fid, author, authorid, subject, dateline, lastpost, lastposter, views, replies) VALUES " +
-			"(" + fid + ", '" + author + "', " + authorid + ", '" + subject + "', '" + dateline + "', '" + dateline + "', '" + author + "', 1, 1)"
-		insID := mysql_con.Exec(sql) // 新增主题
-		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
-			"(" + fid + ", " + insID + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
-		mysql_con.Exec(sql)                                                                                                                // 新增第一条回复
-		sql = "update pre_members set posts = " + strconv.Itoa(posts) + ",threads = " + strconv.Itoa(threads) + " WHERE uid = " + authorid //写入自增后的posts,threads
-		mysql_con.Exec(sql)
+		_, _ = ctx.Text(res)
 
-		ctx.Text("success")
+	case "edit":
+		sql = "UPDATE pre_forum_post SET message = '" + message + "' where pid = " + pid
+		mysql_con.Exec(sql)
+		_, _ = ctx.Text("success")
+	}
+
+	if tid != "0" { //回帖
+	} else { //开新主题
 
 	}
 

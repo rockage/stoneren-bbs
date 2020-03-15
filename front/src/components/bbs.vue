@@ -1,6 +1,6 @@
 <template>
   <div class="bbs">
-    <bbs-button @ShowDataTable="ShowDataTable"></bbs-button>
+    <bbs-button></bbs-button>
 
     <div style="background-color: #EBEEF5;display: flex;justify-content: space-between;align-items:center;">
 
@@ -25,7 +25,7 @@
     </div>
 
     <div id="post_location"></div>
-    <el-table :data="tableData" border style="width: 100%" v-show="dataShow" :show-header="false" stripe>
+    <el-table :data="tableData" border style="width: 100%" :show-header="false" stripe>
       <el-table-column label="主题" min-width="60%">
         <template slot-scope="scope">
           <router-link
@@ -77,7 +77,6 @@
                 currentForum: 0,
                 loading: false,
                 postVisible: false,
-                dataShow: true,
                 sortmode: this.$route.params.sortmode
             }
         },
@@ -119,9 +118,6 @@
                     this.sortmode = "date"
                 }
                 this.pageChange(1)
-            },
-            ShowDataTable: function () {
-                this.dataShow = !this.dataShow
             },
             userProfile: function (uname) {
                 this.$userprofile(uname)

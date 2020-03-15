@@ -4,7 +4,7 @@
 
     <el-button size="mini" type="primary" icon="el-icon-back" v-on:click="$router.back()"></el-button>
 
-    <el-button icon="el-icon-edit-outline" size="mini" @click="popupPost()">发表新主题</el-button>
+    <el-button icon="el-icon-edit-outline" size="mini" @click="popupPost()">发表新帖</el-button>
 
 
     <div style="font-size: medium;margin-top: 5px;margin-right: 5px">
@@ -62,12 +62,7 @@
                         break
                 }
             },
-            xclose: function (event) {
-                //post.vue窗口已销毁，继续向上报
-                this.$emit("ShowDataTable") //改变一次showData的true/false值
-            },
             postFinished: function (event) {
-                //post.vue完成，需要刷新页面
                 this.reload() //页面刷新，从app.vue那里inject了一个reload方法过来
             },
             popupPost: function () {
@@ -76,14 +71,15 @@
                     const PostBox = Vue.extend(Post)
                     let instance = new PostBox({
                         propsData: {
-                            xclose: this.xclose,
                             root: this.$root,
+                            postMode: 'new',
+                            fid: this.$store.getters.fid,
+                            title: '发表新帖',
                             postFinished: this.postFinished
                         }
                     })
                     let PostEl = instance.$mount().$el
                     document.getElementById("post_location").appendChild(PostEl)
-                    this.$emit("ShowDataTable")
                 }
             }
         },
