@@ -18,18 +18,11 @@ export default {
     test: ""
   },
   methods: {
-    onCloseClick: function() {
-      // 激活删除标签事件
-      this.$emit("delete", this.text);
-    },
     router_to: function() {
       this.$store.commit("fid", this.fid);
 
       this.$router
         .push({ name: "forumsview", params: { fid: this.fid,page:1,sortmode:'date' } })
-        .catch(err => {
-
-        });
     }
   }
 };

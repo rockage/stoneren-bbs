@@ -49,13 +49,15 @@ const store = new Vuex.Store({
     },
     fname: function (state) {
       let fs
+
       switch (state.rmode) {
         case "new":
           fs = "最新的帖子"
           break;
         case "normal":
           for (let i = 0; i < state.fsname.length; i++) {
-            if (state.fid === state.fsname[i].fid) {
+            if (parseInt(state.fid) === parseInt(state.fsname[i].fid)) {
+
               fs = state.fsname[i].name
             }
           }
@@ -84,7 +86,7 @@ const store = new Vuex.Store({
       state.loginState = r
     },
     uid: function (state, r) {
-      state.uid = r
+      state.uid =r
     },
     uname: function (state, r) {
       state.uname = r

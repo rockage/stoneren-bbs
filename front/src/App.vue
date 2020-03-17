@@ -102,65 +102,52 @@
                     case 2:
                         this.$router
                             .push({name: "new", params: {page: 1, rmode: 'new', sortmode: 'date'}})
-                            .catch(err => {
-                            });
                         break;
                     case 3:
                         this.$router
                             .push({name: "usersview", params: {page: 1, sortmode: 'date'}})
-                            .catch(err => {
-                            });
                         break;
                     default:
                         break;
                 }
             },
             autoLogin: async function () {
-                const vm = this;
-                let auto = false,
-                    uname = "",
-                    pass = "";
-                if (vm.getCookie("local") !== null) {
-                    const arr = vm.getCookie("local").split(";");
-                    auto = arr[0];
-                    uname = arr[1];
-                    pass = arr[2];
-                }
-                if (auto === true || uname !== "" || pass !== "") {
-                    let data = await vm.loginCheck(); //先判断session能否登录
-                    if (data !== "") {
-                        vm.$store.commit("loginState", true);
-                        vm.$store.commit("uid", data.uid);
-                        vm.$store.commit("uname", data.username);
-                        vm.$store.commit("passwd", pass);
-                    } else {
-                        vm.axios
-                            .get("login", {
-                                //再使用cookie登录
-                                params: {
-                                    withCredentials: true,
-                                    username: uname,
-                                    password: pass
-                                }
-                            })
-                            .then(response => {
-                                if (response.data !== "not found") {
-                                    const ret = JSON.parse(response.data);
-                                    vm.$store.commit("loginState", true);
-                                    vm.$store.commit("uid", ret[0].uid);
-                                    vm.$store.commit("uname", uname);
-                                    vm.$store.commit("passwd", pass);
-                                }
-                            });
-                    }
-                } else {
+
+
+
+
+              const vm = this
+
+                vm.axios.get('secret', {
+                  //携带cookie提交，mycookiesessionnameid是一个httponly cookie
+                  withCredentials: true
+                }).then((response) => {
+                  console.log(response.data)
+                })
+
+              let auto = false
+
+              if (vm.getCookie("local") !== null) {
+                auto = vm.getCookie("auto")
+              }
+              if (auto) {
+                vm.axios.get('secret', {
+                  withCredentials: true //携带cookie提交，mycookiesessionnameid是一个httponly cookie
+                }).then((response) => {
+                  console.log('mycookiesessionnameid:',vm.getCookie('mycookiesessionnameid'))
+                  if (response.data==='secret check fail'){
                     vm.$store.commit("loginState", false);
-                }
-            },
+                  }else{
+                    vm.$store.commit("loginState", true);
+                    vm.$store.commit("uid", data.uid);
+                    vm.$store.commit("uname", data.username);
+                    vm.$store.commit("passwd", pass);
+                  }
+                })
+              }
 
-            addmyMenu: function (fid, label, index, icon) {
-            },
 
+            },
             getForumsInfo: function (info) {
                 let index = 1;
                 for (let i = 0; i < info.length; i++) {

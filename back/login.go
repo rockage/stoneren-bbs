@@ -32,11 +32,13 @@ func secret(ctx iris.Context) {
 
 	if !auth {
 		//ctx.StatusCode(iris.StatusForbidden)
-		ctx.WriteString("")
+		ctx.WriteString("secret check fail")
 		return
 	}
-	retJson := "{\"username\":\"" + session.GetString("username") + "\",\"uid\":\"" + session.GetString("uid") + "\"}"
-	ctx.WriteString(retJson)
+
+
+	//retJson := "{\"username\":\"" + session.GetString("username") + "\",\"uid\":\"" + session.GetString("uid") + "\"}"
+	ctx.WriteString(session.ID())
 }
 
 // login

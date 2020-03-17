@@ -74,6 +74,7 @@ export default {
           //携带cookie提交，mycookiesessionnameid是一个httponly cookie
           withCredentials: true
         }).then((response) => {
+          console.log('mycookiesessionnameid:',vm.getCookie('mycookiesessionnameid'))
           resolve(response.data)
         })
       })

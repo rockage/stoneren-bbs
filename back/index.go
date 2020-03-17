@@ -197,7 +197,7 @@ func setNewPost(ctx iris.Context) {
 	postmode := ctx.FormValue("postMode")
 	dateline := strconv.FormatInt(time.Now().Unix(), 10)
 	useip := ctx.RemoteAddr()
-	/*
+
 		fmt.Println("forumid:"+fid)
 		fmt.Println("threadid:"+tid)
 		fmt.Println("postid:"+pid)
@@ -206,7 +206,7 @@ func setNewPost(ctx iris.Context) {
 		fmt.Println("threadsTitle:"+subject)
 		fmt.Println("postContens:"+message)
 		fmt.Println("postMode:"+postmode)
-	*/
+
 	//message = strings.Replace(message, "</a>", "", -1)
 	//re, _ := regexp.Compile(`<a\s{1,}href(.+?)>`) //删除全部原生超链接
 	//message = re.ReplaceAllString(message, "")
@@ -252,6 +252,7 @@ func setNewPost(ctx iris.Context) {
 	case "reply":
 		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
 			"(" + fid + ", " + tid + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
+		fmt.Println(sql)
 		mysql_con.Exec(sql)
 		//算出总页数，返回给前端直接显示最后回复的帖子：
 		rst, _ = mysql_con.Query("select COUNT(1) as counts from pre_forum_post where tid = " + tid) //求出总行数

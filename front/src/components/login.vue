@@ -95,11 +95,10 @@
 
                             const ret = JSON.parse(response.data);
                             if (ret[0].uid) {
-                                vm.setCookie("local", auto + ";" + uname + ";" + passwd);
+                                vm.setCookie("local", auto);
                                 vm.root.$store.commit("loginState", true);
                                 vm.root.$store.commit("uid", ret[0].uid);
                                 vm.root.$store.commit("uname", uname);
-                                vm.root.$store.commit("passwd", passwd);
                                 vm.$message.success("欢迎，登录成功了。");
                                 vm.close()
                             }
