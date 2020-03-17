@@ -17,7 +17,7 @@
       </el-image>
     </div>
 
-    <div style="white-space: pre;text-align: left;" class="info">
+    <div style="white-space: pre;text-align: center;" class="info">
       {{ message }}
     </div>
 
@@ -70,9 +70,6 @@
                         name: "userThreads",
                         params: {uid: this.uid, sortmode: 'date', page: 1}
                     })
-                    .catch(err => {
-                        //this.$message.error(err);
-                    });
                 this.close()
             },
             getProfile: function () {

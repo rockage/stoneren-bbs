@@ -128,9 +128,6 @@
     },
     methods: {
       postFinished: function () {
-        console.log("fire in")
-        console.log("postmode=", this.getContextData("postmode"))
-        console.log("replyPage=", this.getContextData("replyPage"))
         this.showMode = this.getContextData("postmode")
         switch (this.showMode) {
           case "edit":

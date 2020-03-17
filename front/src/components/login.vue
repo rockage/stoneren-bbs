@@ -15,34 +15,37 @@
             </span>
         </td>
       </tr>
-      </tbody></table>
+      </tbody>
+    </table>
     <br/>
-          <el-input
-            placeholder="用户名"
-            prefix-icon="el-icon-s-custom"
-            v-model="inputName"
-            style="margin-left:5%;margin-bottom: 5px;width:90%;"
-          >
-          </el-input>
-          <el-input
-            placeholder="密码"
-            prefix-icon="el-icon-lock"
-            v-model="inputPasswd"
-            show-password
-            style="margin-left:5%;margin-bottom: 5px;width:90%;"
-          >
-          </el-input>
-          <div class="info" style="margin-left:5%;margin-top:10px;margin-bottom: 5px;width:90%;">记住我：
-          <el-switch
-            v-model="autoLogin"
-            active-color="#13ce66"
-            inactive-color="#909399"
-          >
-          </el-switch></div>
-          <br/>
-          <div class="info" style="width: 90%;color: #dd6161">温馨提示：所有旧会员的密码已被重置为“<b>123456</b>”，请登录后自行修改，谢谢！</div>
+    <el-input
+      placeholder="用户名"
+      prefix-icon="el-icon-s-custom"
+      v-model="inputName"
+      style="margin-left:5%;margin-bottom: 5px;width:90%;"
+    >
+    </el-input>
+    <el-input
+      placeholder="密码"
+      prefix-icon="el-icon-lock"
+      v-model="inputPasswd"
+      show-password
+      style="margin-left:5%;margin-bottom: 5px;width:90%;"
+    >
+    </el-input>
+    <div class="info" style="margin-left:5%;margin-top:10px;margin-bottom: 5px;width:90%;">记住我：
+      <el-switch
+        v-model="autoLogin"
+        active-color="#13ce66"
+        inactive-color="#909399"
+      >
+      </el-switch>
+    </div>
     <br/>
-    <el-button type="primary" @click="check" style="margin-left:10px;margin-top:10px;margin-bottom: 10px;">确 定</el-button>
+    <div class="info" style="width: 90%;color: #dd6161">温馨提示：所有旧会员的密码已被重置为“<b>123456</b>”，请登录后自行修改，谢谢！</div>
+    <br/>
+    <el-button type="primary" @click="check" style="margin-left:10px;margin-top:10px;margin-bottom: 10px;">确 定
+    </el-button>
 
 
   </div>
@@ -92,19 +95,17 @@
                                 this.$message.warning("用户名或密码错误。");
                                 return;
                             }
+                            const uid = response.data
+                            vm.setCookie("auto", auto);
+                            vm.root.$store.commit("loginState", true);
+                            vm.root.$store.commit("uid", uid);
+                            vm.root.$store.commit("uname", uname);
+                            vm.$message.success("欢迎，登录成功了。");
+                            vm.close()
 
-                            const ret = JSON.parse(response.data);
-                            if (ret[0].uid) {
-                                vm.setCookie("local", auto);
-                                vm.root.$store.commit("loginState", true);
-                                vm.root.$store.commit("uid", ret[0].uid);
-                                vm.root.$store.commit("uname", uname);
-                                vm.$message.success("欢迎，登录成功了。");
-                                vm.close()
-                            }
-                        });
+                        })
                 } else {
-                    this.$message.warning("用户名和密码不能为空。");
+                    this.$message.warning("用户名和密码不能为空。")
                 }
             }
         },

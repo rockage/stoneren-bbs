@@ -112,7 +112,6 @@
         },
         methods: {
             sortChange: function () {
-                console.log(this.sortmode)
                 switch (this.sortmode) {
                     case "date":
                         this.sortmode = "last"
@@ -124,7 +123,6 @@
                         this.sortmode = "date"
                         break
                 }
-                console.log(this.sortmode)
                 this.pageChange(1)
             },
             userProfile: function (uname) {
@@ -133,9 +131,6 @@
             pageChange: function (val) {
                 this.$router
                     .push({name: "usersview", params: {page: val, sortmode: this.sortmode}})
-                    .catch(err => {
-                    })
-
 
             },
             renderMain: function () {

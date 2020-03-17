@@ -1,11 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/sessions"
 	"mysql_con"
-	"regexp"
 	"strconv"
 	"time"
 )
@@ -24,7 +22,6 @@ func CheckLogin(ctx iris.Context) bool {
 	}
 	return true
 }
-
 func secret(ctx iris.Context) {
 	// 检查用户是否已通过身份验证
 	session := sess.Start(ctx)
@@ -32,13 +29,11 @@ func secret(ctx iris.Context) {
 
 	if !auth {
 		//ctx.StatusCode(iris.StatusForbidden)
-		ctx.WriteString("secret check fail")
+		_, _ = ctx.WriteString("token check fail")
 		return
 	}
 
-
-	//retJson := "{\"username\":\"" + session.GetString("username") + "\",\"uid\":\"" + session.GetString("uid") + "\"}"
-	ctx.WriteString(session.ID())
+	_, _ = ctx.WriteString(session.GetString("username") + "|" + session.GetString("uid"))
 }
 
 // login
@@ -50,23 +45,16 @@ func login(ctx iris.Context) {
 	var rst []map[string]string
 	rst, _ = mysql_con.Query("select uid from pre_members where username = '" + username + "' and `password` = '" + password + "'")
 	if rst != nil {
+		uid := rst[0]["uid"]
 		session.Set("authenticated", true)
 		session.Set("username", username)
-
+		session.Set("uid", uid)
 		unixTime := strconv.FormatInt(time.Now().Unix(), 10)
 		mysql_con.Exec("update pre_members set lastvisited = " + unixTime + " where uid =" + rst[0]["uid"]) //写入最后登录时间
+		_, _ = ctx.WriteString(uid)
 
-		b, err := json.Marshal(rst)
-		if err == nil {
-			uid := string(b)
-			reg := regexp.MustCompile(`^\[\{\"uid\":\"(\d{1,})\"\}\]$`) //uid是JSON字符串,需要正则一次取值
-			match := reg.FindStringSubmatch(uid)
-			session.Set("uid", match[1])
-			_, _ = ctx.JSON(uid)
-
-		}
 	} else {
-		ctx.Text("not found")
+		_, _ = ctx.Text("not found")
 	}
 	// 将用户设置为已验证
 
@@ -76,5 +64,5 @@ func logout(ctx iris.Context) {
 	session := sess.Start(ctx)
 	// 撤销用户身份验证
 	session.Set("authenticated", false)
-	ctx.WriteString("退出登录。")
+	_, _ = ctx.WriteString("退出登录。")
 }

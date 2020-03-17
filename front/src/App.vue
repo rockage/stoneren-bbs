@@ -112,41 +112,29 @@
                 }
             },
             autoLogin: async function () {
-
-
-
-
-              const vm = this
-
-                vm.axios.get('secret', {
-                  //携带cookie提交，mycookiesessionnameid是一个httponly cookie
-                  withCredentials: true
-                }).then((response) => {
-                  console.log(response.data)
-                })
-
-              let auto = false
-
-              if (vm.getCookie("local") !== null) {
-                auto = vm.getCookie("auto")
-              }
-              if (auto) {
-                vm.axios.get('secret', {
-                  withCredentials: true //携带cookie提交，mycookiesessionnameid是一个httponly cookie
-                }).then((response) => {
-                  console.log('mycookiesessionnameid:',vm.getCookie('mycookiesessionnameid'))
-                  if (response.data==='secret check fail'){
-                    vm.$store.commit("loginState", false);
-                  }else{
-                    vm.$store.commit("loginState", true);
-                    vm.$store.commit("uid", data.uid);
-                    vm.$store.commit("uname", data.username);
-                    vm.$store.commit("passwd", pass);
-                  }
-                })
-              }
-
-
+                const vm = this
+                let auto = false
+                if (vm.getCookie("auto") !== null) {
+                    auto = vm.getCookie("auto")
+                }
+                if (auto) {
+                    vm.axios.get('secret', {
+                        withCredentials: true //携带cookie提交，mycookiesessionnameid是一个httponly cookie
+                    }).then((response) => {
+                        if (response.data === 'token check fail') {
+                            vm.$store.commit("loginState", false)
+                            vm.$store.commit("uid", '')
+                            vm.$store.commit("uname", '')
+                        } else {
+                            console.log(response.data)
+                            let ret = response.data.split("|")
+                            console.log(ret)
+                            vm.$store.commit("loginState", true)
+                            vm.$store.commit("uid", ret[1])
+                            vm.$store.commit("uname", ret[0])
+                        }
+                    })
+                }
             },
             getForumsInfo: function (info) {
                 let index = 1;

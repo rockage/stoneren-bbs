@@ -127,20 +127,14 @@
                     case "new":
                         this.$router
                             .push({name: "new", params: {page: val, sortmode: this.sortmode}})
-                            .catch(err => {
-                            })
                         break
                     case "normal":
                         this.$router
                             .push({name: "forumsview", params: {page: val, sortmode: this.sortmode}})
-                            .catch(err => {
-                            })
                         break
                     case "self":
                         this.$router
                             .push({name: "userThreads", params: {page: val, sortmode: this.sortmode}})
-                            .catch(err => {
-                            })
                         break
                 }
             },

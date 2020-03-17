@@ -90,9 +90,6 @@
                                 name: "userThreads",
                                 params: {uid: this.$store.getters.uid}
                             })
-                            .catch(err => {
-                                this.$message.error(err);
-                            });
                         break;
                     case "3":
                         this.passwdClick()
