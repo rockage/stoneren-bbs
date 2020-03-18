@@ -90,7 +90,7 @@
         :current-page="currentPage"
       ></el-pagination>
     </div>
-    <el-button @click="replyPost">回复</el-button>
+    <el-button type="primary" @click="replyPost">回复</el-button>
 
   </div>
 </template>
@@ -175,16 +175,7 @@
         this.$userprofile(uname)
       },
       up: function (str) {
-        let css = '<style scoped>\n' +
-          '\n' +
-          '  .ql-size-large{\n' +
-          '  font-size:1.5em;\n' +
-          '  }\n' +
-          '\n' +
-          '  .ql-size-huge{\n' +
-          '    font-size:2.5em;\n' +
-          '  }\n' +
-          '</style>'
+        let css = '<link href="/static/js/quill-thread.css" rel="stylesheet">'
         str = css + str
         return str
         str = str.replace(/\[i(=s)\]/gi, "[i]")

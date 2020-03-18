@@ -4,7 +4,7 @@
 
     <el-button size="mini" type="primary" icon="el-icon-back" v-on:click="$router.back()"></el-button>
 
-    <el-button icon="el-icon-edit-outline" type="primary" size="mini" @click="popupPost()">发表新帖</el-button>
+    <el-button icon="el-icon-plus" type="primary" size="mini" @click="popupPost()">发表新帖</el-button>
 
 
     <div style="font-size: medium;margin-top: 5px;margin-right: 5px">
