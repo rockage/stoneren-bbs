@@ -7,10 +7,24 @@
 .ql-container {
   box-sizing: border-box;
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  height: 100%;
+  font-size: 16px;
+  height: 380px;
   margin: 0px;
   position: relative;
+}
+
+.ql-editor {
+  box-sizing: border-box;
+  line-height: 1.42;
+  height: 370px;
+  outline: none;
+  overflow-y: scroll;
+  padding: 12px 15px;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 .ql-container.ql-disabled .ql-tooltip {
   visibility: hidden;
@@ -29,19 +43,7 @@
   margin: 0;
   padding: 0;
 }
-.ql-editor {
-  box-sizing: border-box;
-  line-height: 1.42;
-  height: 100%;
-  outline: none;
-  overflow-y: auto;
-  padding: 12px 15px;
-  tab-size: 4;
-  -moz-tab-size: 4;
-  text-align: left;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
+
 .ql-editor > * {
   cursor: text;
 }
@@ -408,9 +410,9 @@
   cursor: pointer;
   display: inline-block;
   float: left;
-  height: 24px;
+  height: 30px;
   padding: 3px 5px;
-  width: 28px;
+  width: 30px;
 }
 .ql-snow.ql-toolbar button svg,
 .ql-snow .ql-toolbar button svg {
@@ -731,7 +733,7 @@
   margin-top: -9px;
   right: 0;
   top: 50%;
-  width: 18px;
+  width: 30px;
 }
 .ql-snow .ql-picker.ql-header .ql-picker-label[data-label]:not([data-label=''])::before,
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-label]:not([data-label=''])::before,

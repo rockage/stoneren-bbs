@@ -22,8 +22,8 @@ import 'promise-polyfill/src/polyfill';
 Vue.prototype.md5 = md5
 Vue.prototype.axios = axios
 axios.defaults.withCredentials = true
-//axios.defaults.baseURL = 'http://localhost:8081/'
-axios.defaults.baseURL = 'http://stoneren.net:8081/'
+axios.defaults.baseURL = 'http://localhost:8081/'
+//axios.defaults.baseURL = 'http://stoneren.net:8081/'
 //axios.defaults.baseURL = 'http://173.82.105.39:8081/'
 
 Vue.config.productionTip = false

@@ -1,4 +1,7 @@
-<style>
+
+p {
+  font-size: 16px;
+}
 .ql-size-large {
 	font-size:1.5em;
  }
@@ -10,4 +13,3 @@
   color: #f8f8f2;
   overflow: visible;
  }
-</style>
