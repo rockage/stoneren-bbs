@@ -1,6 +1,7 @@
 
 p {
-  font-size: 16px;
+  font-size: medium;
+  line-height:110%;
 }
 .ql-size-large {
 	font-size:1.5em;

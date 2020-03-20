@@ -365,6 +365,7 @@
     align-items: center;
     display: flex;
     justify-content: center;
+
   }
 
   .ql-clipboard {
