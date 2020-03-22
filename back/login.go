@@ -56,13 +56,35 @@ func login(ctx iris.Context) {
 	} else {
 		_, _ = ctx.Text("not found")
 	}
-	// 将用户设置为已验证
+}
 
+func userZhuce(ctx iris.Context) {
+	session := sess.Start(ctx)
+	username := ctx.FormValue("username")
+	password := ctx.FormValue("password")
+	unixTime := strconv.FormatInt(time.Now().Unix(), 10)
+
+	sql := "INSERT INTO pre_members ( username, password, regdate, lastvisited) VALUES ('" + username + "','" + password + "','" + unixTime + "','" + unixTime + "')"
+	uid := mysql_con.Exec(sql) // 新增用户
+	session.Set("authenticated", true)
+	session.Set("username", username)
+	session.Set("uid", uid)
+	_, _ = ctx.WriteString(uid)
+}
+
+func userExist(ctx iris.Context) {
+	username := ctx.FormValue("username")
+	var rst []map[string]string
+	rst, _ = mysql_con.Query("select uid from pre_members where username = '" + username + "'")
+	if rst != nil {
+		_, _ = ctx.WriteString("sucess")
+	} else {
+		_, _ = ctx.Text("fail")
+	}
 }
 
 func logout(ctx iris.Context) {
 	session := sess.Start(ctx)
-	// 撤销用户身份验证
 	session.Set("authenticated", false)
 	_, _ = ctx.WriteString("退出登录。")
 }

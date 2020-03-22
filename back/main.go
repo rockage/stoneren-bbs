@@ -61,6 +61,8 @@ func main() {
 	index.Get("/secret", secret)
 	index.Get("/login", login)
 	index.Get("/logout", logout)
+	index.Get("/userExist", userExist)
+	index.Get("/userZhuce", userZhuce)
 	index.Get("/users", users)
 	index.Get("/resetPosts", resetPosts)
 

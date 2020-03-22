@@ -9,7 +9,7 @@
         <a href="javascript:void(0)" @click="sortChange">{{srotLabel}}</a>
       </div>
 
-      <div >
+      <div>
         <el-pagination
           small
           @current-change="pageChange"
@@ -32,19 +32,33 @@
             :to="{ name: 'threadsview', params: { tid: scope.row.tid } }"
           >{{ scope.row.subject }}
           </router-link>
-          <div class="info">楼主：<a href="javascript:void(0)" @click="userProfile({ uname: scope.row.author })">{{scope.row.author}} </a>
-            <span class="info">{{ getLocalDate(scope.row.dateline) }}</span></div>
-          <div class="info">回复：<a href="javascript:void(0)" @click="userProfile({ uname: scope.row.lastposter })">{{scope.row.lastposter}}</a>
-            <span class="info">{{ getLocalDate(scope.row.lastpost) }}</span></div>
+          <div>
+            <div style="display: flex; flex-direction: row;">
+              <div style="min-width: 120px">
+                <span class="info">楼主：<a href="javascript:void(0)" @click="userProfile({ uname: scope.row.author })">{{scope.row.author}} </a></span>
+              </div>
+              <div style="min-width: 100px">
+                <span class="info">{{ getLocalDate(scope.row.dateline) }}</span>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+              <div style="min-width: 120px">
+                <span class="info">回复：<a href="javascript:void(0)"
+                                         @click="userProfile({ uname: scope.row.lastposter })">{{scope.row.lastposter}}</a></span>
+              </div>
+              <div style="min-width: 100px">
+                <span class="info">{{ getLocalDate(scope.row.lastpost) }}</span>
+              </div>
+            </div>
+          </div>
         </template>
       </el-table-column>
 
       <el-table-column label="回复/浏览" min-width="15%">
         <template slot-scope="scope">
-          <div style="text-align: center;">
-          <span class="info">
-            {{ scope.row.replies }}
-          </span>
+          <div class="info" style="display: flex; flex-direction: column ;margin: 0px;padding: 0px">
+            <div> {{ scope.row.views }}</div>
+            <div>{{ scope.row.replies }}</div>
           </div>
         </template>
       </el-table-column>
@@ -61,7 +75,6 @@
       ></el-pagination>
 
     </div>
-    <HR/>
   </div>
 </template>
 

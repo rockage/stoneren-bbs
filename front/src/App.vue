@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <title>{{bbstitle}}</title>
-    <el-row>
-      <bbsHeader></bbsHeader>
-    </el-row>
 
-    <el-row>
-      <el-col :span="24">
+      <bbsHeader></bbsHeader>
+
+
+
+
         <div>
           <el-menu
             :default-active="defaultActive"
@@ -42,18 +42,12 @@
             </el-menu-item>
           </el-menu>
         </div>
-      </el-col>
-    </el-row>
 
-    <el-row>
-      <el-col :span="24">
+
         <div style="margin-top: 0px;margin-bottom: 0px">
           <router-view :key="$route.fullPath" v-if="isRouterAlive"></router-view>
         </div>
-      </el-col>
-    </el-row>
 
-    <el-row>
       <div style="text-align: center">
         <el-divider content-position="center">
           <a
@@ -62,7 +56,7 @@
           >stoneren-bbs@github</a>
         </el-divider>
       </div>
-    </el-row>
+
 
   </div>
 </template>
@@ -126,9 +120,7 @@
                             vm.$store.commit("uid", '')
                             vm.$store.commit("uname", '')
                         } else {
-                            console.log(response.data)
                             let ret = response.data.split("|")
-                            console.log(ret)
                             vm.$store.commit("loginState", true)
                             vm.$store.commit("uid", ret[1])
                             vm.$store.commit("uname", ret[0])
@@ -167,24 +159,19 @@
 
 <style>
   .footer {
-    /*flex 布局*/
     display: flex;
-    /*实现垂直居中*/
     align-items: center;
-    /*实现水平居中*/
     justify-content: center;
-
     text-align: justify;
     width: 100%;
     height: 50px;
     background: #99a9bf;
-    margin: 0 auto;
     color: #fff;
   }
 
   body {
-    margin-top: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
   }
 
   #app {

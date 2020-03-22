@@ -73,7 +73,7 @@ func getTotalThreads(id string, rMode string) string {
 	case "normal":
 		sql = "select COUNT(1) as counts from pre_forum_thread where fid = " + id //只看自己(uid)
 	}
-	fmt.Println(sql)
+
 	var rst []map[string]string
 	rst, _ = mysql_con.Query(sql) //求出总行数
 	totalRow := rst[0]["counts"]
@@ -94,7 +94,7 @@ func users(ctx iris.Context) {
 
 	switch sortmode {
 	case "date":
-		sql = "select uid,username,regdate,posts,lastvisited from pre_members" + " ORDER BY regdate limit " + startRec + "," + stopRec
+		sql = "select uid,username,regdate,posts,lastvisited from pre_members" + " ORDER BY regdate desc limit " + startRec + "," + stopRec
 	case "last":
 		sql = "select uid,username,regdate,posts,lastvisited from pre_members" + " ORDER BY lastvisited desc limit " + startRec + "," + stopRec
 	case "posts":
@@ -140,6 +140,14 @@ func renderThreadsView(ctx iris.Context) {
 	if ok {
 		b, err := json.Marshal(rst)
 		if err == nil {
+
+			//自增主题的浏览数
+			rst, _ = mysql_con.Query("SELECT views from pre_forum_thread where tid = " + tid) //求出总浏览数
+			views, _ := strconv.Atoi(rst[0]["views"])
+			views++
+			sql = "update pre_forum_thread set views = " + strconv.Itoa(views) + " WHERE tid = " + tid
+			mysql_con.Exec(sql)
+
 			_, _ = ctx.JSON(string(b)) //不返回错误代码，强行执行
 		}
 	}
@@ -198,15 +206,6 @@ func setNewPost(ctx iris.Context) {
 	dateline := strconv.FormatInt(time.Now().Unix(), 10)
 	useip := ctx.RemoteAddr()
 
-		fmt.Println("forumid:"+fid)
-		fmt.Println("threadid:"+tid)
-		fmt.Println("postid:"+pid)
-		fmt.Println("uid:"+authorid)
-		fmt.Println("uname:"+author)
-		fmt.Println("threadsTitle:"+subject)
-		fmt.Println("postContens:"+message)
-		fmt.Println("postMode:"+postmode)
-
 	//message = strings.Replace(message, "</a>", "", -1)
 	//re, _ := regexp.Compile(`<a\s{1,}href(.+?)>`) //删除全部原生超链接
 	//message = re.ReplaceAllString(message, "")
@@ -239,47 +238,60 @@ func setNewPost(ctx iris.Context) {
 
 	switch postmode {
 	case "new":
+		// 新增主题
 		sql = "INSERT INTO pre_forum_thread ( fid, author, authorid, subject, dateline, lastpost, lastposter, views, replies) VALUES " +
-			"(" + fid + ", '" + author + "', " + authorid + ", '" + subject + "', '" + dateline + "', '" + dateline + "', '" + author + "', 1, 1)"
-		insID := mysql_con.Exec(sql) // 新增主题
+			"(" + fid + ", '" + author + "', " + authorid + ", '" + subject + "', '" + dateline + "', '" + dateline + "', '" + author + "', 0, 0)"
+		insID := mysql_con.Exec(sql)
+
+		// 新增回复（第一条）
 		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
 			"(" + fid + ", " + insID + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
-		mysql_con.Exec(sql)                                                                                                                // 新增第一条回复
-		sql = "update pre_members set posts = " + strconv.Itoa(posts) + ",threads = " + strconv.Itoa(threads) + " WHERE uid = " + authorid //写入自增后的posts,threads
 		mysql_con.Exec(sql)
-		_, _ = ctx.Text(insID)
+
+		//自增用户主题数、发帖数
+		sql = "update pre_members set posts = " + strconv.Itoa(posts) + "," +
+			"threads = " + strconv.Itoa(threads) + ", " +
+			"WHERE uid = " + authorid //写入自增后的posts,threads
+		mysql_con.Exec(sql)
+		_, _ = ctx.Text(insID) //返回最后插入的主题insID
 
 	case "reply":
+		//新增回复
 		sql = "INSERT INTO pre_forum_post ( fid, tid, author, authorid, dateline, useip, message) VALUES " +
 			"(" + fid + ", " + tid + ", '" + author + "', " + authorid + ", '" + dateline + "', '" + useip + "', '" + message + "')"
-		fmt.Println(sql)
 		mysql_con.Exec(sql)
-		//算出总页数，返回给前端直接显示最后回复的帖子：
+
+		rst, _ = mysql_con.Query("SELECT replies from pre_forum_thread where tid = " + tid) //求出总行数
+		replies, _ := strconv.Atoi(rst[0]["replies"])
+		replies++
+
+		//修改主题的最后回复日期、最后回复人、总回复数
+		sql = "update pre_forum_thread set lastpost = '" + dateline + "'," +
+			"lastposter = '" + author + "', " +
+			"replies = " + strconv.Itoa(replies) + " " +
+			"WHERE tid = " + tid //写入自增后的posts,threads
+		mysql_con.Exec(sql)
+
+		//总页数
 		rst, _ = mysql_con.Query("select COUNT(1) as counts from pre_forum_post where tid = " + tid) //求出总行数
 		var i float64
 		i, _ = strconv.ParseFloat(rst[0]["counts"], 32)
 		page := math.Ceil(i / 20)
 		res := strconv.FormatFloat(page, 'E', -1, 32)
-		mysql_con.Exec("update pre_members set posts = " + strconv.Itoa(posts) + " WHERE uid = " + authorid) //写入自增后的posts
-		_, _ = ctx.Text(res)
+
+		//自增用户发帖数
+		mysql_con.Exec("update pre_members set posts = " + strconv.Itoa(posts) + " WHERE uid = " + authorid)
+		_, _ = ctx.Text(res) //返回总页数
 
 	case "edit":
 		sql = "UPDATE pre_forum_post SET message = '" + message + "' where pid = " + pid
 		mysql_con.Exec(sql)
 		_, _ = ctx.Text("success")
 	}
-
-	if tid != "0" { //回帖
-	} else { //开新主题
-
-	}
-
 }
 func saveAttachment(data []byte) string {
 	dir_file := AttachmentDir + time.Now().Format("2006-01") + "/"
 	dir_database := "/static/attachment/" + time.Now().Format("2006-01") + "/"
-	fmt.Println("dir file" + dir_file)
-	fmt.Println("data file" + dir_database)
 
 	myUuid := uuid.NewV4()
 	_, err := os.Stat(dir_file)
@@ -290,11 +302,11 @@ func saveAttachment(data []byte) string {
 	uutext := myUuid.String() + ".jpg"
 
 	fileName := dir_file + uutext
-	fmt.Println(fileName)
+
 	err = ioutil.WriteFile(fileName, data, 0666)
 
 	databaseName := dir_database + uutext
-	fmt.Println(databaseName)
+
 	return databaseName
 }
 

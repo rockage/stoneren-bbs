@@ -343,8 +343,8 @@
     position: fixed;
     top: 20%;
     height: 100%;
-    width: 100%;
-
+    display:inline-block;
+    width:100%;
 
     overflow: hidden;
   }

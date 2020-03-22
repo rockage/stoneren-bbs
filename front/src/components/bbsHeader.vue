@@ -16,8 +16,7 @@
 
         <td style="text-align: right;margin-right: 20px">
             <span v-show="!loginState">
-              <el-button type="text" @click="loginClick">登录</el-button>
-              <el-button type="text" @click="loginClick">注册</el-button>
+              <el-button type="text" @click="zhuceClick">登录/注册</el-button>
             </span>
 
           <span v-show="loginState">
@@ -48,6 +47,7 @@
     import LoginBox from "./login.vue"
     import ProfileBox from "./profile.vue"
     import PasswdBox from "./password.vue"
+    import ZhuceBox from "./zhuce.vue"
     import Vue from "vue"
 
     export default {
@@ -85,10 +85,11 @@
                         this.profileClick()
                         break;
                     case "2":
+                        this.$store.commit("fname", this.uname) //在bbsButton上显示: "用户名"的帖子
                         this.$router
                             .push({
                                 name: "userThreads",
-                                params: {uid: this.$store.getters.uid}
+                                params: {uid: this.$store.getters.uid,sortmode: 'date', page: 1}
                             })
                         break;
                     case "3":
@@ -138,6 +139,17 @@
                         propsData: {
                             loginClose: null, //无需返回值的弹窗
                             loginFinished: null,
+                            root: this.$root,
+                        }
+                    })
+                    document.body.appendChild(instance.$mount().$el)
+                }
+            },
+            zhuceClick: function () {
+                if (!document.getElementById("registerBox")) {
+                    const ZhuCe = Vue.extend(ZhuceBox)
+                    let instance = new ZhuCe({
+                        propsData: {
                             root: this.$root,
                         }
                     })

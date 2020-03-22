@@ -1,7 +1,20 @@
-//exports.install = function (Vue) {
+import InfoBox from "./components/infoBox"
 
 export default {
   install(Vue) {
+    Vue.prototype.infoBox = function (data) { //修改图片尺寸imgWidth或imgHeight为0表示自适应
+      if (!document.getElementById("info")) {
+        const info = Vue.extend(InfoBox)
+        let instance = new info({
+          propsData: {
+            root: this.$root,
+            title:data.title,
+            message:data.message,
+          }
+        })
+        document.body.appendChild(instance.$mount().$el)
+      }
+    }
 
     Vue.prototype.transImage = function (src, w_img, h_img, callback) { //修改图片尺寸imgWidth或imgHeight为0表示自适应
       let originImg = new Image()
@@ -82,7 +95,7 @@ export default {
     }
 
     Vue.prototype.setCookie = function (c_name, value) { //全局函数2
-      docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/","");
+      docCookies.setItem(c_name, value, "Tue, 06 Dec 2022 13:11:07 GMT", "/", "");
     }
 
     Vue.prototype.getCookie = function (c_name) { //全局函数3
